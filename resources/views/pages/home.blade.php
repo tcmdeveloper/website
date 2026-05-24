@@ -21,7 +21,7 @@
                 Primary
             </a>
 
-            <a href="/contact"
+            <a href="/about"
                class="btn btn-secondary">
                 Secondary
             </a>
