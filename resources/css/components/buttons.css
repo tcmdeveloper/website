@@ -1,0 +1,169 @@
+/* =========================================
+   BUTTON BASE STYLES
+========================================= */
+
+.btn {
+    @apply 
+        inline-flex items-center justify-center
+        px-6 py-2
+        bg-gradient-to-r
+        from-olive-600 to-olive-500
+        border rounded
+        shadow-sm
+        text-white
+        font-medium
+        transition-all duration-300
+        hover:bg-gray-100 hover:shadow hover:translate-y-[1px] 
+        active:scale-[0.98]
+    ;
+}
+
+/* =========================================
+   PRIMARY BUTTON
+========================================= */
+
+.btn-primary {
+    @apply 
+        from-indigo-600 to-blue-500
+        border-indigo-500
+        hover:from-indigo-700 hover:to-blue-600
+    ;
+}
+
+/* =========================================
+   SECONDARY BUTTON
+========================================= */
+
+.btn-secondary {
+    @apply 
+        from-slate-500 to-zinc-400
+        border-slate-400
+        hover:from-slate-600 hover:to-zinc-500
+    ;
+}
+
+/* =========================================
+   DANGER BUTTON
+========================================= */
+
+.btn-danger {
+    @apply 
+        from-red-600 to-orange-500
+        border-red-500
+        hover:from-red-700 hover:to-orange-600
+    ;
+}
+
+/* =========================================
+   SUCCESS BUTTON
+========================================= */
+
+.btn-success {
+    @apply 
+        from-green-600 to-lime-500
+        border-green-500
+        hover:from-green-700 hover:to-lime-600
+    ;
+}
+
+/* =========================================
+   WARNING BUTTON
+========================================= */
+
+.btn-warning {
+    @apply 
+        from-amber-600 to-yellow-500
+        border-amber-500
+        hover:from-amber-700 hover:to-yellow-600
+    ;
+}
+
+/* =========================================
+   GHOST BUTTON
+========================================= */
+
+.btn-ghost {
+    @apply 
+        bg-none
+        border-indigo-400
+        text-indigo-500
+    ;
+}
+
+/* =========================================
+   LINK BUTTON
+========================================= */
+
+.btn-link {
+    @apply 
+        inline-flex items-center justify-center
+        bg-none
+        border-none rounded-none
+        shadow-none
+        text-blue-600
+        font-medium
+        underline
+        transition-all duration-300
+        hover:bg-none hover:shadow-none hover:no-underline hover:translate-y-[1px] 
+        active:scale-[0.98]
+    ;
+}
+
+
+
+
+/* =========================================
+   BUTTON SIZE VARIENTS
+========================================= */
+
+
+/* Extra small button */
+
+.btn-xs {
+    @apply 
+        px-2 py-0.5
+        text-xs
+    ;
+}
+
+
+/* Small button */
+
+.btn-sm {
+    @apply 
+        px-3 py-1
+        text-sm
+    ;
+}
+
+
+/* Large button */
+
+.btn-lg {
+    @apply 
+        px-9 py-3
+        text-lg
+    ;
+}
+
+
+/* Extra large button */
+
+.btn-xl {
+    @apply 
+        px-12 py-4
+        text-xl
+    ;
+}
+
+
+
+
+/* =========================================
+   DISABLED STATE
+========================================= */
+
+.btn:disabled,
+.btn[disabled] {
+    @apply opacity-50 cursor-not-allowed pointer-events-none;
+}
