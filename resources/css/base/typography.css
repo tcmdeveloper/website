@@ -1,0 +1,25 @@
+a{
+    @apply
+        hover:underline hover:underline-offset-3
+    ;
+}
+
+
+/* =========================================
+   LINK BUTTON
+========================================= */
+
+.link {
+    @apply 
+        inline-flex items-center justify-center
+        bg-none
+        border-none rounded-none
+        shadow-none
+        text-blue-600
+        font-normal
+        underline
+        transition-all duration-300
+        hover:bg-none hover:shadow-none hover:no-underline hover:translate-y-[1px] 
+        active:scale-[0.98]
+    ;
+}

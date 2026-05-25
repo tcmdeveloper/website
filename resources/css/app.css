@@ -27,4 +27,5 @@
 
 /* Components */
 @import "./components/buttons.css";
+@import "./components/cards.css";
 @import "./components/forms.css";

@@ -13,11 +13,26 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+
+            $table->string('hex', 11)->unique();
+            
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('google_id')->nullable();
             $table->rememberToken();
+
+            $table->string('role')->default('user');
+
+            $table->string('username')->unique()->nullable();
+            $table->string('display_name')->unique()->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('avatar')->nullable();
+
+            $table->char('country_code', 2)->nullable();
+            $table->char('state_code', 2)->nullable();
+            
             $table->timestamps();
         });
 

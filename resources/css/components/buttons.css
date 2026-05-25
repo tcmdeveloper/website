@@ -3,19 +3,7 @@
 ========================================= */
 
 .btn {
-    @apply 
-        inline-flex items-center justify-center
-        px-6 py-2
-        bg-gradient-to-r
-        from-olive-600 to-olive-500
-        border rounded
-        shadow-sm
-        text-white
-        font-medium
-        transition-all duration-300
-        hover:bg-gray-100 hover:shadow hover:translate-y-[1px] 
-        active:scale-[0.98]
-    ;
+
 }
 
 /* =========================================
@@ -23,11 +11,7 @@
 ========================================= */
 
 .btn-primary {
-    @apply 
-        from-indigo-600 to-blue-500
-        border-indigo-500
-        hover:from-indigo-700 hover:to-blue-600
-    ;
+
 }
 
 /* =========================================
@@ -47,11 +31,7 @@
 ========================================= */
 
 .btn-danger {
-    @apply 
-        from-red-600 to-orange-500
-        border-red-500
-        hover:from-red-700 hover:to-orange-600
-    ;
+
 }
 
 /* =========================================
@@ -90,24 +70,7 @@
     ;
 }
 
-/* =========================================
-   LINK BUTTON
-========================================= */
 
-.btn-link {
-    @apply 
-        inline-flex items-center justify-center
-        bg-none
-        border-none rounded-none
-        shadow-none
-        text-blue-600
-        font-medium
-        underline
-        transition-all duration-300
-        hover:bg-none hover:shadow-none hover:no-underline hover:translate-y-[1px] 
-        active:scale-[0.98]
-    ;
-}
 
 
 
@@ -134,6 +97,13 @@
         px-3 py-1
         text-sm
     ;
+}
+
+
+/* Medium button */
+
+.btn-md {
+
 }
 
 

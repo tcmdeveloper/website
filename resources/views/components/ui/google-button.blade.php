@@ -1,0 +1,53 @@
+{{-- resources/views/components/ui/google-button.blade.php --}}
+
+@props([
+    'href' => '#',
+])
+
+<a
+    href="{{ $href }}"
+    {{ $attributes->merge([
+        'class' => '
+            inline-flex items-center justify-center gap-3
+            w-full
+            px-5 py-3
+            rounded-lg
+            border border-gray-300
+            bg-white
+            text-gray-700
+            font-medium
+            shadow-sm
+            transition-all duration-200
+            hover:bg-gray-50 hover:shadow
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300
+        '
+    ]) }}
+>
+    {{-- Google Icon --}}
+    <svg
+        class="w-5 h-5"
+        viewBox="0 0 48 48"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            fill="#FFC107"
+            d="M43.611 20.083H42V20H24v8h11.303C33.654 32.657 29.215 36 24 36c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.27 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"
+        />
+        <path
+            fill="#FF3D00"
+            d="M6.306 14.691l6.571 4.819C14.655 16.108 19.002 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.27 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"
+        />
+        <path
+            fill="#4CAF50"
+            d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.166 35.091 26.715 36 24 36c-5.196 0-9.625-3.326-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"
+        />
+        <path
+            fill="#1976D2"
+            d="M43.611 20.083H42V20H24v8h11.303c-.793 2.307-2.29 4.277-4.284 5.57.001-.001 6.19 5.238 6.19 5.238C36.971 39.029 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"
+        />
+    </svg>
+
+    <span>
+        {{ $slot ?: 'Continue with Google' }}
+    </span>
+</a>
