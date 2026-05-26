@@ -7,14 +7,18 @@ use Illuminate\Http\Request;
 class PageController extends Controller
 {
 
+    // -----------------------------------------------------
     // CONSTRUCTOR
+    // -----------------------------------------------------
 
     public function __construct(
         
     ){}
 
 
+    // -----------------------------------------------------
     // HOMEPAGE
+    // -----------------------------------------------------
 
     public function home()
     {
@@ -22,7 +26,9 @@ class PageController extends Controller
     }
 
 
+    // -----------------------------------------------------
     // ABOUT
+    // -----------------------------------------------------
 
     public function about()
     {
@@ -30,7 +36,9 @@ class PageController extends Controller
     }
 
 
+    // -----------------------------------------------------
     // CONTACT
+    // -----------------------------------------------------
 
     public function contact()
     {
@@ -38,7 +46,9 @@ class PageController extends Controller
     }
 
 
+    // -----------------------------------------------------
     // TERMS
+    // -----------------------------------------------------
 
     public function terms()
     {
@@ -46,7 +56,9 @@ class PageController extends Controller
     }
 
 
+    // -----------------------------------------------------
     // PRIVACY
+    // -----------------------------------------------------
 
     public function privacy()
     {

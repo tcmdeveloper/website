@@ -1,0 +1,6 @@
+.error-text{
+    @apply
+        m-0 mt-1.5
+        text-red-600 text-xs
+    ;
+}

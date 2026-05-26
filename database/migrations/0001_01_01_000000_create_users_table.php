@@ -32,6 +32,9 @@ return new class extends Migration
 
             $table->char('country_code', 2)->nullable();
             $table->char('state_code', 2)->nullable();
+
+            $table->timestamp('terms_accepted_at')->nullable();
+            $table->string('terms_version')->nullable();
             
             $table->timestamps();
         });

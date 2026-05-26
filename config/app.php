@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Terms Version
+    |--------------------------------------------------------------------------
+    |
+    | Version identifier for Terms of Service; stored against users to track 
+    | acceptance compliance
+    |
+    */
+
+    'terms_version' => '1.0.0', // Increment when Terms of Service changes
+
 ];

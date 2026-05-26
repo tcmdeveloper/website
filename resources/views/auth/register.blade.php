@@ -19,7 +19,7 @@
         {{-- Divider with text --}}
         <x-ui.divider-with-text text="or sign in with email" />
 
-        <form method="POST" action="{{ route('register') }}" class="space-y-5">
+        <form method="POST" action="{{ route('register') }}" class="space-y-4">
             
             @csrf
 
@@ -59,7 +59,7 @@
                 />
             </div>
 
-            {{-- Remember me --}}
+            {{-- Terms acceptance --}}
             <div>
                 <x-ui.checkbox name="terms">
                     I agree to the
