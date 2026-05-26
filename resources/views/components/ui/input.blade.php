@@ -10,7 +10,7 @@
 <div class="form-group">
 
     @if($label)
-        <label for="{{ $name }}" class="label">
+        <label for="{{ $name }}" class="block text-sm mb-1">
             {{ $label }}
         </label>
     @endif
@@ -22,8 +22,18 @@
         value="{{ old($name, $value) }}"
         {{ $attributes->merge([
             'class' =>
-                'w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 shadow-sm
-                focus:border-olive-500 focus:ring-2 focus:ring-olive-500 focus:ring-offset-1 transition'
+                'w-full 
+                px-4 py-2.5
+                bg-white 
+                border border-gray-300
+                shadow-sm
+                text-gray-900 
+                focus:outline-none
+                focus:ring-1
+                focus:ring-sky-300
+                focus:ring-offset-0
+                focus:ring-offset-white
+                transition'
         ]) }}
     />
 

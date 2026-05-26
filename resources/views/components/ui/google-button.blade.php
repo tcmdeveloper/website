@@ -2,27 +2,14 @@
 
 @props([
     'href' => '#',
+    'text' => 'Continue with Google'
 ])
 
-<a
-    href="{{ $href }}"
-    {{ $attributes->merge([
+<x-ui.button type="button" variant="ghost" size="lg" href="{{ $href }}" full {{ $attributes->merge([
         'class' => '
-            inline-flex items-center justify-center gap-3
-            w-full
-            px-5 py-3
-            rounded-lg
-            border border-gray-300
-            bg-white
-            text-gray-700
-            font-medium
-            shadow-sm
-            transition-all duration-200
-            hover:bg-gray-50 hover:shadow
-            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300
+            inline-flex items-center justify-center gap-x-3           
         '
-    ]) }}
->
+    ]) }}>
     {{-- Google Icon --}}
     <svg
         class="w-5 h-5"
@@ -48,6 +35,6 @@
     </svg>
 
     <span>
-        {{ $slot ?: 'Continue with Google' }}
+        {{ $text }}
     </span>
-</a>
+</x-ui.button>

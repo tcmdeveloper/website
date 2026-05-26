@@ -5,12 +5,19 @@
     subtitle="Use your Google account or enter your email & password manually."
 >
 
-    <x-ui.card class="max-w-md mx-auto">
 
+    {{-- Authentication status messages --}}
+    <x-auth-session-status :status="session('status')" />
 
-        <x-ui.google-button
-            href="{{ route('google.redirect') }}"
-        />
+    <x-ui.card class="max-w-lg mx-auto text-stone-600 text-sm">
+
+        {{-- Sign in with Google button --}}
+        <x-ui.google-button href="{{ route('google.redirect') }}">
+            Sign in with Google
+        </x-ui.google-button>
+
+        {{-- Divider with text --}}
+        <x-ui.divider-with-text text="or sign in with email" />
 
         <form method="POST" action="{{ route('register') }}" class="space-y-5">
             
@@ -52,8 +59,36 @@
                 />
             </div>
 
+            {{-- Remember me --}}
+            <div>
+                <x-ui.checkbox name="terms">
+                    I agree to the
+
+                    <a
+                        href="{{ route('terms') }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="link"
+                    >Terms of Service</a>
+
+                    and
+
+                    <a
+                        href="{{ route('privacy') }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="link"
+                    >
+                        Privacy Policy
+                    </a>
+                </x-ui.checkbox>
+            </div>
+
+            {{-- Divider --}}
+            <x-ui.divider />
+
             {{-- Submit --}}
-            <x-ui.button type="submit" variant="success" size="lg" full>
+            <x-ui.button type="submit" size="lg" full class="">
                 Create account
             </x-ui.button>
 
@@ -63,10 +98,10 @@
         <x-ui.form-footer>
             Already have an account?
             <a href="{{ route('login') }}" class="link">
-                Login
+                Go to login
             </a>
         </x-ui.form-footer>
 
-    </div>
+    </x-ui.card>
 
 </x-layouts.app>

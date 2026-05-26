@@ -11,14 +11,14 @@
 @php
 
     $base = '
-        inline-flex items-center justify-center
+        inline-flex items-center justify-center gap-3
         mt-1
         px-6 py-2
         border rounded
         shadow-sm
         font-medium
         transition-all duration-300
-        hover:opacity-90
+        hover:opacity-90 hover:no-underline hover:translate-y-[1px] 
         focus:outline-none focus:ring-2 focus:ring-offset-2
         active:scale-[0.98]
     ';
@@ -26,10 +26,10 @@
     $variants = [
         'primary' => '
             bg-gradient-to-r
-            from-indigo-600 to-blue-500
-            border-indigo-500
+            from-blue-600 to-sky-500
+            border-blue-500
             text-white
-            focus:ring-indigo-500
+            focus:ring-blue-600
         ',
 
         'secondary' => '
@@ -37,7 +37,7 @@
             from-slate-600 to-gray-500
             border-slate-500
             text-white
-            focus:ring-slate-500
+            focus:ring-slate-600
         ',
 
         'danger' => '
@@ -45,7 +45,7 @@
             from-red-600 to-orange-500
             border-red-500
             text-white
-            focus:ring-red-500
+            focus:ring-red-600
         ',
 
         'success' => '
@@ -53,7 +53,7 @@
             from-green-600 to-lime-500
             border-green-500
             text-white
-            focus:ring-green-500
+            focus:ring-green-600
         ',
 
         'warning' => '
@@ -61,15 +61,16 @@
             from-indigo-600 to-blue-500
             border-indigo-500
             text-white
-            focus:ring-indigo-500
+            focus:ring-indigo-600
         ',
 
         'ghost' => '
-            bg-gradient-to-r
-            from-indigo-600 to-blue-500
-            border-indigo-500
-            text-white
-            focus:ring-indigo-500
+            bg-gradient-to-t
+            from-gray-100 via-gray-50 to-white
+            border-gray-300
+            text-stone-700
+            focus:ring-gray-400
+            hover:from-yellow-50 to-white
         ',
     ];
 

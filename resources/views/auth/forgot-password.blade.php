@@ -1,25 +1,47 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-    </div>
+{{-- resources/views/auth/forgot-password.blade.php --}}
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<x-layouts.app
+    title="Forgot your password?"
+    subtitle="Enter your email address and we'll send you a password reset link."
+>
 
-    <form method="POST" action="{{ route('password.email') }}">
-        @csrf
+    {{-- Authentication status messages --}}
+    <x-auth-session-status :status="session('status')" />
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    <x-ui.card class="max-w-lg mx-auto text-stone-600 text-sm">
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
-    </form>
+        <form method="POST" action="{{ route('password.email') }}" class="space-y-5">
+            
+            @csrf
+
+            {{-- Email --}}
+            <div>
+                <x-ui.input
+                    name="email"
+                    type="email"
+                    label="Email"
+                    autofocus
+                />
+            </div>
+
+
+            {{-- Submit --}}
+            <x-ui.button type="submit" variant="primary" size="lg" full>
+                {{ __('Email password reset link') }}
+            </x-ui.button>
+
+        </form>
+
+        {{-- Form footer --}}
+            <x-ui.form-footer class="items-start">
+                <a href="{{ route('login') }}" class="link">
+                    {{ __('Back to login') }}
+                </a>
+                <a href="{{ route('register') }}" class="link">
+                    Create an account
+                </a>
+            </x-ui.form-footer>
+
+    </x-ui.card>
+
 </x-guest-layout>

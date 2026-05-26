@@ -5,21 +5,25 @@
     subtitle="Use your Google account or enter your email & password manually."
 >
 
-    <!-- Session status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    {{-- Authentication status messages --}}
+    <x-auth-session-status :status="session('status')" />
 
-
-    <x-ui.card class="max-w-md mx-auto">
+    <x-ui.card class="max-w-lg mx-auto text-stone-600 text-sm">
 
         {{-- Sign in with Google button --}}
-        <x-ui.google-button
+        <x-ui.google-button 
             href="{{ route('google.redirect') }}"
-        />
+        >
+            Sign in with Google
+        </x-ui.google-button>
+
+        {{-- Divider with text --}}
+        <x-ui.divider-with-text text="or sign in with email" />
 
         <form method="POST" action="{{ route('login') }}" class="space-y-5">
             @csrf
 
-            <!-- Email -->
+            {{-- Email --}}
             <div>
                 <x-ui.input
                     name="email"
@@ -28,54 +32,43 @@
                 />
             </div>
 
-            <!-- Password -->
+            {{-- Password --}}
             <div>
                 <x-ui.input
-                    name="email"
-                    type="email"
-                    label="Email"
+                    name="password"
+                    type="password"
+                    label="Password"
                 />
             </div>
-            <!-- Remember Me -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                    <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
+
+            {{-- Remember me --}}
+            <div>
+                <x-ui.checkbox
+                    name="remember"
+                    :label="__('Remember me')"
+                />
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
+            {{-- Divider --}}
+            <x-ui.divider />
 
-                <x-primary-button class="ms-3">
-                    {{ __('Log in') }}
-                </x-primary-button>
+            {{-- Submit --}}
+            <x-ui.button type="submit" variant="primary" size="lg" full>
+                Log in
+            </x-ui.button>
 
-
-
-                <x-ui.form-footer class="items-start">
-                <a 
-                    href="{{ route('password.request') }}" 
-                    class="btn-link"
-                >
-                    Forgot your password?
-                </a>
-
-                <a 
-                    href="{{ route('register') }}"
-                    class="btn-link"    
-                >
-                    Create an account
-                </a>
-            </x-ui.form-footer>
-
-
-
-            </div>
         </form>
+
+        {{-- Form footer --}}
+        <x-ui.form-footer class="items-start">
+            <a href="{{ route('password.request') }}" class="link">
+                {{ __('Forgot your password?') }}
+            </a>
+            <a href="{{ route('register') }}" class="link">
+                Create an account
+            </a>
+        </x-ui.form-footer>
+
     </x-ui.card>
+
 </x-layouts.app>
