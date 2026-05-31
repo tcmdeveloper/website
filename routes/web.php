@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -7,10 +8,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(PageController::class)->group(function(){
     Route::get('/', 'home')->name('home');
-    Route::get('/about', 'about')->name('about');
-    Route::get('/contact', 'contact')->name('contact');
-    Route::get('/terms', 'terms')->name('terms');
-    Route::get('/privacy', 'privacy')->name('privacy');
+    Route::get('/about', 'about')->name('pages.about');
+    Route::get('/contact', 'contact')->name('pages.contact');
+    Route::get('/terms', 'terms')->name('pages.terms');
+    Route::get('/privacy', 'privacy')->name('pages.privacy');
 });
 
 
@@ -19,6 +20,9 @@ Route::controller(PageController::class)->group(function(){
 
 
 
+Route::controller(AdminController::class)->middleware('auth')->group(function(){
+    Route::post('/admin/videos/transcribe', 'transcribeVideo')->name('admin.transcribe-youtube-video');
+});
 
 
 Route::get('/dashboard', function () {

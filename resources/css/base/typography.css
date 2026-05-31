@@ -1,6 +1,4 @@
 
-
-
 /* =========================================
    LINK BUTTON
 ========================================= */
@@ -11,7 +9,7 @@
         bg-none
         border-none rounded-none
         shadow-none
-        text-olive-500 hover:text-olive-600
+        text-stone-500 hover:text-olive-600
         font-normal
         no-underline underline-offset-3
         transition-all duration-300

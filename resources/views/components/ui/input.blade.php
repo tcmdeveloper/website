@@ -7,18 +7,24 @@
     'label' => null,
 ])
 
+
 <div class="form-group">
 
     @if($label)
-        <label for="{{ $name }}" class="block text-sm mb-1">
+        <label 
+            for="{{ $name }}" 
+            class="block mb-1 text-sm text-stone-500 font-medium"
+        >
             {{ $label }}
         </label>
     @endif
 
+    
     <input
+        x-ref="{{ $name }}"
         id="{{ $name }}"
         name="{{ $name }}"
-        type="{{ $type }}"
+        type="{{ $type ?? 'text' }}"
         value="{{ old($name, $value) }}"
         {{ $attributes->merge([
             'class' =>
@@ -37,8 +43,13 @@
         ]) }}
     />
 
-    @error($name)
-        <p class="error-text">{{ $message }}</p>
-    @enderror
+
+    {{-- Validation message if present for this field --}}
+    @if ($errors->has($name))
+        <p class="error-text">
+            {{ $errors->first($name) }}
+        </p>
+    @endif
 
 </div>
+

@@ -28,8 +28,25 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string', 'email:rfc,dns'],
             'password' => ['required', 'string'],
+        ];
+    }
+
+    /**
+     * Get custom validation messages.
+     */
+    public function messages(): array
+    {
+        return [
+            // Email
+            'email.required' => 'Please enter your email address.',
+            'email.string' => 'Email address format is invalid.',
+            'email.email' => 'Please enter a valid email address.',
+
+            // Password
+            'password.required' => 'Please enter your password.',
+            'password.string' => 'Password format is invalid.',
         ];
     }
 
@@ -46,7 +63,7 @@ class LoginRequest extends FormRequest
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'password' => trans('auth.failed'),
             ]);
         }
 

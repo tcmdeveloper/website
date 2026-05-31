@@ -25,7 +25,7 @@
 
     {{-- MAIN CONTENT --}}
     <main class="flex-1">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-0">
             {{ $slot }}
         </div>
     </main>
@@ -34,8 +34,8 @@
     <footer class="border-t bg-white">
         <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-gray-500 flex justify-between gap-x-6">
             <span class="grow">© {{ date('Y') }} {{ config('app.name') }}</span>
-            <a href="{{ route('terms') }}">Terms</a>
-            <a href="{{ route('privacy') }}">Privacy</a>
+            <a href="{{ route('pages.terms') }}">Terms</a>
+            <a href="{{ route('pages.privacy') }}">Privacy</a>
         </div>
     </footer>
 

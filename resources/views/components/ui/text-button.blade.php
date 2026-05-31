@@ -13,8 +13,8 @@
                 text-sm font-medium
                 text-gray-600
                 transition-colors duration-200
+                cursor-pointer
                 hover:text-gray-900
-                hover:underline
                 underline-offset-4
                 focus:outline-none
                 focus:ring-2
