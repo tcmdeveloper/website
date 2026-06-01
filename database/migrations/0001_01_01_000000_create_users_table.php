@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
 
+            // Public identifier
             $table->string('hex', 11)->unique();
             
             $table->string('email')->unique();
@@ -26,8 +27,7 @@ return new class extends Migration
 
             $table->string('username')->unique()->nullable();
             $table->string('display_name')->unique()->nullable();
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
+            $table->string('name')->nullable();
             $table->string('avatar')->nullable();
 
             $table->char('country_code', 2)->nullable();

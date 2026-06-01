@@ -1,17 +1,24 @@
-<x-layouts.app>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+{{-- resources/views/admin/dashboard.blade.php --}}
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+<x-layouts.app 
+    title="Dashboard"
+    subtitle="You can do admin things here for the site."
+>
+    <x-ui.card class="mx-auto">
+
+        <div class="flex flex-wrap gap-3 mb-1">
+
+            <x-ui.button href="#" variant="primary">
+                Articles
+            </x-ui.button>
+
+            <x-ui.button href="{{route('transcriptions.index')}}" variant="primary">
+                Transcriptions
+            </x-ui.button>
+
+        </div>
                     
-
-                    <form
+                    {{-- <form
                         method="POST"
                         action="{{ route('admin.transcribe-youtube-video') }}"
                         class="space-y-5"
@@ -23,7 +30,6 @@
 
                         @csrf
 
-                        {{-- URL --}}
                         <div>
                             <x-ui.input
                                 name="url"
@@ -34,18 +40,12 @@
                         </div>
 
 
-                        {{-- Submit --}}
                         <x-ui.button type="submit" variant="primary" size="sm">
                            Continue
                         </x-ui.button>
 
 
-                    </form>
+                    </form> --}}
 
-
-
-                </div>
-            </div>
-        </div>
-    </div>
+    </x-ui.card>
 </x-layouts.app>

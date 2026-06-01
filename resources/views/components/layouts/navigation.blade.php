@@ -15,7 +15,7 @@
                 <a href="/about" class="hover:text-gray-900">About</a>
                 <a href="/contact" class="hover:text-gray-900">Contact</a>
                 @auth
-                    <a href="/dashboard" class="hover:text-gray-900">Dashboard</a>
+                    <a href="{{route('dashboard')}}" class="hover:text-gray-900">Dashboard</a>
                     <form
                             method="POST"
                             action="{{ route('logout') }}"

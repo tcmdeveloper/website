@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
-use Database\Seeders\ImportSeeder;
+use Database\Seeders\ArticleSeeder;
+use Database\Seeders\CategorySeeder;
+use Database\Seeders\UserSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,7 +18,16 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            ImportSeeder::class,
+            ArticleSeeder::class,
+            CacheSeeder::class,
+            CategorySeeder::class,
+            EmailChangeRequestSeeder::class,
+            FailedJobSeeder::class,
+            JobBatchSeeder::class,
+            JobSeeder::class,
+            TermsVersionSeeder::class,
+            TranscriptionSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }

@@ -52,4 +52,14 @@ class User extends Authenticatable
         $routeKeyValue = $this->getRouteKeyName();
         return $this->$routeKeyValue;
     }
+
+
+
+
+    // Relationships
+    
+    public function transcriptions()
+    {
+        return $this->hasMany(Transcription::class);
+    }
 }
