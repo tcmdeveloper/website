@@ -10,16 +10,14 @@
         $attributes->merge([
             'class' => '
                 inline-flex items-center
-                text-sm font-medium
-                text-gray-600
+                text-sm 
+                text-zinc-500
                 transition-colors duration-200
                 cursor-pointer
-                hover:text-gray-900
+                hover:text-yellow-500
                 underline-offset-4
                 focus:outline-none
-                focus:ring-2
-                focus:ring-olive-500
-                rounded-sm
+                focus:ring-none
             '
         ])
     }}

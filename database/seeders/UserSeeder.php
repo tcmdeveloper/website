@@ -34,6 +34,7 @@ class UserSeeder extends Seeder
                 'username' => $item->username,
                 'display_name' => $item->display_name,
                 'name' => $item->name,
+                'bio' => $item->bio,
                 'avatar' => $item->avatar,
                 'country_code' => $item->country_code,
                 'state_code' => $item->state_code,

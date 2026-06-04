@@ -58,7 +58,7 @@
 
         {{-- ARTICLE CONTENT --}}
         <article class="prose prose-lg max-w-none prose-indigo">
-            {!! $article->content !!}
+            {!! Str::markdown($article->content) !!}
         </article>
 
         {{-- TAGS --}}
@@ -99,7 +99,7 @@
 
             <div>
                 <div class="font-semibold text-gray-900">
-                    {{ $article->author->name ?? 'Author Name' }}
+                    {{ $article->author->display_name ?? 'Author Name' }}
                 </div>
 
                 <div class="text-sm text-gray-500">

@@ -29,7 +29,7 @@ class GoogleController extends Controller
         $user = User::updateOrCreate(
             ['email' => $googleUser->email],
             [
-                'hex' => $this->generator->generate(),
+                'hex' => $this->generator->uniqueHexId(),
                 'first_name' => $names['first_name'],
                 'last_name' => $names['last_name'],
                 'google_id' => $googleUser->id,

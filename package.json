@@ -15,5 +15,9 @@
         "postcss": "^8.4.31",
         "tailwindcss": "^4.3.0",
         "vite": "^8.0.0"
+    },
+    "dependencies": {
+        "@fontsource/source-serif-4": "^5.2.9",
+        "cropperjs": "^2.1.1"
     }
 }

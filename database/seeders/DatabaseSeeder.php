@@ -18,16 +18,19 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            ArticleSeeder::class,
-            CacheSeeder::class,
+
+            UserSeeder::class,
             CategorySeeder::class,
+            ArticleSeeder::class,
+            TranscriptionSeeder::class,
+            CacheSeeder::class,
             EmailChangeRequestSeeder::class,
             FailedJobSeeder::class,
             JobBatchSeeder::class,
             JobSeeder::class,
             TermsVersionSeeder::class,
-            TranscriptionSeeder::class,
-            UserSeeder::class,
+            
+            
         ]);
     }
 }

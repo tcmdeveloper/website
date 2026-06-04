@@ -2,16 +2,19 @@
 
 @if(!empty($title) || !empty($subtitle))
 
-    <div class="my-10 pb-10 border-b border-gray-200 relative text-center">
+    <div 
+        class="mb-10 py-10 bg-zinc-200 border-b border-gray-300 relative text-center" 
+        style="background-image: url('images/banner.png'); background-size:cover; background-position: left -240px;"
+    >
 
         @if($title)
-            <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900">
+            <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-700">
                 {!! $title !!}
             </h1>
         @endif
 
         @if($subtitle)
-            <p class="mt-3 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+            <p class="mt-3 text-base sm:text-lg text-zinc-600 max-w-2xl mx-auto">
                 {!! $subtitle !!}
             </p>
         @endif

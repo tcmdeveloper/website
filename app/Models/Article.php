@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Article extends Model
@@ -49,7 +50,7 @@ class Article extends Model
     */
     public function getRouteKeyName(): string
     {
-        return 'hex';
+        return 'slug';
     }
 
     /*
@@ -68,6 +69,23 @@ class Article extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Accessors
+    |--------------------------------------------------------------------------
+    |
+    | Generate the publicly accessible URL for the stored image.
+    | This allows `$model->image_url` to return a full URL instead
+    | of the raw storage path saved in the database.
+    |
+    */
+    
+    // Image URL attribute
+    public function getImageUrlAttribute()
+    {
+        return Storage::url($this->image);
     }
 
     /*

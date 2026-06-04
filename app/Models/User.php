@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable(['hex', 'email', 'password', 'google_id', 'username', 'display_name', 'first_name', 'last_name', 'avatar', 'country_code', 'state_code'])]
 #[Hidden(['password', 'remember_token'])]
@@ -52,6 +53,18 @@ class User extends Authenticatable
         $routeKeyValue = $this->getRouteKeyName();
         return $this->$routeKeyValue;
     }
+
+
+
+    // Accessors
+
+    public function getAvatarUrlAttribute(): string
+    {
+        return $this->avatar
+            ? Storage::url($this->avatar)
+            : asset('images/default-avatar-dark.png');
+    }
+
 
 
 

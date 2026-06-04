@@ -24,8 +24,8 @@ class CacheSeeder extends Seeder
 
             $model::create([
                 'key' => $item->id,
-                'value' => $item->id,
-                'expiration' => $item->id
+                'value' => $item->value,
+                'expiration' => $item->expiration
             ]);
 
         }

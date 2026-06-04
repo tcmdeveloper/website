@@ -5,6 +5,7 @@
     'type' => 'text',
     'value' => null,
     'label' => null,
+    'hideLabel' => false,
 ])
 
 
@@ -13,7 +14,7 @@
     @if($label)
         <label 
             for="{{ $name }}" 
-            class="block mb-1 text-sm text-stone-500 font-medium"
+            class="{{ $hideLabel ? 'sr-only' : 'block mb-1 text-sm text-stone-500 font-medium' }}"
         >
             {{ $label }}
         </label>

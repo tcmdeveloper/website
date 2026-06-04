@@ -62,7 +62,7 @@ class RegisteredUserController extends Controller
         ]);
 
         $user = User::create([
-            'hex' => $generator->makeHex(),
+            'hex' => $generator->uniqueHexId(),
             'username' => strtolower($data['username']),
             'display_name' => $data['username'],
             'email' => $data['email'],
@@ -75,6 +75,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('admin.dashboard', absolute: false));
     }
 }

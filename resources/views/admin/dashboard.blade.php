@@ -8,11 +8,15 @@
 
         <div class="flex flex-wrap gap-3 mb-1">
 
-            <x-ui.button href="#" variant="primary">
+            <x-ui.button href="{{route('admin.profile.show')}}" variant="primary">
+                Profile
+            </x-ui.button>
+
+            <x-ui.button href="{{route('admin.articles.index')}}" variant="primary">
                 Articles
             </x-ui.button>
 
-            <x-ui.button href="{{route('transcriptions.index')}}" variant="primary">
+            <x-ui.button href="{{route('admin.transcriptions.index')}}" variant="primary">
                 Transcriptions
             </x-ui.button>
 

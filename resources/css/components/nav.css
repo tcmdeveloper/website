@@ -1,0 +1,6 @@
+@layer components {
+    .nav-link {
+        @apply text-zinc-100 hover:text-yellow-300 transition-colors font-brand cursor-pointer;
+    }
+
+}

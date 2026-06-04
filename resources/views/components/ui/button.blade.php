@@ -11,7 +11,7 @@
 @php
 
     $base = '
-        inline-flex items-center justify-center gap-3
+        inline-flex items-center justify-center
         mt-1
         px-6 py-2
         border rounded
@@ -25,6 +25,7 @@
 
     $variants = [
         'primary' => '
+            gap-3
             bg-gradient-to-r
             from-blue-600 to-sky-500
             border-blue-500
@@ -33,6 +34,7 @@
         ',
 
         'secondary' => '
+            gap-3
             bg-gradient-to-r
             from-slate-600 to-gray-500
             border-slate-500
@@ -41,6 +43,7 @@
         ',
 
         'danger' => '
+            gap-3
             bg-gradient-to-r
             from-red-600 to-orange-500
             border-red-500
@@ -49,6 +52,7 @@
         ',
 
         'success' => '
+            gap-3
             bg-gradient-to-r
             from-green-600 to-lime-500
             border-green-500
@@ -57,6 +61,7 @@
         ',
 
         'warning' => '
+            gap-3
             bg-gradient-to-r
             from-indigo-600 to-blue-500
             border-indigo-500
@@ -65,6 +70,7 @@
         ',
 
         'ghost' => '
+            gap-3
             bg-gradient-to-t
             from-gray-100 via-gray-50 to-white
             border-gray-300
@@ -75,11 +81,11 @@
     ];
 
     $sizes = [
-        'xs' => 'px-2 py-0.5 text-xs',
-        'sm' => 'px-3 py-1 text-sm',
-        'md' => 'px-6 py-2 text-base',
-        'lg' => 'px-9 py-3 text-lg',
-        'xl' => 'px-12 py-4 text-xl',
+        'xs' => 'px-2.5! py-1.5! text-xs',
+        'sm' => 'px-3! py-1! text-sm',
+        'md' => 'px-6! py-2! text-base',
+        'lg' => 'px-9! py-3! text-lg',
+        'xl' => 'px-12! py-4! text-xl',
     ];
 
     $classes = implode(' ', [

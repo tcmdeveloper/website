@@ -8,11 +8,19 @@
 
     <title>{{ $title ?? config('app.name') }}</title>
 
+    {{-- Vite --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    {{-- Stack per-page styles --}}
+    @stack('styles')
+
 </head>
 
-<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
-
+<body 
+    x-data="{ menuOpen: false }"
+    :class="{ 'overflow-hidden': menuOpen }"
+    class="pt-[61px] flex flex-col min-h-screen bg-gray-50 text-gray-900 font-body"
+>
 
     {{-- NAVBAR --}}
     <x-layouts.navigation />
@@ -31,13 +39,8 @@
     </main>
 
     {{-- FOOTER --}}
-    <footer class="border-t bg-white">
-        <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-gray-500 flex justify-between gap-x-6">
-            <span class="grow">© {{ date('Y') }} {{ config('app.name') }}</span>
-            <a href="{{ route('pages.terms') }}">Terms</a>
-            <a href="{{ route('pages.privacy') }}">Privacy</a>
-        </div>
-    </footer>
+    <x-layouts.footer />
 
+    @stack('scripts')
 </body>
 </html>
