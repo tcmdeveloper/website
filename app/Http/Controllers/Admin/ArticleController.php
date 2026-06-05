@@ -199,6 +199,21 @@ if ($request->cropped_image) {
 
 
 
+    public function uploadImage(Request $request)
+{
+    $request->validate([
+        'image' => ['required', 'image']
+    ]);
+
+    $path = $request->file('image')
+        ->store('articles', 'public');
+
+    return response()->json([
+        'url' => Storage::url($path),
+    ]);
+}
+
+
 
     // -----------------------------------------------------
     // DESTROY

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use League\CommonMark\CommonMarkConverter;
 
 class Article extends Model
 {
@@ -86,6 +87,16 @@ class Article extends Model
     public function getImageUrlAttribute()
     {
         return Storage::url($this->image);
+    }
+
+    // Get article HTML content for markdown
+    public function getHtmlContentAttribute()
+    {
+        $converter = new CommonMarkConverter();
+
+        return $converter
+            ->convert($this->content)
+            ->getContent();
     }
 
     /*

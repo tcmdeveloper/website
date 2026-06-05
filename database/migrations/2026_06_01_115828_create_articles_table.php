@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('excerpt')->nullable();
-            $table->longText('content');
+            $table->text('content');
 
             // Relations
             $table->foreignId('user_id')

@@ -18,6 +18,13 @@
     },
     "dependencies": {
         "@fontsource/source-serif-4": "^5.2.9",
-        "cropperjs": "^2.1.1"
+        "@tiptap/extension-image": "^3.25.0",
+        "@tiptap/extension-link": "^3.25.0",
+        "@tiptap/extension-placeholder": "^3.25.0",
+        "@tiptap/markdown": "^3.25.0",
+        "cropperjs": "^1.6.2",
+        "dompurify": "^3.4.8",
+        "marked": "^18.0.5",
+        "turndown": "^7.2.4"
     }
 }

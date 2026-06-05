@@ -1,19 +1,22 @@
 <?php
 
 namespace App\Http\Controllers\Frontend;
-use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\Controller;
+use League\CommonMark\CommonMarkConverter;
 use App\Models\Article;
-use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
     public function show(Article $article)
     {
+        $converter = new CommonMarkConverter();
 
-    // dd($article);
-        return view('articles.show', compact('article'));
+        $contentHtml = $converter->convert($article->content);
+
+        return view('articles.show', [
+            'article' => $article,
+            'contentHtml' => $contentHtml,
+        ]);
     }
-
-    
 }

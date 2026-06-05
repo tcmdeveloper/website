@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 
-#[Fillable(['hex', 'email', 'password', 'google_id', 'username', 'display_name', 'first_name', 'last_name', 'avatar', 'country_code', 'state_code'])]
+#[Fillable(['hex', 'email', 'email_verified_at', 'password', 'google_id', 'username', 'display_name', 'name', 'bio', 'avatar', 'country_code', 'state_code'])]
 #[Hidden(['password', 'remember_token'])]
 
 class User extends Authenticatable
@@ -63,6 +63,16 @@ class User extends Authenticatable
         return $this->avatar
             ? Storage::url($this->avatar)
             : asset('images/default-avatar-dark.png');
+    }
+
+    public function getCountryNameAttribute(): string
+    {
+        return config('countries')[$this->country_code] ?? 'Unknown';
+    }
+
+    public function getStateNameAttribute(): string
+    {
+        return config('states')[$this->state_code] ?? 'Unknown';
     }
 
 

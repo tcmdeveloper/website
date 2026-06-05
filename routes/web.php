@@ -58,12 +58,15 @@ Route::controller(AdminArticleController::class)
         Route::get('/admin/articles', 'index')->name('admin.articles.index');
         
         Route::get('/admin/articles/create', 'create')->name('admin.articles.create');
-        Route::post('/admin/articles/store', 'store')->name('admin.articles.store');
+        Route::post('/admin/articles/store', 'store')->name('articles.store');
         Route::get('/admin/articles/{article}/edit', 'edit')->name('admin.articles.edit');
         Route::patch('/admin/articles/{article}', 'update')->name('admin.articles.update');
         Route::delete('/admin/articles/{article}','destroy')->name('admin.articles.destroy');
 
         Route::get('/admin/articles/{article}', 'inspect')->name('admin.articles.inspect');
+
+
+        Route::post('/admin/articles/upload-image', 'uploadImage');
     })
 ;
 
@@ -74,14 +77,16 @@ Route::controller(AdminArticleController::class)
 // PROFILE CONTROLLER
 // -----------------------------------------------------
 
-Route::prefix('admin/profile')->name('admin.profile.')->middleware(['auth'])->group(function () {
-    Route::get('/', [ProfileController::class, 'show'])->name('show');
-    Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
-    Route::patch('/', [ProfileController::class, 'update'])->name('update');
-    Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+Route::controller(ProfileController::class)->prefix('admin/profile')->name('admin.profile.')->middleware(['auth'])->group(function () {
+    Route::get('/', 'show')->name('show');
+    Route::get('/edit', 'edit')->name('edit');
+    Route::patch('/', 'update')->name('update');
+    Route::delete('/', 'destroy')->name('destroy');
 
-    Route::get('/password', [ProfileController::class, 'editPassword'])->name('password.edit');
-    Route::patch('/password', [ProfileController::class, 'updatePassword'])->name('password.update');
+    Route::get('/password', 'editPassword')->name('password.edit');
+    Route::patch('/password', 'updatePassword')->name('password.update');
+
+    Route::post('/avatar', 'updateAvatar')->name('admin.profile.avatar');
 });
 
 

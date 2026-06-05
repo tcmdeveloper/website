@@ -4,6 +4,7 @@
     {{
         $attributes->merge([
             'class' => '
+                mb-10
                 bg-white
                 border border-gray-200
                 shadow-sm

@@ -1,138 +1,170 @@
 {{-- resources/views/admin/articles/create.blade.php --}}
 
-@push('styles')
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css"
-    />
-@endpush
-
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 
+    {{-- YOUR SCRIPT MUST COME AFTER --}}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            let cropper;
 
-            document.getElementById('imageInput').addEventListener('change', function (e) {
+            let cropper = null;
 
-                const file = e.target.files[0];
-                if (!file) return;
+            const imageInput = document.getElementById('imageInput');
+            const preview = document.getElementById('preview');
+            const form = document.getElementById('articleForm');
+            const croppedInput = document.getElementById('croppedImage');
 
-                const reader = new FileReader();
+            if (imageInput) {
+                imageInput.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
 
-                reader.onload = function (event) {
+                    const reader = new FileReader();
 
-                    const img = document.getElementById('preview');
+                    reader.onload = function (event) {
+                        preview.src = event.target.result;
+                        preview.classList.remove('hidden');
 
-                    img.src = event.target.result;
-                    img.classList.remove('hidden');
+                        if (cropper) cropper.destroy();
 
-                    if (cropper) {
-                        cropper.destroy();
-                    }
+                        cropper = new Cropper(preview, {
+                            aspectRatio: 16 / 9,
+                            viewMode: 1,
+                            dragMode: 'move',
+                        });
+                    };
 
-                    cropper = new Cropper(img, {
-                        aspectRatio: 16 / 9,
-                        viewMode: 1,
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    if (!cropper) return form.submit();
+
+                    const canvas = cropper.getCroppedCanvas({
+                        width: 1200,
+                        height: 675
                     });
-                };
 
-                reader.readAsDataURL(file);
-            });
+                    canvas.toBlob((blob) => {
+                        const reader = new FileReader();
 
-            document.getElementById('articleForm').addEventListener('submit', function (e) {
-    e.preventDefault();
+                        reader.onload = function () {
+                            croppedInput.value = reader.result;
+                            form.submit();
+                        };
 
-    const form = this;
-
-    if (!cropper) {
-        form.submit();
-        return;
-    }
-
-    const canvas = cropper.getCroppedCanvas({
-        width: 1200,
-        height: 675
-    });
-
-    canvas.toBlob(function (blob) {
-
-        const reader = new FileReader();
-
-        reader.onload = function () {
-
-            document.getElementById('croppedImage').value = reader.result;
-
-            // IMPORTANT: ensure DOM is updated before submit
-            setTimeout(() => {
-                form.submit();
-            }, 0);
-        };
-
-        reader.readAsDataURL(blob);
-
-    }, "image/jpeg", 0.9);
-}); console.log(document.getElementById('croppedImage').value);
+                        reader.readAsDataURL(blob);
+                    }, 'image/jpeg', 0.9);
+                });
+            }
         });
-</script>
+    </script>
 @endpush
 
-
 <x-layouts.app 
-    title="Articles"
-    subtitle="Here are the articles you've been working on."
+    title="Create a new article"
+    subtitle="Publish the content for your article in the form below."
 >
 
+    @if ($errors->any())
+        <div class="bg-red-100 text-red-700 p-4 mb-4 rounded">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-@if ($errors->any())
-    <div class="bg-red-100 text-red-700 p-4 mb-4 rounded">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+
     <x-ui.card class="mx-auto">
 
-        <form id="articleForm" method="POST" action="{{ route('admin.articles.store') }}" class="space-y-4">
+        <form id="articleForm" method="POST" action="{{ route('articles.store') }}" class="space-y-4">
 
-            @csrf
+            <div 
+                x-data="{
+                    title: '',
+                    slug: '',
+                    slugEdited: false
+                }"
+                class="space-y-4"
+            >
 
-            {{-- Title --}}
+                {{-- Title --}}
+                <div>
+                    <x-ui.input
+                        name="title"
+                        type="text"
+                        label="Title"
+                        x-model="title"
+                        @input="
+                            slug = title
+                                .toLowerCase()
+                                .trim()
+                                .replace(/[^a-z0-9\s-]/g, '')
+                                .replace(/\s+/g, '-')
+                                .replace(/-+/g, '-')
+                        "
+                    />
+                </div>
+
+                {{-- Slug --}}
+                <div>
+                    <x-ui.input
+                        name="slug"
+                        type="text"
+                        label="Slug"
+                        x-model="slug"
+                    />
+                </div>
+
+            </div>
+                
             <div>
-                <x-ui.input
-                    name="title"
-                    type="text"
-                    label="Title"
+
+                {{-- Excerpt --}}
+                <x-ui.textarea
+                    name="excerpt"
+                    label="Excerpt"
+                    rows="3"
+                    placeholder="Write something..."
                 />
             </div>
 
-            {{-- Slug --}}
-            <div>
-                <x-ui.input
-                    name="slug"
-                    type="text"
-                    label="Slug"
-                />
-            </div>
 
-            {{-- Excerpt --}}
-            <x-ui.textarea
-                name="excerpt"
-                label="Excerpt"
-                rows="3"
-                placeholder="Write something..."
-            />
 
-            {{-- Content --}}
-            <x-ui.textarea
-                name="content"
-                label="Content"
-                rows="8"
-                placeholder="Write something..."
-            />
+
+
+            <div x-data="markdownEditor"
+     x-init="init()"
+     class="grid grid-cols-2 gap-6">
+
+    <!-- Editor -->
+    <div class="h-full flex flex-col">
+        <textarea
+            x-ref="content"
+            name="content"
+            class="flex-1 w-full border rounded p-2 resize-none"
+            placeholder="Write Markdown..."
+        >{{ old('content') }}</textarea>
+    </div>
+
+    <!-- Preview -->
+    <div class="h-full flex flex-col">
+        <div class="flex-1 border rounded p-4 bg-white prose max-w-none overflow-auto">
+            <div x-html="previewMarkdown" class="markdown"></div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
 
             {{-- Category --}}
             <x-ui.select
@@ -143,23 +175,23 @@
             />
 
             {{-- Featured images --}}
-            
+                
             <input
-    id="imageInput"
-    name="featured_image"
-    label="Featured image"
-    type="file"
-    accept="image/*"
-/>
+                id="imageInput"
+                name="featured_image"
+                label="Featured image"
+                type="file"
+                accept="image/*"
+            />
 
             <div class="mb-6">
-    <img
-        id="preview"
-        class="max-w-full hidden rounded-lg"
-    >
-</div>
+                <img
+                    id="preview"
+                    class="max-w-full hidden rounded-lg"
+                >
+            </div>
 
-<input type="hidden" name="cropped_image" id="croppedImage">
+            <input type="hidden" name="cropped_image" id="croppedImage">
 
             {{-- Meta title --}}
             <div>
@@ -196,9 +228,10 @@
             >
                 Create article
             </x-ui.button>
+        
         </form>
 
-    </x-ui.card>
 
+    </x-ui.card>
 
 </x-layouts.app>

@@ -12,11 +12,12 @@
 
     $base = '
         inline-flex items-center justify-center
-        mt-1
+        
         px-6 py-2
         border rounded
         shadow-sm
         font-medium
+        cursor-pointer
         transition-all duration-300
         hover:opacity-90 hover:no-underline hover:translate-y-[1px] 
         focus:outline-none focus:ring-2 focus:ring-offset-2
@@ -25,6 +26,7 @@
 
     $variants = [
         'primary' => '
+        mt-1
             gap-3
             bg-gradient-to-r
             from-blue-600 to-sky-500
@@ -34,6 +36,7 @@
         ',
 
         'secondary' => '
+        mt-1
             gap-3
             bg-gradient-to-r
             from-slate-600 to-gray-500
@@ -43,6 +46,7 @@
         ',
 
         'danger' => '
+        mt-1
             gap-3
             bg-gradient-to-r
             from-red-600 to-orange-500
@@ -52,6 +56,7 @@
         ',
 
         'success' => '
+        mt-1
             gap-3
             bg-gradient-to-r
             from-green-600 to-lime-500
@@ -61,6 +66,7 @@
         ',
 
         'warning' => '
+        mt-1
             gap-3
             bg-gradient-to-r
             from-indigo-600 to-blue-500
@@ -70,6 +76,7 @@
         ',
 
         'ghost' => '
+        mt-1
             gap-3
             bg-gradient-to-t
             from-gray-100 via-gray-50 to-white

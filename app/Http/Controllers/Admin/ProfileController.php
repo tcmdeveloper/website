@@ -3,19 +3,23 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\UpdatePasswordRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
+
+    // -----------------------------------------------------
+    // SHOW USER'S PROFILE
+    // -----------------------------------------------------
+
     public function show(Request $request): View
     {
         return view('admin.profile.show', [
@@ -24,9 +28,10 @@ class ProfileController extends Controller
     }
 
 
-    /**
-     * Display the user's profile form.
-     */
+    // -----------------------------------------------------
+    // EDIT PROFILE FORM
+    // -----------------------------------------------------
+
     public function edit(Request $request): View
     {
         return view('admin.profile.edit', [
@@ -34,25 +39,97 @@ class ProfileController extends Controller
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
+
+    // -----------------------------------------------------
+    // UPDATE USER'S PROFILE INFORMATION
+    // -----------------------------------------------------
+
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $data = $request->validated();
+
+        // Check if username changed
+        $data['username'] = strtolower($data['username']);
+        $data['display_name'] = $request->input('username');
+
+        $user->fill($data);
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('admin.profile.show')
+            ->with('status', 'profile-updated');
     }
 
-    /**
-     * Delete the user's account.
-     */
+
+    // -----------------------------------------------------
+    // EDIT PASSWORD FORM
+    // -----------------------------------------------------
+
+    public function editPassword(): View
+    {
+        return view('admin.profile.password', [
+            'user' => auth()->user(),
+        ]);
+    }
+
+
+    // -----------------------------------------------------
+    // UPDATE USER'S PASSWORD
+    // -----------------------------------------------------
+
+    public function updatePassword(UpdatePasswordRequest $request): RedirectResponse
+    {
+        $request->user()->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()
+            ->route('admin.profile.show')
+            ->with('status', 'password-updated');
+    }
+
+
+    // -----------------------------------------------------
+    // STORE NEW AVATAR AND UPDATE DATABASE
+    // -----------------------------------------------------
+
+    public function updateAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => ['required', 'image', 'max:2048'],
+        ]);
+
+        $user = auth()->user();
+
+        // delete old avatar if exists
+        if ($user->avatar) {
+            Storage::disk('public')->delete($user->avatar);
+        }
+
+        // store new avatar
+        $path = $request->file('avatar')->store('avatars/'.$user->id, 'public');
+
+        // save to DB
+        $user->avatar = $path;
+        $user->save();
+
+        return response()->json([
+            'message' => 'Avatar updated successfully',
+            'avatar_url' => Storage::url($path),
+        ]);
+    }
+
+
+    // -----------------------------------------------------
+    // DELETE USER'S ACCOUNT
+    // -----------------------------------------------------
+
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
