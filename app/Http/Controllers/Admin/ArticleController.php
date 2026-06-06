@@ -78,7 +78,7 @@ class ArticleController extends Controller
             'content' => 'nullable',
             'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'cropped_image' => ['nullable', 'string'],
-            'meta_title' => ['nullable', 'string', 'max:60'],
+            'meta_title' => ['nullable', 'string', 'max:100'],
             'meta_description' => ['nullable', 'string', 'max:160'],
             'is_published' => ['nullable', 'boolean']
         ]);
@@ -115,7 +115,13 @@ if ($request->cropped_image) {
     );
 
     $imagePath = 'articles/' . $filename;
+
+    // dd($imagePath);
+
+
 }
+
+
 
 
 

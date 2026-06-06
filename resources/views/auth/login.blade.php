@@ -13,13 +13,13 @@
 
         
         {{-- Sign in with Google button --}}
-        <x-ui.google-button href="{{ route('google.redirect') }}">
+        {{-- <x-ui.google-button href="{{ route('google.redirect') }}">
             Sign in with Google
-        </x-ui.google-button>
+        </x-ui.google-button> --}}
 
 
         {{-- Divider with text --}}
-        <x-ui.divider-with-text text="or sign in with email" />
+        {{-- <x-ui.divider-with-text text="or sign in with email" /> --}}
 
 
         <form
@@ -80,7 +80,7 @@
 
         {{-- Form footer --}}
 
-        <x-ui.form-footer class="items-start">
+        {{-- <x-ui.form-footer class="items-start">
 
             <a 
                 href="{{ route('password.request') }}" 
@@ -97,7 +97,7 @@
             </a>
 
 
-        </x-ui.form-footer>
+        </x-ui.form-footer> --}}
 
 
     </x-ui.card>

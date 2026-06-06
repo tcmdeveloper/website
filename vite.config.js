@@ -13,4 +13,14 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+    server: {
+      host: true,
+      hmr: {
+        host: 'metrix-v1.test',
+      },
+      watch: {
+        usePolling: true,
+        interval: 100,
+      },
+    },
 });

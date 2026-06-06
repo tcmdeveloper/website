@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class CategorySeeder extends Seeder
 {
@@ -28,6 +27,7 @@ class CategorySeeder extends Seeder
                 'name' => $item->name,
                 'slug' => $item->slug,
                 'description' => $item->description,
+                'color' => $item->color,
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at,
             ]);

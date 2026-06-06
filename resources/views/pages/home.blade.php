@@ -5,12 +5,14 @@
     subtitle="Live trial coverage, court documents, and structured case breakdowns<br>from True Crime Metrix."
 >
 
+    {{-- Latest articles --}}
+
     <div class="grid gap-6 sm:grid-cols-1 lg:grid-cols-2">
 
         @foreach ($articles as $article)
 
             <a href="{{ route('articles.show', $article->slug) }}"
-               class="group bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition">
+               class="group bg-white border border-gray-200 rounded-sm overflow-hidden hover:shadow-lg transition">
 
                 {{-- Image --}}
                 <div class="aspect-video overflow-hidden bg-gray-100">
@@ -45,7 +47,7 @@
                     </p>
 
                     <div class="pt-2 text-sm font-medium text-blue-600">
-                        Read more →
+                        Read more <x-ui.icon name="arrow-right" size="xs" class="-translate-y-[1px]!" />
                     </div>
 
                 </div>

@@ -2,7 +2,7 @@
 #markdown-preview, .markdown {
 
     h1 {
-        @apply text-4xl font-bold tracking-tight text-gray-900 mb-6;
+        @apply text-5xl font-bold tracking-tight text-gray-900 mb-6;
     }
 
     h2 {
@@ -36,7 +36,7 @@
     }
 
     p{
-        @apply mt-3 text-gray-800;
+        @apply my-5 mt-3 text-gray-800;
     }
 }
 

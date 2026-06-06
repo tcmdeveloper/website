@@ -18,6 +18,12 @@ class PageController extends Controller
     ){}
 
 
+    public function showCategory()
+    {
+        return [];
+    }
+
+
     // -----------------------------------------------------
     // HOMEPAGE
     // -----------------------------------------------------

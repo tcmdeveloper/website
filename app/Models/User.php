@@ -60,9 +60,15 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute(): string
     {
-        return $this->avatar
-            ? Storage::url($this->avatar)
-            : asset('images/default-avatar-dark.png');
+        if (! $this->avatar) {
+            return asset('images/default-avatar-dark.png');
+        }
+
+        if (filter_var($this->avatar, FILTER_VALIDATE_URL)) {
+            return $this->avatar;
+        }
+
+        return Storage::url($this->avatar);
     }
 
     public function getCountryNameAttribute(): string

@@ -32,6 +32,8 @@ Route::controller(PageController::class)->group(function(){
     Route::get('/case-updates', 'privacy')->name('case-updates.index');
     Route::get('/documents', 'privacy')->name('documents.index');
     Route::get('/criminal-profiles', 'privacy')->name('criminal-profiles.index');
+
+    Route::get('/categories/{category}', 'showCategory')->name('categories.show');
 });
 
 
@@ -53,20 +55,18 @@ Route::controller(FrontendArticleController::class)
 // -----------------------------------------------------
 
 Route::controller(AdminArticleController::class)
+    ->prefix('/articles')
+    ->name('articles.')
     ->middleware(['auth', 'verified'])
-    ->group(function(){
-        Route::get('/admin/articles', 'index')->name('admin.articles.index');
-        
-        Route::get('/admin/articles/create', 'create')->name('admin.articles.create');
-        Route::post('/admin/articles/store', 'store')->name('articles.store');
-        Route::get('/admin/articles/{article}/edit', 'edit')->name('admin.articles.edit');
-        Route::patch('/admin/articles/{article}', 'update')->name('admin.articles.update');
-        Route::delete('/admin/articles/{article}','destroy')->name('admin.articles.destroy');
-
-        Route::get('/admin/articles/{article}', 'inspect')->name('admin.articles.inspect');
-
-
-        Route::post('/admin/articles/upload-image', 'uploadImage');
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{article}/edit', 'edit')->name('edit');
+        Route::patch('/{article}', 'update')->name('update');
+        Route::delete('/{article}','destroy')->name('destroy');
+        Route::get('/{article}', 'inspect')->name('inspect');
+        Route::post('/upload-image', 'uploadImage');
     })
 ;
 
@@ -77,16 +77,18 @@ Route::controller(AdminArticleController::class)
 // PROFILE CONTROLLER
 // -----------------------------------------------------
 
-Route::controller(ProfileController::class)->prefix('admin/profile')->name('admin.profile.')->middleware(['auth'])->group(function () {
-    Route::get('/', 'show')->name('show');
-    Route::get('/edit', 'edit')->name('edit');
-    Route::patch('/', 'update')->name('update');
-    Route::delete('/', 'destroy')->name('destroy');
-
-    Route::get('/password', 'editPassword')->name('password.edit');
-    Route::patch('/password', 'updatePassword')->name('password.update');
-
-    Route::post('/avatar', 'updateAvatar')->name('admin.profile.avatar');
+Route::controller(ProfileController::class)
+    ->prefix('/profile')
+    ->name('profile.')
+    ->middleware(['auth'])
+    ->group(function () {
+        Route::get('/', 'show')->name('show');
+        Route::get('/edit', 'edit')->name('edit');
+        Route::patch('/', 'update')->name('update');
+        Route::delete('/', 'destroy')->name('destroy');
+        Route::get('/password', 'editPassword')->name('password.edit');
+        Route::patch('/password', 'updatePassword')->name('password.update');
+        Route::post('/avatar', 'updateAvatar')->name('profile.avatar');
 });
 
 
@@ -107,15 +109,17 @@ Route::controller(DashboardController::class)->group(function(){
 // TRANSCRIPTION CONTROLLER
 // -----------------------------------------------------
 
-Route::controller(TranscriptionController::class)->middleware(['auth', 'verified'])->group(function(){
-    Route::post('/admin/transcriptions/store', 'store')->name('admin.transcriptions.store');
-    Route::get('/admin/transcriptions/create', 'create')->name('admin.transcriptions.create');
-    Route::get('/admin/transcriptions', 'index')->name('admin.transcriptions.index');
-
-
-    Route::post('/admin/videos/transcribe', 'transcribeVideo')->name('admin.transcriptions.transcribe-youtube');
-    Route::post('/admin/videos/transcribe-uploaded-video', 'transcribeVideo')->name('admin.transcriptions.transcribe-upload');
-    Route::get('/admin/subtitles/translate', 'translateSubtitles')->name('admin.transcriptions.translate-subs');
+Route::controller(TranscriptionController::class)
+    ->prefix('/transcriptions')
+    ->name('transcriptions.')
+    ->middleware(['auth', 'verified'])
+    ->group(function(){
+        Route::post('/store', 'store')->name('store');
+        Route::get('/create', 'create')->name('create');
+        Route::get('/transcriptions', 'index')->name('index');
+        Route::post('/transcribe', 'transcribeVideo')->name('transcribe-youtube');
+        Route::post('/transcribe-uploaded-video', 'transcribeVideo')->name('transcribe-upload');
+        Route::get('/translate', 'translateSubtitles')->name('translate-subs');
 });
 
 

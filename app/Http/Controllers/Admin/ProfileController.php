@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+use App\Services\UsernameGenerator;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -20,10 +21,20 @@ class ProfileController extends Controller
     // SHOW USER'S PROFILE
     // -----------------------------------------------------
 
-    public function show(Request $request): View
+    public function show(UsernameGenerator $generator, Request $request): View
     {
-        return view('admin.profile.show', [
-            'user' => $request->user(),
+
+        $user = $request->user();
+
+        // Only generate if missing
+        if (empty($user->username)) {
+            $user->username = $generator->generate($user->name);
+            // $user->save();
+        }
+
+
+        return view('profile.show', [
+            'user' => $user,
         ]);
     }
 
@@ -34,7 +45,7 @@ class ProfileController extends Controller
 
     public function edit(Request $request): View
     {
-        return view('admin.profile.edit', [
+        return view('profile.edit', [
             'user' => $request->user(),
         ]);
     }
@@ -62,7 +73,7 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return Redirect::route('admin.profile.show')
+        return Redirect::route('profile.show')
             ->with('status', 'profile-updated');
     }
 
@@ -73,7 +84,7 @@ class ProfileController extends Controller
 
     public function editPassword(): View
     {
-        return view('admin.profile.password', [
+        return view('profile.password', [
             'user' => auth()->user(),
         ]);
     }
@@ -90,7 +101,7 @@ class ProfileController extends Controller
         ]);
 
         return redirect()
-            ->route('admin.profile.show')
+            ->route('profile.show')
             ->with('status', 'password-updated');
     }
 

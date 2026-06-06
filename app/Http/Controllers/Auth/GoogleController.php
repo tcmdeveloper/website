@@ -24,17 +24,15 @@ class GoogleController extends Controller
     {
         $googleUser = Socialite::driver('google')->stateless()->user();
 
-        $names = splitGoogleName($googleUser->name);
 
         $user = User::updateOrCreate(
             ['email' => $googleUser->email],
             [
                 'hex' => $this->generator->uniqueHexId(),
-                'first_name' => $names['first_name'],
-                'last_name' => $names['last_name'],
+                'name' => $googleUser->name,
                 'google_id' => $googleUser->id,
                 'password' => bcrypt(str()->random(24)),
-                'avatar' => $googleUser->avatar,   
+                'avatar' => $googleUser->avatar,
             ]
         );
 

@@ -6,13 +6,13 @@
     <x-ui.card class="max-w-2xl mx-auto px-16 py-16 pb-11">
 
         {{-- Profile header --}}
-        @include('admin.profile.partials.header')
+        @include('profile.partials.header')
 
         <div class="mt-10 border-t border-zinc-400 flex flex-col font-light">
 
             <form
                 method="POST"
-                action="{{ route('admin.profile.password.update') }}"
+                action="{{ route('profile.password.update') }}"
                 class=""
             >
                 @csrf
@@ -73,7 +73,7 @@
                 {{-- ACTIONS --}}
                 <div class="flex gap-3 mt-8 justify-center">
                     <x-ui.button type="submit" variant="primary" size="md" full>Update Password</x-ui.button>
-                    <x-ui.button href="{{route('admin.profile.show')}}" size="md" variant="secondary" full>Cancel</x-ui.button>
+                    <x-ui.button href="{{route('profile.show')}}" size="md" variant="secondary" full>Cancel</x-ui.button>
                 </div>
 
 

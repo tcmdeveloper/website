@@ -3,15 +3,35 @@
 <x-layouts.app>
        
 
-    <x-ui.card class="max-w-3xl mx-auto flex flex-col items-center markdown bg-transparent! border-none shadow-none!">
+    <x-ui.card class="max-w-6xl mx-auto flex flex-col items-center markdown shadow-none! bg-transparent! border-none!">
 
-        <div class="my-1 mt-4 text-sm">{{ $article->created_at->format('M d, Y') }}</div>
+        <div class="my-1 mt-5 text-lg font-bold flex flex-row justify-center w-full">
+            <span>{{ $article->created_at->format('M d, Y') }}</span>
+            {{-- <span>
+                    <x-ui.category-pip
+                        href="{{route('categories.show', $article->category->slug)}}"
+                        color="{{$article->category->color}}"
+                    >
+                        {{$article->category->name}}
+                    </x-ui.category-pip>
+                </span> --}}
+        </div>
 
-        <h1 class="text-center my-4 mb-1!">
+        <h1 class="text-center my-8 mb-8!">
             {{ $article->title }}
         </h1>
 
-        <h2 class="text-center mb-3!">
+        <span>
+                    <x-ui.category-pip
+                        href="{{route('categories.show', $article->category->slug)}}"
+                        color="{{$article->category->color}}"
+                    >
+                        {{$article->category->name}}
+                    </x-ui.category-pip>
+                    <a class="inline-flex items-center rounded-full px-3 py-1 text-sm font-normal transition bg-lime-500 text-white hover:bg-lime-20">by {{$article->author->display_name}}</a>
+                </span>
+
+        <h2 class="text-center mt-7 mb-5!">
             {{ $article->excerpt }}
         </h2>
 
@@ -20,7 +40,7 @@
         @if(!empty($article->featured_image))
             <img
                 src="{{ url($article->featured_image) }}"
-                class="my-6 w-full rounded-xs object-contain max-w-3xl"
+                class="my-6 w-full rounded-xs object-contain shadow-sm"
                 alt="{{ $article->title }}"
             >
         @endif
@@ -29,7 +49,7 @@
             <span>Author: Metrix</span>
             @if(!empty($article->category))
                 <span>|</span>
-                <span>Category: <a href="{{url('/categories')}}" class="link text-blue-800!">{{ $article->category->name }}</a></span>
+                
             @endif
         </div>
 

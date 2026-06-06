@@ -59,10 +59,10 @@
 
             {{-- ACTIONS --}}
             <div class="flex gap-3 justify-self-end mt-2">
-                @if (request()->routeIs('admin.profile.edit') ||
-                    request()->routeIs('admin.profile.password.edit'))
+                @if (request()->routeIs('profile.edit') ||
+                    request()->routeIs('profile.password.edit'))
                     <x-ui.button
-                        href="{{ route('admin.profile.show') }}"
+                        href="{{ route('profile.show') }}"
                         size="xs"
                         variant="ghost"
                     >
@@ -70,13 +70,13 @@
                     </x-ui.button>
                 @else
                     <x-ui.button
-                        href="{{ route('admin.profile.edit') }}"
+                        href="{{ route('profile.edit') }}"
                         size="xs"
                     >
                         Edit profile
                     </x-ui.button>
                 @endif
-                <x-ui.button href="{{ route('admin.profile.password.edit')}}" size="xs" variant="secondary">Change password</x-ui.button>
+                <x-ui.button href="{{ route('profile.password.edit')}}" size="xs" variant="secondary">Change password</x-ui.button>
             </div>
         </div>
 
