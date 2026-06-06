@@ -55,7 +55,7 @@
         </button>
 
         @auth
-            <a href="{{ route('admin.dashboard') }}" class="nav-link">
+            <a href="{{ route('dashboard') }}" class="nav-link">
                 Dashboard
             </a>
 

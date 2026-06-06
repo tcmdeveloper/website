@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             ArticleSeeder::class,
             TranscriptionSeeder::class,
-            CacheSeeder::class,
             EmailChangeRequestSeeder::class,
             FailedJobSeeder::class,
             JobBatchSeeder::class,

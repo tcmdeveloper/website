@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Frontend\ArticleController as FrontendArticleController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Frontend\PageController;
+use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\TranscriptionController;
 use Illuminate\Support\Facades\Route;
@@ -40,14 +41,15 @@ Route::controller(PageController::class)->group(function(){
 
 
 // -----------------------------------------------------
-// ARTICLE CONTROLLER (FRONT-END)
+// CONTACT CONTROLLER
 // -----------------------------------------------------
 
-Route::controller(FrontendArticleController::class)
-    ->group(function(){
-        Route::get('/articles/{article}', 'show')->name('articles.show');
-    })
-;
+Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
+Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
+
+
+
+
 
 
 // -----------------------------------------------------
@@ -57,7 +59,7 @@ Route::controller(FrontendArticleController::class)
 Route::controller(AdminArticleController::class)
     ->prefix('/articles')
     ->name('articles.')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth'])
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
@@ -67,6 +69,16 @@ Route::controller(AdminArticleController::class)
         Route::delete('/{article}','destroy')->name('destroy');
         Route::get('/{article}', 'inspect')->name('inspect');
         Route::post('/upload-image', 'uploadImage');
+    })
+;
+
+// -----------------------------------------------------
+// ARTICLE CONTROLLER (FRONT-END)
+// -----------------------------------------------------
+
+Route::controller(FrontendArticleController::class)
+    ->group(function(){
+        Route::get('/articles/{article}', 'show')->name('articles.show');
     })
 ;
 
@@ -99,7 +111,7 @@ Route::controller(ProfileController::class)
 // -----------------------------------------------------
 
 Route::controller(DashboardController::class)->group(function(){
-    Route::get('/dashboard', 'index')->middleware(['auth', 'verified'])->name('admin.dashboard');
+    Route::get('/dashboard', 'index')->middleware(['auth', 'verified'])->name('dashboard');
 });
 
 

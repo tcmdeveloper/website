@@ -8,11 +8,11 @@
 <x-ui.card class="mx-auto">
 
     <div class="flex justify-between items-center mb-9">
-        <x-ui.button href="{{ route('admin.dashboard') }}" variant="ghost" size="sm" class="gap-2!">
+        <x-ui.button href="{{ route('dashboard') }}" variant="ghost" size="sm" class="gap-2!">
             <x-heroicon-o-arrow-left class="w-4 aspect-square" />
             Dashboard
         </x-ui.button>
-        <x-ui.button href="{{ route('admin.articles.create') }}" variant="primary" size="sm" class="gap-2!">
+        <x-ui.button href="{{ route('articles.create') }}" variant="primary" size="sm" class="gap-2!">
             <x-heroicon-o-plus class="w-4 aspect-square" />
             New Article
         </x-ui.button>
@@ -27,16 +27,16 @@
             </div>
 
             <div class="flex gap-2">
-                <x-ui.button href="{{ route('admin.articles.inspect', $article) }}" variant="primary" size="xs" class="gap-2!">
+                <x-ui.button href="{{ route('articles.inspect', $article) }}" variant="primary" size="xs" class="gap-2!">
                     <x-heroicon-o-magnifying-glass class="w-4 aspect-square" />
                     Inspect
                 </x-ui.button>
-                <x-ui.button href="{{ route('admin.articles.edit', $article) }}" variant="secondary" size="xs" class="gap-2!">
+                <x-ui.button href="{{ route('articles.edit', $article) }}" variant="secondary" size="xs" class="gap-2!">
                     <x-heroicon-o-trash class="w-4 aspect-square" />
                     Edit
                 </x-ui.button>
 
-                <form method="POST" action="{{ route('admin.articles.destroy', $article) }}">
+                <form method="POST" action="{{ route('articles.destroy', $article) }}">
                     @csrf
                     @method('DELETE')
 

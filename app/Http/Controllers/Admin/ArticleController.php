@@ -26,7 +26,7 @@ class ArticleController extends Controller
     {
         $articles = Article::latest()->paginate(10);
 
-        return view('admin.articles.index', compact('articles'));
+        return view('articles.index', compact('articles'));
     }
 
 
@@ -40,7 +40,7 @@ class ArticleController extends Controller
     {
         $articles = Article::latest()->paginate(10);
 
-        return view('admin.articles.inspect', compact('articles'));
+        return view('articles.inspect', compact('articles'));
     }
 
 
@@ -56,7 +56,7 @@ class ArticleController extends Controller
             ->orderBy('name')
             ->pluck('name', 'id');
         
-        return view('admin.articles.create', compact('categories'));
+        return view('articles.create', compact('categories'));
     }
 
 
@@ -146,7 +146,7 @@ if ($request->cropped_image) {
 // dd($request->all());        
         Article::create($data);
 
-        return redirect()->route('admin.articles.index')
+        return redirect()->route('articles.index')
             ->with('success', 'Article created');
     }
 
@@ -163,7 +163,7 @@ if ($request->cropped_image) {
             ->orderBy('name')
             ->pluck('name', 'id');
 
-        return view('admin.articles.edit', compact('categories', 'article'));
+        return view('articles.edit', compact('categories', 'article'));
 
         // return view('admin.articles.edit', [
         //     'categories' => $categories,
@@ -199,7 +199,7 @@ if ($request->cropped_image) {
 
         $article->update($data);
 
-        return redirect()->route('admin.articles.index')
+        return redirect()->route('articles.index')
             ->with('success', 'Article updated');
     }
 
@@ -229,7 +229,7 @@ if ($request->cropped_image) {
     {
         $article->delete();
 
-        return redirect()->route('admin.articles.index')
+        return redirect()->route('articles.index')
             ->with('success', 'Article deleted');
     }
 }
