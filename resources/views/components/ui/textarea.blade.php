@@ -25,12 +25,23 @@
 
     $stateReadonly = "bg-zinc-50 text-zinc-700 cursor-default select-text border-zinc-200";
 
+    $error = $errors->has($name);
+    $stateError = "bg-red-50 border-red-500 text-red-900 focus:ring-red-300";
+
+
+
     $state = $disabled
-        ? $stateDisabled
+    ? $stateDisabled
+    : ($error
+        ? $stateError
         : ($readonly
             ? $stateReadonly
             : $stateDefault
-        );
+        )
+    );
+
+
+
 
 @endphp
 
