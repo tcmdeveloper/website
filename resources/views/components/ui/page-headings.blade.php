@@ -3,7 +3,7 @@
 @if(!empty($title) || !empty($subtitle))
 
 
-    @if (request()->routeIs('contact.show'))
+    @if (! request()->routeIs('home'))
         <div 
             class="mb-4 py-10 relative text-center"
         >

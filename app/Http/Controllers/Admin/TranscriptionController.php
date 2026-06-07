@@ -10,9 +10,17 @@ use App\Services\RandomStringGenerator;
 use Illuminate\Http\Request;
 
 
+// -----------------------------------------------------
+// TRANSCRIPTION CONTROLER (ADMIN)
+// -----------------------------------------------------
 
 class TranscriptionController extends Controller
-{
+{   
+
+    // -----------------------------------------------------
+    // INDEX
+    // -----------------------------------------------------
+
     public function index()
     {
         $transcriptions = auth()->user()
@@ -25,10 +33,20 @@ class TranscriptionController extends Controller
         ]);
     }
 
+
+    // -----------------------------------------------------
+    // CREATE
+    // -----------------------------------------------------
+
     public function create()
     {
         return view('admin.transcriptions.create');
     }
+
+
+    // -----------------------------------------------------
+    // STORE
+    // -----------------------------------------------------
 
     public function store(RandomStringGenerator $generator, Request $request)
     {
@@ -69,4 +87,5 @@ class TranscriptionController extends Controller
             ->route('admin.transcriptions.index')
             ->with('success', 'Your transcription has started.');
     }
+
 }

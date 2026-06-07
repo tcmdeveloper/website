@@ -2,9 +2,14 @@
 
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Frontend\ArticleController as FrontendArticleController;
+
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
+
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Frontend\CategoryController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\TranscriptionController;
 use Illuminate\Support\Facades\Route;
@@ -18,23 +23,31 @@ use Illuminate\Support\Facades\Route;
 // admin.articles.update
 // admin.articles.destroy
 
+// index   GET          /users
+// show    GET          /users/{user}
+// create  GET          /users/create
+// store   POST         /users
+// edit    GET          /users/{user}/edit
+// update  PUT/PATCH    /users/{user}
+// destroy DELETE /     users/{user}
+
 // -----------------------------------------------------
 // PAGE CONTROLLER
 // -----------------------------------------------------
 
 Route::controller(PageController::class)->group(function(){
+    // Page routes
     Route::get('/', 'home')->name('home');
     Route::get('/about', 'about')->name('pages.about');
     Route::get('/contact', 'contact')->name('pages.contact');
     Route::get('/terms', 'terms')->name('pages.terms');
     Route::get('/privacy', 'privacy')->name('pages.privacy');
 
+    // Temporary routes
     Route::get('/posts', 'privacy')->name('posts.index');
     Route::get('/case-updates', 'privacy')->name('case-updates.index');
     Route::get('/documents', 'privacy')->name('documents.index');
     Route::get('/criminal-profiles', 'privacy')->name('criminal-profiles.index');
-
-    Route::get('/categories/{category}', 'showCategory')->name('categories.show');
 });
 
 
@@ -44,8 +57,17 @@ Route::controller(PageController::class)->group(function(){
 // CONTACT CONTROLLER
 // -----------------------------------------------------
 
-Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
-Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
+Route::controller(ContactController::class)
+    ->prefix('contact')
+    ->name('contact.')
+    ->group(function () {
+        Route::get('/', 'show')->name('show');
+        Route::post('/', 'store')
+            ->middleware('throttle:5,1')
+            ->name('store');
+    })
+;
+
 
 
 
@@ -53,21 +75,21 @@ Route::post('/contact', [ContactController::class, 'store'])->middleware('thrott
 
 
 // -----------------------------------------------------
-// ARTICLE CONTROLLER (ADMIN)
+// CATEGORY CONTROLLER (ADMIN)
 // -----------------------------------------------------
 
-Route::controller(AdminArticleController::class)
-    ->prefix('/articles')
+Route::controller(AdminCategoryController::class)
+    ->prefix('articles')
     ->name('articles.')
     ->middleware(['auth'])
     ->group(function () {
-        Route::get('/', 'index')->name('index');
+        Route::get('/admin', 'index')->name('admin-index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::get('/{article}/edit', 'edit')->name('edit');
         Route::patch('/{article}', 'update')->name('update');
         Route::delete('/{article}','destroy')->name('destroy');
-        Route::get('/{article}', 'inspect')->name('inspect');
+        Route::get('/{article}/inspect', 'inspect')->name('inspect');
         Route::post('/upload-image', 'uploadImage');
     })
 ;
@@ -79,6 +101,62 @@ Route::controller(AdminArticleController::class)
 Route::controller(FrontendArticleController::class)
     ->group(function(){
         Route::get('/articles/{article}', 'show')->name('articles.show');
+        Route::get('/articles', 'show')->name('articles.index');
+    })
+;
+
+Route::controller(ContactController::class)
+    ->prefix('contact')
+    ->name('contact.')
+    ->group(function () {
+        Route::get('/', 'show')->name('show');
+        Route::post('/', 'store')
+            ->middleware('throttle:5,1')
+            ->name('store');
+    })
+;
+
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+
+
+Route::get('/categories/create', [CategoryController::class, 'create'])->middleware(['auth', 'verified'])->name('categories.create');
+Route::get('/categories/edit', [CategoryController::class, 'edit'])->middleware(['auth', 'verified'])->name('categories.edit');
+Route::patch('/{category}', [CategoryController::class, 'edit'])->middleware(['auth', 'verified'])->name('categories.update');
+Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->middleware(['auth', 'verified'])->name('categories.destroy');
+Route::get('/categories/{category}', 'show')->name('categories.show');
+
+
+
+
+
+// -----------------------------------------------------
+// ARTICLE CONTROLLER (ADMIN)
+// -----------------------------------------------------
+
+Route::controller(AdminArticleController::class)
+    ->prefix('articles')
+    ->name('articles.')
+    ->middleware(['auth'])
+    ->group(function () {
+        Route::get('/admin', 'index')->name('admin-index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{article}/edit', 'edit')->name('edit');
+        Route::patch('/{article}', 'update')->name('update');
+        Route::delete('/{article}','destroy')->name('destroy');
+        Route::get('/{article}/inspect', 'inspect')->name('inspect');
+        Route::post('/upload-image', 'uploadImage');
+    })
+;
+
+// -----------------------------------------------------
+// ARTICLE CONTROLLER (FRONT-END)
+// -----------------------------------------------------
+
+Route::controller(FrontendArticleController::class)
+    ->group(function(){
+        Route::get('/articles/{article}', 'show')->name('articles.show');
+        Route::get('/articles', 'show')->name('articles.index');
     })
 ;
 

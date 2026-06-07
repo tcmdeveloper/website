@@ -6,8 +6,18 @@ use App\Jobs\TranscriptionJob;
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
 
+
+// -----------------------------------------------------
+// ADMIN CONTROLLER (ADMIN)
+// -----------------------------------------------------
+
 class AdminController extends Controller
 {
+
+    // -----------------------------------------------------
+    // TRANSCRIBE VIDEO
+    // -----------------------------------------------------
+
     public function transcribeVideo(Request $request)
     {
         $request->validate([
@@ -21,7 +31,9 @@ class AdminController extends Controller
         ]);
     }
 
-
+    // -----------------------------------------------------
+    // TRANSLATE SUBTITLES
+    // -----------------------------------------------------
 
     public function translateSubtitles()
     {
@@ -65,7 +77,6 @@ class AdminController extends Controller
         $convert->mustRun();
 
         return response()->download($srtPath);
-    
     }
 
 }

@@ -3,19 +3,29 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\ContactMessage;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
-class ContactController extends Controller
+
+// -----------------------------------------------------
+// CATEGORY CONTROLLER (ADMIN)
+// -----------------------------------------------------
+
+class CategoryController extends Controller
 {
 
     // -----------------------------------------------------
-    // SHOW CONTACT FORM
+    // INDEX
     // -----------------------------------------------------
 
-    public function show()
+    public function index()
     {
-        return view('contact.show');
+        $categories = Category::query()
+            ->whereHas('publishedArticles')
+            ->orderBy('name')
+            ->paginate(10);
+        
+        return view('categories.index', compact('categories'));
     }
 
 
@@ -32,13 +42,9 @@ class ContactController extends Controller
             'message' => ['required', 'string', 'max:2000'],
         ]);
 
-        ContactMessage::create($validated);
+        Category::create($validated);
 
-        return back()->with('status', [
-            'type' => 'success',
-            'message' => 'Your message was sent to Metrix!',
-        ]);
-
+        return back()->with('success', 'New category added!');
     }
     
 }

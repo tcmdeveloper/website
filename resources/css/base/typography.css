@@ -36,7 +36,7 @@
     }
 
     p{
-        @apply my-5 mt-3 text-gray-800;
+        @apply my-8 mt-0 text-gray-800;
     }
 }
 

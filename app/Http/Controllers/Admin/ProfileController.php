@@ -14,24 +14,25 @@ use Illuminate\Support\Facades\Hash;
 use App\Services\UsernameGenerator;
 use Illuminate\View\View;
 
+
+// -----------------------------------------------------
+// PROFILE CONTROLER (ADMIN)
+// -----------------------------------------------------
+
 class ProfileController extends Controller
 {
 
     // -----------------------------------------------------
-    // SHOW USER'S PROFILE
+    // DISPLAY PROFILE
     // -----------------------------------------------------
 
     public function show(UsernameGenerator $generator, Request $request): View
     {
-
         $user = $request->user();
 
-        // Only generate if missing
         if (empty($user->username)) {
             $user->username = $generator->generate($user->name);
-            // $user->save();
         }
-
 
         return view('profile.show', [
             'user' => $user,
@@ -40,7 +41,7 @@ class ProfileController extends Controller
 
 
     // -----------------------------------------------------
-    // EDIT PROFILE FORM
+    // EDIT
     // -----------------------------------------------------
 
     public function edit(Request $request): View
@@ -158,4 +159,5 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+    
 }

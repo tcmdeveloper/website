@@ -8,11 +8,10 @@
     'size' => 'md',
     'disabled' => false,
     'readonly' => false,
-
 ])
 
-
 @php
+    $selectedValue = old($name, $value);
 
     $sizeClasses = match ($size) {
         'sm' => 'px-3 py-2 text-sm',
@@ -30,27 +29,24 @@
 
     $state = $disabled
         ? $stateDisabled
-        : ($readonly
-            ? $stateReadonly
-            : $stateDefault
-        );
-
+        : ($readonly ? $stateReadonly : $stateDefault);
 @endphp
 
 
 <div class="form-group">
 
+    {{-- Label --}}
     @if($label)
-        <label 
-            for="{{ $name }}" 
+        <label
+            for="{{ $name }}"
             class="{{ $hideLabel ? 'sr-only' : 'block mb-1 text-sm text-stone-500 font-medium' }}"
         >
             {{ $label }}
         </label>
     @endif
 
+    {{-- Select --}}
     <select
-        x-ref="{{ $name }}"
         id="{{ $name }}"
         name="{{ $name }}"
         @disabled($disabled)
@@ -60,16 +56,18 @@
         ]) }}
     >
 
+        {{-- Placeholder --}}
         @if($placeholder)
             <option value="">
                 {{ $placeholder }}
             </option>
         @endif
 
+        {{-- Options --}}
         @foreach($options as $key => $labelOption)
             <option
                 value="{{ $key }}"
-                @selected(old($name, $value) == $key)
+                @selected((string) $selectedValue === (string) $key)
             >
                 {{ $labelOption }}
             </option>
@@ -77,11 +75,11 @@
 
     </select>
 
-    {{-- Validation message if present for this field --}}
-    @if ($errors->has($name))
-        <p class="error-text">
-            {{ $errors->first($name) }}
+    {{-- Error message --}}
+    @error($name)
+        <p class="mt-1 text-sm text-red-600">
+            {{ $message }}
         </p>
-    @endif
+    @enderror
 
 </div>
