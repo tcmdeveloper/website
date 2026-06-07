@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use Illuminate\Http\Request;
 
 
 // -----------------------------------------------------
-// CATEGORY CONTROLLER
+// CATEGORY CONTROLLER (FRONTEND)
 // -----------------------------------------------------
 
 class CategoryController extends Controller
@@ -28,5 +27,23 @@ class CategoryController extends Controller
         return view('categories.index', compact('categories'));
     }
 
-    
+
+    // -----------------------------------------------------
+    // SHOW
+    // -----------------------------------------------------
+
+    public function show(Category $category)
+    {
+        $articles = $category->articles()
+            ->published()
+            ->latest('published_at')
+            ->paginate(12);
+
+        return view('categories.show', [
+            'category' => $category,
+            'articles' => $articles,
+        ]);
+    }
+
+
 }

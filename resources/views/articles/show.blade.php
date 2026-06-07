@@ -55,7 +55,7 @@
 
         {{-- ARTICLE CONTENT --}}
         <article class="prose max-w-none markdown">
-            {!! $contentHtml !!}
+            {!! $article->contentHtml !!}
         </article>
 
 

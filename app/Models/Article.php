@@ -46,7 +46,7 @@ class Article extends Model
     /*
     |--------------------------------------------------------------------------
     | Route Binding (IMPORTANT)
-    | This makes URLs use /articles/{hex}
+    | This makes URLs use /articles/{slug}
     |--------------------------------------------------------------------------
     */
     public function getRouteKeyName(): string
@@ -84,9 +84,13 @@ class Article extends Model
     */
     
     // Image URL attribute
-    public function getImageUrlAttribute()
+    public function getFeaturedImageUrlAttribute()
     {
-        return Storage::url($this->image);
+        if ($this->featured_image && Storage::disk('public')->exists($this->featured_image)) {
+            return asset('storage/' . $this->featured_image);
+        }
+
+        return asset('images/default-article.jpg');
     }
 
     // Get article HTML content for markdown
@@ -95,6 +99,18 @@ class Article extends Model
         $converter = new CommonMarkConverter();
 
         return $converter
+            ->convert($this->content)
+            ->getContent();
+    }
+
+    // Covert markdown content to HTML
+    public function getContentHtmlAttribute(): string
+    {
+        if (blank($this->content)) {
+            return '<p class="text-gray-400">No content available.</p>';
+        }
+
+        return (new CommonMarkConverter())
             ->convert($this->content)
             ->getContent();
     }

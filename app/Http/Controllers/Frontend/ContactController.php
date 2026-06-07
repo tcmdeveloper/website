@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
 use Illuminate\Http\Request;
 
+
+// -----------------------------------------------------
+// CONTACT CONTROLLER (FRONTEND)
+// -----------------------------------------------------
+
 class ContactController extends Controller
 {
 

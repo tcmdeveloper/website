@@ -79,8 +79,8 @@ Route::controller(ContactController::class)
 // -----------------------------------------------------
 
 Route::controller(AdminCategoryController::class)
-    ->prefix('articles')
-    ->name('articles.')
+    ->prefix('categories')
+    ->name('categories.')
     ->middleware(['auth'])
     ->group(function () {
         Route::get('/admin', 'index')->name('admin-index');
@@ -95,35 +95,18 @@ Route::controller(AdminCategoryController::class)
 ;
 
 // -----------------------------------------------------
-// ARTICLE CONTROLLER (FRONT-END)
+// CATEGORY CONTROLLER (FRONTEND)
 // -----------------------------------------------------
 
-Route::controller(FrontendArticleController::class)
+Route::controller(FrontendCategoryController::class)
+    ->prefix('categories')
+    ->name('categories.')
     ->group(function(){
-        Route::get('/articles/{article}', 'show')->name('articles.show');
-        Route::get('/articles', 'show')->name('articles.index');
+        Route::get('/{category}', 'show')->name('show');
+        Route::get('/', 'show')->name('index');
     })
 ;
 
-Route::controller(ContactController::class)
-    ->prefix('contact')
-    ->name('contact.')
-    ->group(function () {
-        Route::get('/', 'show')->name('show');
-        Route::post('/', 'store')
-            ->middleware('throttle:5,1')
-            ->name('store');
-    })
-;
-
-Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
-
-
-Route::get('/categories/create', [CategoryController::class, 'create'])->middleware(['auth', 'verified'])->name('categories.create');
-Route::get('/categories/edit', [CategoryController::class, 'edit'])->middleware(['auth', 'verified'])->name('categories.edit');
-Route::patch('/{category}', [CategoryController::class, 'edit'])->middleware(['auth', 'verified'])->name('categories.update');
-Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->middleware(['auth', 'verified'])->name('categories.destroy');
-Route::get('/categories/{category}', 'show')->name('categories.show');
 
 
 

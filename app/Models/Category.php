@@ -26,6 +26,18 @@ class Category extends Model
             }
         });
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Route Binding (IMPORTANT)
+    | This makes URLs use /categories/{slug}
+    |--------------------------------------------------------------------------
+    */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
     
 
 
