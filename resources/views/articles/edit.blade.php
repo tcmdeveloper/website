@@ -25,100 +25,23 @@
 
 @endpush
 
+
 <x-layouts.app
     title="Edit Article"
     subtitle="Update your article details."
 >
 
-    <x-ui.card class="mx-auto">
+    <x-ui.card class="mx-auto max-w-5xl">
 
 
-        <form method="POST" action="{{ route('articles.update', $article) }}" class="space-y-4">
+        <form 
+            method="POST" 
+            action="{{ route('articles.update', $article) }}" 
+            class="space-y-5"
+        >
 
             @csrf
             @method('PATCH')
-
-
-            {{-- Featured image --}}
-
-            <div class="flex flex-col items-center">
-
-                <h1 class="text-3xl font-bold text-center mb-8">Featured image</h1>
-
-
-                <div id="currentImage">
-                    {{-- FEATURED IMAGE --}}
-                    @if(!empty($article->featured_image))
-            
-                        <img
-                            
-                            src="{{ url($article->featured_image) }}"
-                            class="m-0 w-full rounded-xs object-contain shadow-sm max-w-xl mx-auto mb-8"
-                            alt="{{ $article->title }}"
-                        >
-                    @endif
-                
-                    <button
-                        id="changeImageBtn"
-                        type="button"
-                        class="
-                            inline-flex
-                            items-center
-                            justify-center
-                            border
-                            rounded
-                            shadow-sm
-                            font-medium
-                            cursor-pointer
-                            transition-all
-                            duration-300
-                            hover:opacity-90
-                            hover:no-underline
-                            hover:translate-y-[1px] 
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            active:scale-[0.98]
-                            mt-1
-                            gap-3
-                            bg-gradient-to-r
-                            from-blue-600
-                            to-sky-500
-                            border-blue-500
-                            text-white
-                            focus:ring-blue-600
-                            px-6
-                            py-1.5
-                            text-lg"
-                        onclick="document.getElementById('imageInput').click()"
-                    >Change image</button>
-                </div>
-
-
-                <input
-                    id="imageInput"
-                    name="featured_image"
-                    type="file"
-                    accept="image/*"
-                    class="hidden"
-                />
-
-                <div class="mb-6">
-                    <img
-                        id="preview"
-                        class="max-w-full hidden rounded-lg"
-                    >
-                </div>
-
-                <input type="hidden" name="cropped_image" id="croppedImage">
-
-           
-            </div>
-
-
-            {{-- Form divider --}}
-
-            <x-ui.divider class="mb-10" />
 
 
             {{-- Title & slug auto feed --}}
@@ -224,59 +147,203 @@
             </div>
 
 
+            {{-- Featured image --}}
+
+            <div class="bg-gray-100 border border-zinc-300 rounded-sm shadow-sm p-4 py-10 flex justify-center items-center w-full mx-auto mb-8">
+
+
+                {{-- Current image canvase --}}
+
+                <div 
+                    id="currentImageCanvas" 
+                    class="flex flex-col items-center"
+                >
+
+                    {{-- Featured image --}}
+
+                    <div class="relative group">
+
+                        <img
+                            src="{{ url($article->featured_image->path) }}"
+                            class="w-2xl"
+                            alt="{{ $article->featured_image->alt_text }}"
+                        >
+
+                        
+                        {{-- Edit image --}}
+
+                        <button
+                            type="button"
+                            @click="$refs.featuredImageInput.click()"
+                            class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 cursor-pointer"
+                            aria-label="Change image"
+                        >
+
+                            <x-heroicon-o-pencil class="h-8 w-8 text-white" />
+
+                        </button>
+
+
+                        {{-- Hidden image input --}}
+
+                        <input
+                            x-ref="featuredImageInput"
+                            name="featured_image"
+                            type="file"
+                            accept="image/*"
+                            class="hidden"
+                        />
+
+
+                        {{-- Hidden featured image id --}}
+
+                        <input
+                            type="hidden"
+                            name="featured_image_id"
+                            value="{{ $article->featuredImage?->id }}"
+                        >
+                    
+                    </div>
+
+
+                    {{-- Featured image meta  --}}
+
+                    <div class="mt-6 w-full flex flex-col space-y-5">
+
+                        {{-- Caption --}}
+
+                        <div>
+                            <x-ui.input
+                                name="featured_image_caption"
+                                type="text"
+                                size="sm"
+                                label="Image caption"
+                                :value="old('featured_image_caption', $article->featured_image->caption)"
+                            />
+                        </div>
+
+
+                        {{-- Alt text --}}
+
+                        <div>
+                            <x-ui.input
+                                name="featured_image_alt_text"
+                                type="text"
+                                size="sm"
+                                label="Meta title"
+                                :value="old('featured_image_alt_text', $article->featured_image->alt_text)"
+                            />
+                        </div>
+
+
+                        {{-- Source --}}
+
+                        <div>
+                            <x-ui.input
+                                name="featured_image_source"
+                                type="text"
+                                size="sm"
+                                label="Image source"
+                                :value="old('featured_image_source', $article->featured_image->source)"
+                            />
+                        </div>
+
+
+                        {{-- Source URL --}}
+
+                        <div>
+                            <x-ui.input
+                                name="featured_image_source_url"
+                                type="text"
+                                size="sm"
+                                label="Link to source"
+                                :value="old('featured_image_source_url', $article->featured_image->source_url)"
+                            />
+                        </div>
+
+                    </div>
+
+                </div>
+                {{-- End of featured image canvas --}}
+
+
+                {{-- Image cropper canvase --}}
+
+                <div id="imageCropperCanvas" class="mb-6">
+                    <img
+                        id="preview"
+                        class="max-w-xl rounded-lg"
+                    >
+                    <input type="hidden" name="cropped_image" id="croppedImage">
+                    <x-ui.button variant="secondary" class="hidden!">Cancel</x-ui.button>
+                </div>                
+
+            </div>
+
+
             {{-- Category --}}
 
-            <x-ui.select
-                name="category_id"
-                label="Category"
-                :options="$categories"
-                value="{{old('category_id', $article->category_id)}}"
-                placeholder="Select a category"
-            />
+            <div>
+                <x-ui.select
+                    name="category_id"
+                    label="Category"
+                    :options="$categories"
+                    value="{{old('category_id', $article->category_id)}}"
+                    placeholder="Select a category"
+                />
+            </div>
 
 
             {{-- Meta title --}}
 
-            <x-ui.input
-                name="meta_title"
-                type="text"
-                label="Meta title"
-                :value="old('meta_title', $article->meta_title)"
-            />
+            <div>
+                <x-ui.input
+                    name="meta_title"
+                    type="text"
+                    label="Meta title"
+                    :value="old('meta_title', $article->meta_title)"
+                />
+            </div>
 
 
             {{-- Meta description --}}
 
-            <x-ui.textarea
-                name="meta_description"
-                label="Meta description"
-                rows="3"
-                value="{{$article->meta_description}}"
-            />
+            <div>
+                <x-ui.textarea
+                    name="meta_description"
+                    label="Meta description"
+                    rows="3"
+                    :value="old('meta_description', $article->meta_description)"
+                />
+            </div>
 
 
             {{-- Visibility --}}
 
-            <x-ui.select
-                name="is_published"
-                label="Status"
-                :options="[
-                    1 => 'Public',
-                    0 => 'Private',
-                ]"
-                :value="old('is_published', (int) $article->is_published)"
-                placeholder="Set visibility"
-            />
+            <div>
+                <x-ui.select
+                    name="is_published"
+                    label="Status"
+                    :options="[
+                        1 => 'Public',
+                        0 => 'Private',
+                    ]"
+                    :value="old('is_published', (int) $article->is_published)"
+                    placeholder="Set visibility"
+                />
+            </div>
 
 
             {{-- Submit form --}}
 
-            <x-ui.button
-                type="submit"
-                size="lg"
-            >
-                Update Article
-            </x-ui.button>
+            <div>
+                <x-ui.button
+                    type="submit"
+                    size="lg"
+                >
+                    Update Article
+                </x-ui.button>
+            </div>
 
 
         </form>

@@ -29,9 +29,6 @@ return new class extends Migration {
                 ->constrained()
                 ->nullOnDelete();
 
-            // Media
-            $table->string('featured_image')->nullable();
-
             // Publishing
             $table->timestamp('published_at')->nullable();
             $table->boolean('is_published')->default(false);

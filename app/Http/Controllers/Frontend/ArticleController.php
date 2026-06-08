@@ -18,8 +18,11 @@ class ArticleController extends Controller
     // -----------------------------------------------------
 
     public function index()
-    {
-        return view('articles.show');
+    {   
+        $articles = Article::published()->orderBy('published_at', 'desc')->paginate(10);
+
+        return view('articles.index', compact('articles'));
+
     }
 
 
@@ -32,6 +35,7 @@ class ArticleController extends Controller
         return view('articles.show', [
             'article' => $article,
         ]);
+
     }
 
 

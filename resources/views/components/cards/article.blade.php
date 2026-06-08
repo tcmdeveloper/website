@@ -1,18 +1,18 @@
 @props([
     'title',
     'excerpt' => null,
-    'featuredImageUrl' => null,
+    'featuredImage' => null,
     'authorName' => null,
     'publishedAt' => null,
     'url' => '#',
 ])
 
 <article class="border border-gray-200 rounded-sm overflow-hidden bg-white hover:shadow-md transition-shadow duration-200">
-    
+        
     {{-- Featured image --}}
     <a href="{{ $url }}" class="block">
         <img 
-            src="{{ $featuredImageUrl }}"
+            src="{{ $featuredImage ? asset($featuredImage->path) : asset('images/default-article.jpg') }}"
             class="w-full h-48 object-cover"
         >
     </a>

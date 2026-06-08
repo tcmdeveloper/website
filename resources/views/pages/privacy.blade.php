@@ -5,7 +5,7 @@
     subtitle="How we collect, use, and protect your information."
 >
 
-    <div class="max-w-4xl mx-auto space-y-10 text-gray-700 leading-relaxed">
+    <x-ui.container>
 
         {{-- Intro --}}
         <section>
@@ -108,6 +108,6 @@
             Last updated: {{ now()->format('F d, Y') }}
         </p>
 
-    </div>
+    </x-ui.container>
 
 </x-layouts.app>

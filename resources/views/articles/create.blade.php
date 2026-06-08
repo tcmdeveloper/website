@@ -1,71 +1,100 @@
-{{-- resources/views/admin/articles/create.blade.php --}}
+{{-- resources/views/admin/articles/edit.blade.php --}}
 
 @push('scripts')
+
      @include('articles.partials.upload-image-script')
+
+     <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const imageInput = document.getElementById('imageInput');
+            const currentImage = document.getElementById('currentImage');
+            
+
+            if (imageInput) {
+                imageInput.addEventListener('change', function (e) {
+                    currentImage.classList.add('hidden');
+                });
+
+            }
+
+        });
+
+    </script>
+
 @endpush
 
-<x-layouts.app 
+
+<x-layouts.app
     title="Create a new article"
-    subtitle="Publish the content for your article in the form below."
+    subtitle="Complete this form to create a new article."
 >
 
-    @if ($errors->any())
-        <div class="bg-red-100 text-red-700 p-4 mb-4 rounded">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <x-ui.card class="mx-auto max-w-5xl">
 
 
-    <x-ui.card class="mx-auto">
+        <form 
+            method="POST" 
+            action="{{ route('articles.store') }}" 
+            class="space-y-5"
+        >
 
-        <form id="articleForm" method="POST" action="{{ route('articles.store') }}" class="space-y-4">
+            @csrf
+
+            {{-- Title & slug auto feed --}}
 
             <div
                 x-data="{
-                    title: '',
-                    slug: '',
+                    title: @js(old('title')),
+                    slug: @js(old('slug')),
                     slugEdited: false
                 }"
-                class="space-y-4"
+                class="space-y-5"
             >
 
+
                 {{-- Title --}}
+
                 <div>
                     <x-ui.input
                         name="title"
-                        type="text"
                         label="Title"
                         x-model="title"
+                        placeholder="Article title"
                         @input="
-                            slug = title
-                                .toLowerCase()
-                                .trim()
-                                .replace(/[^a-z0-9\s-]/g, '')
-                                .replace(/\s+/g, '-')
-                                .replace(/-+/g, '-')
+                            if (!slugEdited) {
+                                slug = title
+                                    .toLowerCase()
+                                    .trim()
+                                    .replace(/[^a-z0-9\s-]/g, '')
+                                    .replace(/\s+/g, '-')
+                                    .replace(/-+/g, '-')
+                            }
                         "
                     />
                 </div>
 
+
                 {{-- Slug --}}
+
                 <div>
                     <x-ui.input
                         name="slug"
-                        type="text"
                         label="Slug"
                         x-model="slug"
+                        placeholder="URL identifier"
+                        @input="slugEdited = true"
                     />
                 </div>
 
-            </div>
-                
-            <div>
 
-                {{-- Excerpt --}}
+            </div>
+
+
+            {{-- Excerpt --}}
+
+            <div>
                 <x-ui.textarea
                     name="excerpt"
                     label="Excerpt"
@@ -75,102 +104,250 @@
             </div>
 
 
-
-
+            {{-- Content --}}
 
             <div x-data="markdownEditor"
-     x-init="init()"
-     class="grid grid-cols-2 gap-6">
-
-    <!-- Editor -->
-    <div class="h-full flex flex-col">
-        <textarea
-            x-ref="content"
-            name="content"
-            class="flex-1 w-full border rounded p-2 resize-none"
-            placeholder="Write Markdown..."
-        >{{ old('content') }}</textarea>
-    </div>
-
-    <!-- Preview -->
-    <div class="h-full flex flex-col">
-        <div class="flex-1 border rounded p-4 bg-white prose max-w-none overflow-auto">
-            <div x-html="previewMarkdown" class="markdown"></div>
-        </div>
-    </div>
-
-</div>
+                x-init="init()"
+                class="grid grid-cols-2 gap-6">
 
 
+                <!-- Editor -->
 
+                <div class="form-group h-full flex flex-col">
+
+                    <label
+                        for="content"
+                        class="block mb-1 text-sm text-stone-500 font-medium"
+                    >
+                        Content
+                    </label>
+
+                    <textarea
+                        x-ref="content"
+                        name="content"
+                        class="flex-1 w-full border border-zinc-300 bg-yellow-50 rounded-sm p-4 resize-none shadow-sm"
+                        placeholder="Write Markdown..."
+                    >{{ old('content') }}</textarea>
+
+                </div>
+
+                <!-- Preview -->
+                <div class="form-group h-full flex flex-col">
+                    <label
+                        for="content"
+                        class="block mb-1 text-sm text-stone-500 font-medium"
+                    >
+                        Preview
+                    </label>
+                    <div class="flex-1 border border-zinc-300 rounded-sm p-4 bg-white prose max-w-none overflow-auto shadow-sm">
+                        <div x-html="previewMarkdown" class="markdown"></div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            {{-- Featured image --}}
+
+            <div class="bg-gray-100 border border-zinc-300 rounded-sm shadow-sm p-4 py-10 flex justify-center items-center w-full mx-auto mb-8">
+
+
+                {{-- Current image canvase --}}
+
+                <div 
+                    id="currentImageCanvas" 
+                    class="flex flex-col items-center"
+                >
+
+                    {{-- Featured image --}}
+
+                    <div class="relative group">
+
+                        <img
+                            src="{{ url('images/default-article.jpg') }}"
+                            class="w-2xl"
+                            alt="Default article image"
+                        >
+
+                        
+                        {{-- Edit image --}}
+
+                        <button
+                            type="button"
+                            @click="$refs.featuredImageInput.click()"
+                            class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 cursor-pointer"
+                            aria-label="Change image"
+                        >
+
+                            <x-heroicon-o-pencil class="h-8 w-8 text-white" />
+
+                        </button>
+
+
+                        {{-- Hidden image input --}}
+
+                        <input
+                            x-ref="featuredImageInput"
+                            name="featured_image"
+                            type="file"
+                            accept="image/*"
+                            class="hidden"
+                        />
+
+                    
+                    </div>
+
+
+                    {{-- Featured image meta  --}}
+
+                    <div class="mt-6 w-full flex flex-col space-y-5">
+
+                        {{-- Caption --}}
+
+                        <div>
+                            <x-ui.input
+                                name="featured_image_caption"
+                                type="text"
+                                size="sm"
+                                placeholder="Image caption"
+                                label="Image caption"
+                                :value="old('featured_image_caption')"
+                            />
+                        </div>
+
+
+                        {{-- Alt text --}}
+
+                        <div>
+                            <x-ui.input
+                                name="featured_image_alt_text"
+                                type="text"
+                                size="sm"
+                                label="Alt text"
+                                placeholder="Alt text"
+                                :value="old('featured_image_alt_text')"
+                            />
+                        </div>
+
+
+                        {{-- Source --}}
+
+                        <div>
+                            <x-ui.input
+                                name="featured_image_source"
+                                type="text"
+                                size="sm"
+                                label="Image source"
+                                placeholder="Image source"
+                                :value="old('featured_image_source')"
+                            />
+                        </div>
+
+
+                        {{-- Source URL --}}
+
+                        <div>
+                            <x-ui.input
+                                name="featured_image_source_url"
+                                type="text"
+                                size="sm"
+                                label="Link to source"
+                                placeholder="Image source"
+                                :value="old('featured_image_source_url')"
+                            />
+                        </div>
+
+                    </div>
+
+                </div>
+                {{-- End of featured image canvas --}}
+
+
+                {{-- Image cropper canvase --}}
+
+                <div id="imageCropperCanvas" class="mb-6">
+                    <img
+                        id="preview"
+                        class="max-w-xl rounded-lg"
+                    >
+                    <input type="hidden" name="cropped_image" id="croppedImage">
+                    <x-ui.button variant="secondary" class="hidden!">Cancel</x-ui.button>
+                </div>                
+
+            </div>
 
 
             {{-- Category --}}
-            <x-ui.select
-                name="category_id"
-                label="Category"
-                :options="$categories"
-                placeholder="Select a category"
-            />
 
-            {{-- Featured images --}}
-                
-            <input
-                id="imageInput"
-                name="featured_image"
-                label="Featured image"
-                type="file"
-                accept="image/*"
-            />
-
-            <div class="mb-6">
-                <img
-                    id="preview"
-                    class="max-w-full hidden rounded-lg"
-                >
+            <div>
+                <x-ui.select
+                    name="category_id"
+                    label="Category"
+                    :options="$categories"
+                    value="{{old('category_id')}}"
+                    placeholder="Select a category"
+                />
             </div>
 
-            <input type="hidden" name="cropped_image" id="croppedImage">
 
             {{-- Meta title --}}
+
             <div>
                 <x-ui.input
                     name="meta_title"
                     type="text"
                     label="Meta title"
+                    placeholder="Meta title"
+                    :value="old('meta_title')"
                 />
             </div>
 
+
             {{-- Meta description --}}
-            <x-ui.textarea
-                name="meta_description"
-                label="Meta description"
-                rows="3"
-                placeholder="Write something..."
-            />
+
+            <div>
+                <x-ui.textarea
+                    name="meta_description"
+                    label="Meta description"
+                    rows="3"
+                    placeholder="Meta description"
+                    :value="old('meta_description')"
+                />
+            </div>
+
 
             {{-- Visibility --}}
-            <x-ui.select
-                name="is_published"
-                label="Status"
-                :options="[
-                    true => 'Public',
-                    false => 'Private',
-                ]"
-                placeholder="Set visibility"
-            />
 
-            {{-- Submit --}}
-            <x-ui.button
-                type="submit"
-                size="lg"
-            >
-                Create article
-            </x-ui.button>
-        
+            <div>
+                <x-ui.select
+                    name="is_published"
+                    label="Status"
+                    :options="[
+                        1 => 'Public',
+                        0 => 'Private',
+                    ]"
+                    :value="old('is_published')"
+                    placeholder="Set visibility"
+                />
+            </div>
+
+
+            {{-- Submit form --}}
+
+            <div>
+                <x-ui.button
+                    type="submit"
+                    size="md"
+                >
+                    Create article
+                </x-ui.button>
+            </div>
+
+
         </form>
 
 
     </x-ui.card>
+
 
 </x-layouts.app>

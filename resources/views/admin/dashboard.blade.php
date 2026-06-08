@@ -12,7 +12,7 @@
                 Profile
             </x-ui.button>
 
-            <x-ui.button href="{{route('articles.index')}}" variant="primary">
+            <x-ui.button href="{{route('articles.admin-index')}}" variant="primary">
                 Articles
             </x-ui.button>
 

@@ -3,7 +3,7 @@
     subtitle="Update your account password securely."
 >
 
-    <x-ui.card class="max-w-2xl mx-auto px-16 py-16 pb-11">
+    <x-ui.card class="max-w-5xl mx-auto px-16 py-16 pb-11">
 
         {{-- Profile header --}}
         @include('profile.partials.header')
@@ -72,14 +72,9 @@
 
                 {{-- ACTIONS --}}
                 <div class="flex gap-3 mt-8 justify-center">
-                    <x-ui.button type="submit" variant="primary" size="md" full>Update Password</x-ui.button>
-                    <x-ui.button href="{{route('profile.show')}}" size="md" variant="secondary" full>Cancel</x-ui.button>
+                    <x-ui.button type="submit" variant="primary" size="md">Update Password</x-ui.button>
+                    <x-ui.button href="{{route('profile.show')}}" size="md" variant="secondary">Cancel</x-ui.button>
                 </div>
-
-
-
-               
-
              
 
             </form>

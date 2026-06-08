@@ -72,6 +72,12 @@ class Article extends Model
         return $this->belongsTo(Category::class);
     }
 
+    // Images
+    public function images()
+    {
+        return $this->hasMany(ArticleImage::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Accessors
@@ -84,22 +90,24 @@ class Article extends Model
     */
     
     // Image URL attribute
-    public function getFeaturedImageUrlAttribute()
+    public function getFeaturedImageAttribute()
     {
-        if ($this->featured_image && Storage::disk('public')->exists($this->featured_image)) {
-            return asset('storage/' . $this->featured_image);
-        }
+        $image = $this->images()->where('is_featured', true)->first()
+            ?? $this->images()->first();
 
-        return asset('images/default-article.jpg');
+        return $image;
+        // return $image
+        //     ? asset('storage/' . $image->path)
+        //     : asset('images/default-article.jpg');
     }
 
     // Get article HTML content for markdown
-    public function getHtmlContentAttribute()
+    public function getExcerptHtmlAttribute()
     {
         $converter = new CommonMarkConverter();
 
         return $converter
-            ->convert($this->content)
+            ->convert($this->excerpt)
             ->getContent();
     }
 
@@ -125,7 +133,8 @@ class Article extends Model
     public function scopePublished($query)
     {
         return $query->where('is_published', true)
-                     ->whereNotNull('published_at');
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
     }
 
     // Latest first

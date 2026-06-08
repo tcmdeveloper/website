@@ -31,7 +31,6 @@ class ArticleSeeder extends Seeder
                 'content' => $item->content,
                 'user_id' => $item->user_id,
                 'category_id' => $item->category_id,
-                'featured_image' => $item->featured_image,
                 'published_at' => $item->published_at,
                 'is_published' => $item->is_published,
                 'meta_title' => $item->meta_title,

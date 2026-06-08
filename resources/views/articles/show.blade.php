@@ -28,7 +28,7 @@
                     >
                         {{$article->category->name}}
                     </x-ui.category-pip>
-                    <a class="inline-flex items-center rounded-full px-3 py-1 text-sm font-normal transition bg-lime-500 text-white hover:bg-lime-20">by {{$article->author->display_name}}</a>
+                    <a class="inline-flex items-center rounded-full px-3 py-1 text-sm font-normal transition bg-red-500 text-white hover:bg-lime-20">by {{$article->author->display_name}}</a>
                 </span>
 
         <h2 class="text-center mt-7 mb-5!">
@@ -37,20 +37,22 @@
 
         
         {{-- FEATURED IMAGE --}}
-        @if(!empty($article->featured_image))
-            <img
-                src="{{ url($article->featured_image) }}"
-                class="my-6 w-full rounded-xs object-contain shadow-sm"
-                alt="{{ $article->title }}"
-            >
-        @endif
+        <img
+            src="{{ asset($article->featured_image->path) }}"
+            class="my-6 w-full rounded-xs object-contain shadow-sm"
+            alt="{{ $article->featured_image->alt_text }}"
+        >
+        
 
-        <div class="flex gap-4 border border-zinc-300 w-full px-3 py-2 text-sm mb-6 bg-amber-50">
-            <span>Author: Metrix</span>
-            @if(!empty($article->category))
-                <span>|</span>
-                
-            @endif
+        <div class="flex flex-col gap-4 border border-zinc-300 w-full px-3 py-2 text-xs mb-6 bg-amber-50">
+            {{ $article->excerpt }}
+            <span>
+                Image source: 
+                <a href="/" target="_blank" class="link ml-1">
+                    {{ $article->featured_image->source }}
+                    <x-ui.icon name="arrow-top-right-on-square" size="xs" class="ml-1 relative -top-1 w-2!" />
+                </a>
+            </span>
         </div>
 
         {{-- ARTICLE CONTENT --}}

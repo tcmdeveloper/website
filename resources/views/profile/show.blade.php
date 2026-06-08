@@ -10,7 +10,7 @@
 >
 
     {{-- Profile card --}}
-    <x-ui.card class="max-w-2xl mx-auto px-16 py-16">
+    <x-ui.card class="max-w-5xl mx-auto px-16 py-16">
 
         {{-- Profile header --}}
         @include('profile.partials.header')

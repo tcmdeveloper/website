@@ -8,15 +8,15 @@
     subtitle="Manage your account details and preferences."
 >
 
- <x-ui.card class="max-w-2xl mx-auto px-16 py-16 pb-11">
+ <x-ui.card class="max-w-5xl mx-auto px-16 py-16 pb-11">
 
 
-    @include('admin.profile.partials.header')
+    @include('profile.partials.header')
 
 
     <form
             method="POST"
-            action="{{ route('admin.profile.update') }}"
+            action="{{ route('profile.update') }}"
             class="space-y-5"
             x-data="formHandler({
                 firstError: {{ Js::from($errors->keys()[0] ?? null) }}
@@ -193,8 +193,8 @@
 
         {{-- ACTIONS --}}
         <div class="flex gap-3 mt-8 justify-center">
-            <x-ui.button type="submit" variant="primary" size="md" full>Save changes</x-ui.button>
-            <x-ui.button href="{{route('admin.profile.show')}}" size="md" variant="secondary" full>Cancel</x-ui.button>
+            <x-ui.button type="submit" variant="primary" size="md">Update details</x-ui.button>
+            <x-ui.button href="{{route('profile.show')}}" size="md" variant="secondary">Cancel</x-ui.button>
         </div>
 
     </form>

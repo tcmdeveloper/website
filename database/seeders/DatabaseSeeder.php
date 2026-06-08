@@ -1,10 +1,6 @@
 <?php
 
 namespace Database\Seeders;
-
-use Database\Seeders\ArticleSeeder;
-use Database\Seeders\CategorySeeder;
-use Database\Seeders\UserSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -22,13 +18,13 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CategorySeeder::class,
             ArticleSeeder::class,
+            ArticleImageSeeder::class,
             TranscriptionSeeder::class,
             EmailChangeRequestSeeder::class,
             FailedJobSeeder::class,
             JobBatchSeeder::class,
             JobSeeder::class,
             TermsVersionSeeder::class,
-            
             
         ]);
     }

@@ -26,7 +26,7 @@ class ArticleController extends Controller
     {
         $articles = Article::latest()->paginate(10);
 
-        return view('articles.index', compact('articles'));
+        return view('articles.admin-index', compact('articles'));
     }
 
     // -----------------------------------------------------
@@ -65,8 +65,8 @@ class ArticleController extends Controller
             'slug' => ['nullable', 'string', 'max:150', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', 'unique:articles,slug'],
             'excerpt' => ['nullable', 'string', 'min:50', 'max:300'],
             'content' => 'nullable',
-            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'cropped_image' => ['nullable', 'string'],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'meta_title' => ['nullable', 'string', 'max:100'],
             'meta_description' => ['nullable', 'string', 'max:160'],
             'is_published' => ['nullable', 'boolean']
@@ -134,26 +134,102 @@ class ArticleController extends Controller
     // -----------------------------------------------------
 
     public function update(Request $request, Article $article)
-    {
+    {   
+
+        // 1. Validate form input
+
         $data = $request->validate([
             'title' => ['required', 'string', 'min:5', 'max:120', 'regex:/^[\pL\pN\s\-\:\,\.\'\"\!\?]+$/u'],
             'slug' => ['required', 'string', 'max:150', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('articles', 'slug')->ignore($article->id),],
-            'excerpt' => ['required', 'string', 'min:50', 'max:300'],
-            'content' => 'required',
+            'excerpt' => ['nullable', 'string', 'max:500'],
+            'content' => ['required'],
+            'cropped_image' => ['nullable', 'string', 'max:255'],
+            'featured_image_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('article_images', 'id'),
+            ],
+            'featured_image_caption' => ['nullable', 'string', 'max:255'],
+            'featured_image_alt_text' => ['nullable', 'string', 'max:255'],
+            'featured_image_source' => ['nullable', 'string', 'max:255'],
+            'featured_image_source_url' => ['nullable', 'string', 'max:255'],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
             'meta_title' => ['nullable', 'string', 'max:100'],
             'meta_description' => ['nullable', 'string', 'max:300'],
             'is_published' => ['required', 'boolean']
         ]);
+    
+
+        // 2. Gather image data
+
+        $imageData = [
+            'id' => $data['featured_image_id'] ?? null,
+            'cropped_image' => $data['cropped_image'] ?? null,
+            'caption' => $data['featured_image_caption'] ?? null,
+            'alt_text' => $data['featured_image_alt_text'] ?? null,
+            'source' => $data['featured_image_source'] ?? null,
+            'source_url' => $data['featured_image_source_url'] ?? null,
+        ];
+
+
+        // 3. Remove image data from input
+
+        unset(
+            $data['cropped_image'],
+            $data['featured_image_id'],
+            $data['featured_image_caption'],
+            $data['featured_image_alt_text'],
+            $data['featured_image_source'],
+            $data['featured_image_source_url']
+        );
+
+
+        // 4. Set published date if first publish
 
         if ($data['is_published'] && ! $article->published_at) {
             $data['published_at'] = now();
         }
 
+
+        // 5. Update article
+
         $article->update($data);
 
-        return redirect()->route('articles.index')
-            ->with('success', 'Article updated');
+
+
+        // 6. Get the image to update
+
+        $image = null;
+
+        if (!empty($imageData['id'])) {
+
+            $image = $article->images()
+                ->whereKey($imageData['id'])
+                ->first();
+            
+            if ($image) {
+                $image->update([
+                    'caption' => $imageData['caption'],
+                    'alt_text' => $imageData['alt_text'],
+                    'source' => $imageData['source'],
+                    'source_url' => $imageData['source_url'],
+                ]);
+
+            }
+
+        }
+
+
+
+
+
+
+
+        return redirect()->route('articles.admin-index')
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Article updated successfully!',
+            ]);
     }
 
 

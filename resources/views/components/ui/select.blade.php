@@ -58,7 +58,7 @@
 
         {{-- Placeholder --}}
         @if($placeholder)
-            <option value="">
+            <option value="" disabled selected hidden class="text-red-500">
                 {{ $placeholder }}
             </option>
         @endif
