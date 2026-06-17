@@ -1,5 +1,11 @@
-{{-- resources/views/components/ui/container.blade.php --}}
+{{-- components/ui/container.blade.php --}}
+@props([
+    'maxWidth' => 'max-w-5xl',
+])
 
-<div class="mx-auto max-w-5xl space-y-5">
-    {{$slot}}
+<div {{ $attributes->class([
+    'mx-auto mb-12 pt-10 border-t border-zinc-300',
+    $maxWidth,
+]) }}>
+    {{ $slot }}
 </div>

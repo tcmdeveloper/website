@@ -28,6 +28,7 @@
 /* -----------------------------------
    Theme customization
 ------------------------------------ */
+
 @theme {
    --font-body: "Roboto", sans-serif;
    --font-display: "Lemon Milk", sans-serif;
@@ -49,14 +50,12 @@
 @import "./components/buttons.css";
 @import "./components/cards.css";
 @import "./components/forms.css";
+@import "./components/links.css";
 @import "./components/nav.css";
+@import "./components/prose-content.css";
 
 
-@layer base {
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-heading;
-  }
-}
+
 
 
 

@@ -93,7 +93,13 @@ class Article extends Model
     public function getFeaturedImageAttribute()
     {
         $image = $this->images()->where('is_featured', true)->first()
-            ?? $this->images()->first();
+            ?? $this->images()->first()
+            ?? (object) [
+                'path' => asset('images/default.png'),
+                'alt_text' => 'Default article image'
+            ];
+
+        
 
         return $image;
         // return $image

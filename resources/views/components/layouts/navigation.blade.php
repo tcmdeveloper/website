@@ -35,7 +35,7 @@
                     group-hover:translate-y-[2px] group-hover:scale-[101%]
                 "
             >
-                True Crime Metrix</span>
+                Socks</span>
             </span>
         </a>
     </div>
@@ -55,7 +55,7 @@
         </button>
 
         @auth
-            <a href="{{ route('dashboard') }}" class="nav-link">
+            <a href="{{ route('dashboard.index') }}" class="nav-link">
                 Dashboard
             </a>
 

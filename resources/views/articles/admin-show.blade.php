@@ -1,4 +1,4 @@
-{{-- resources/views/admin/articles/index.blade.php --}}
+{{-- resources/views/articles/admin-show.blade.php --}}
 
 <x-layouts.app 
     title="Articles"
@@ -9,12 +9,12 @@
 
         <div class="flex justify-between items-center mb-9">
 
-            <x-ui.button href="{{ route('dashboard') }}" variant="ghost" size="sm" class="gap-2!">
+            <x-ui.button href="{{ route('dashboard.index') }}" variant="ghost" size="sm" class="gap-2!">
                 <x-heroicon-o-arrow-left class="w-4 aspect-square" />
                 Dashboard
             </x-ui.button>
 
-            <x-ui.button href="{{ route('articles.create') }}" variant="primary" size="sm" class="gap-2!">
+            <x-ui.button href="{{ route('admin.articles.create') }}" variant="primary" size="sm" class="gap-2!">
                 <x-heroicon-o-plus class="w-4 aspect-square" />
                 New Article
             </x-ui.button>

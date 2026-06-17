@@ -26,6 +26,7 @@
 @endpush
 
 
+
 <x-layouts.app
     title="Edit Article"
     subtitle="Update your article details."
@@ -36,7 +37,7 @@
 
         <form 
             method="POST" 
-            action="{{ route('articles.update', $article) }}" 
+            action="{{ route('admin.articles.update', $article) }}" 
             class="space-y-5"
         >
 

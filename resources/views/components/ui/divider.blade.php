@@ -1,9 +1,8 @@
-{{-- resources/views/components/ui/divider.blade.php --}}
-
 <div
     {{
         $attributes->merge([
             'class' => '
+                my-10
                 border-t 
                 border-stone-300
             '

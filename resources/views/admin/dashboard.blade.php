@@ -4,7 +4,7 @@
     title="Dashboard"
     subtitle="You can do admin things here for the site."
 >
-    <x-ui.card class="mx-auto">
+    <x-ui.card class="mx-auto max-w-5xl">
 
         <div class="flex flex-wrap gap-3 mb-1">
 
@@ -12,12 +12,16 @@
                 Profile
             </x-ui.button>
 
-            <x-ui.button href="{{route('articles.admin-index')}}" variant="primary">
+            <x-ui.button href="{{route('admin.articles.index')}}" variant="primary">
                 Articles
             </x-ui.button>
 
             <x-ui.button href="{{route('transcriptions.index')}}" variant="primary">
                 Transcriptions
+            </x-ui.button>
+
+            <x-ui.button href="{{route('jail-call-logs.show')}}" variant="primary">
+                Import Call Log
             </x-ui.button>
 
         </div>

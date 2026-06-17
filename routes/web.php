@@ -11,6 +11,8 @@ use App\Http\Controllers\Frontend\ArticleController as FrontendArticleController
 use App\Http\Controllers\Admin\TranscriptionController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\JailCallLogController;
+
 
 // -----------------------------------------------------
 // CRUD CONVENTION
@@ -23,6 +25,10 @@ use Illuminate\Support\Facades\Route;
 // edit    GET          /users/{user}/edit
 // update  PUT/PATCH    /users/{user}
 // destroy DELETE /     users/{user}
+
+
+Route::get('/import-csv', [JailCallLogController::class, 'showForm'])->middleware(['auth', 'verified'])->name('jail-call-logs.show');
+Route::post('/import-csv', [JailCallLogController::class, 'import'])->middleware(['auth', 'verified'])->name('jail-call-logs.import');
 
 
 // -----------------------------------------------------

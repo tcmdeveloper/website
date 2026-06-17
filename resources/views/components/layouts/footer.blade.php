@@ -1,6 +1,6 @@
 {{-- resources/views/components/layouts/footer.blade.php --}}
 
-<footer class="border-t bg-white">
+<footer class="border-t border-t-zinc-300 bg-white">
     <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-gray-500 flex justify-between gap-x-6">
         <span class="grow">© {{ date('Y') }} {{ config('app.name') }}</span>
         <a href="/about" class="hover:text-yellow-500">About</a>

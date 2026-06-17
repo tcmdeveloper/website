@@ -33,11 +33,11 @@ class ArticleController extends Controller
     // INSPECT
     // -----------------------------------------------------
 
-    public function inspect()
+    public function show()
     {
         $articles = Article::latest()->paginate(10);
 
-        return view('articles.inspect', compact('articles'));
+        return view('articles.admin-show', compact('articles'));
     }
 
     // -----------------------------------------------------
@@ -52,7 +52,6 @@ class ArticleController extends Controller
         
         return view('articles.create', compact('categories'));
     }
-
 
     // -----------------------------------------------------
     // STORE
