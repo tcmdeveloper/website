@@ -16,8 +16,15 @@ return new class extends Migration
             $table->string('term_group_name')->nullable();
             $table->string('term_name')->nullable();
 
+            $table->text('raw_start_time')->nullable();
             $table->dateTime('start_time')->nullable();
+            $table->string('start_time_error')->nullable();
+
+            $table->text('raw_end_time')->nullable();
             $table->dateTime('end_time')->nullable();
+            $table->string('end_time_error')->nullable();
+
+            
 
             // duration in seconds
             $table->unsignedInteger('duration')->nullable();

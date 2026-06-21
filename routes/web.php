@@ -26,6 +26,11 @@ use App\Http\Controllers\JailCallLogController;
 // update  PUT/PATCH    /users/{user}
 // destroy DELETE /     users/{user}
 
+Route::get('call-logs', [JailCallLogController::class, 'show'])->middleware(['auth', 'verified']);
+Route::get('call-logs/edit/{jailCallLog}', [JailCallLogController::class, 'edit'])->middleware(['auth', 'verified']);
+Route::patch('call-logs/patch', [JailCallLogController::class, 'update'])->middleware(['auth', 'verified']);
+
+
 
 Route::get('/import-csv', [JailCallLogController::class, 'showForm'])->middleware(['auth', 'verified'])->name('jail-call-logs.show');
 Route::post('/import-csv', [JailCallLogController::class, 'import'])->middleware(['auth', 'verified'])->name('jail-call-logs.import');

@@ -35,7 +35,7 @@
                     group-hover:translate-y-[2px] group-hover:scale-[101%]
                 "
             >
-                Socks</span>
+                True Crime Metrix</span>
             </span>
         </a>
     </div>
