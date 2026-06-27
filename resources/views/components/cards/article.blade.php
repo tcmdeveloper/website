@@ -12,8 +12,12 @@
     {{-- Featured image --}}
     <a href="{{ $url }}" class="block">
         <img 
-            src="{{ $featuredImage ? asset($featuredImage->path) : asset('images/default-article.jpg') }}"
+            src="{{ $featuredImage 
+                ? Storage::url($featuredImage->path) 
+                : asset('images/default-article.jpg') 
+            }}"
             class="w-full h-48 object-cover"
+            alt="Featured image"
         >
     </a>
 
