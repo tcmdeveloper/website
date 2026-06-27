@@ -27,7 +27,7 @@
                     {{-- Description --}}
                     @if($category->description)
                         <p class="text-sm text-zinc-500 mt-2">
-                            {{ Str::limit($category->description, 90) }}
+                            {{ Str::limit($category->description, 300) }}
                         </p>
                     @endif
 
@@ -35,7 +35,7 @@
                     <div class="mt-4 flex items-center justify-between text-sm text-zinc-400">
 
                         <span>
-                            {{ $category->posts_count }} posts
+                            {{ $category->articles_count }} posts
                         </span>
 
                         <span class="group-hover:text-green-500 transition">

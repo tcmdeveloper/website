@@ -84,11 +84,13 @@
                                 <form
                                     method="POST"
                                     action="{{ route('admin.categories.destroy', $category) }}"
+                                    onsubmit="return confirm('Are you sure you want to delete this category? This action cannot be undone.')"
                                 >
                                     @csrf
                                     @method('DELETE')
 
                                     <x-ui.button
+                                        type="submit"
                                         size="xs"
                                         variant="danger"
                                     >

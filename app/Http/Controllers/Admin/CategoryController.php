@@ -22,11 +22,11 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::withCount([
-            'articles as article_count'
-        ])->orderBy('name')->paginate(10);
+        $categories = Category::withCount('publishedArticles as article_count')->orderBy('name')->get();
         
-        return view('categories.admin-index', compact('categories'));
+        return view('categories.admin-index', [
+            'categories' => $categories
+        ]);
     }
 
 
@@ -85,6 +85,27 @@ class CategoryController extends Controller
 
         return redirect( route('admin.categories.index') )->with('success', 'New category added!');
 
+    }
+
+
+    // -----------------------------------------------------
+    // DESTROY
+    // -----------------------------------------------------
+
+    public function destroy(Category $category)
+    {
+        $category->articles()->update([
+            'category_id' => null
+        ]);
+
+        $category->delete();
+        
+        return redirect()
+            ->route('admin.categories.index')
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Category deleted!',
+            ]);
     }
 
     

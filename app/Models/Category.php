@@ -69,6 +69,24 @@ class Category extends Model
             default => 'bg-stone-500',
         };
     }
+
+
+
+
+
+    // -----------------------------------------------------
+    // SCOPES
+    // -----------------------------------------------------
+
+    public function scopePublished($query)
+    {
+        return $query
+            ->where('is_published', true)
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
+    }
+
+    
     
 
 
@@ -89,9 +107,13 @@ class Category extends Model
 
     public function publishedArticles()
     {
-        return $this->hasMany(Article::class)
-            ->where('is_published', true)
-            ->whereNotNull('published_at')
-            ->where('published_at', '<=', now());
+        return $this->hasMany(Article::class)->published();
     }
+
+
+
+    
+    
 }
+
+

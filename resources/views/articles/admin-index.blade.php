@@ -57,8 +57,8 @@
                         </td>
 
 
-                        <td class="px-6 py-4 text-zinc-500">
-                            {{ $article->category->name }}
+                        <td class="px-6 py-4 {{ $article->category ? 'text-zinc-500' : 'text-zinc-300' }}">
+                            {{ $article->category?->name ?? 'Uncategorized' }}
                         </td>
 
                         <td class="px-6 py-4">

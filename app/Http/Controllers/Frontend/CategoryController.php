@@ -22,6 +22,7 @@ class CategoryController extends Controller
         $categories = Category::query()
             ->whereHas('publishedArticles')
             ->orderBy('name')
+            ->withCount('articles')
             ->paginate(10);
         
         return view('categories.index', compact('categories'));
