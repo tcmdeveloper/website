@@ -5,22 +5,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {{-- CSRF --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- Page title --}}
+    {{-- Title --}}
     <title>{{ $title ?? config('app.name') }}</title>
+    <meta name="title" content="{{ $title ?? config('app.name') }}">
+
+    {{-- SEO description --}}
+    <meta name="description" content="{{ $meta_description ?? 'Default description for your application' }}">
 
     {{-- Favicons --}}
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
     <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
 
-    {{-- Vite --}}
+    {{-- Open Graph (social sharing) --}}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ $title ?? config('app.name') }}">
+    <meta property="og:description" content="{{ $meta_description ?? '' }}">
+    <meta property="og:image" content="{{ $og_image ?? asset('images/default-og.jpg') }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card" content="summary_large_image">
+
+    {{-- Prevent indexing on dev (optional) --}}
+    @if(app()->environment('local'))
+        <meta name="robots" content="noindex,nofollow">
+    @endif
+
+    {{-- Vite (production-safe) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
-    {{-- Stack per-page styles --}}
+
+    {{-- Page-specific styles --}}
     @stack('styles')
 
+    {{-- Page-specific scripts (if you still use them) --}}
+    @stack('scripts')
 </head>
 
 <body 
