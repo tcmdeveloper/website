@@ -10,6 +10,7 @@ composer install --no-dev --optimize-autoloader
 
 # 3. Sync ONLY safe public files
 cp public/index.php public_html/
+cp public/phpinfo.php public_html/
 cp public/.htaccess public_html/
 
 # 4. Sync Vite build (critical)
