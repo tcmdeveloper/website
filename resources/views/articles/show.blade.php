@@ -1,62 +1,81 @@
 {{-- resources/views/articles/show.blade.php --}}
 
 <x-layouts.app>
+    
        
+    <x-ui.card class="max-w-4xl mx-auto flex flex-col items-center prose-content shadow-none! bg-transparent! border-none! ">
 
-    <x-ui.card class="max-w-6xl mx-auto flex flex-col items-center markdown shadow-none! bg-transparent! border-none!">
 
-        <div class="my-1 mt-5 text-lg font-bold flex flex-row justify-center w-full">
+        {{-- PUBLISHED DATE --}}
+
+        <div class="mt-5 text-xs font-light uppercase tracking-widest">
             <span>{{ $article->created_at->format('M d, Y') }}</span>
-            {{-- <span>
-                    <x-ui.category-pip
-                        href="{{route('categories.show', $article->category->slug)}}"
-                        color="{{$article->category->color}}"
-                    >
-                        {{$article->category->name}}
-                    </x-ui.category-pip>
-                </span> --}}
         </div>
 
-        <h1 class="text-center my-8 mb-8!">
+
+        {{-- TITLE AND EXCERPT --}}
+
+        <h1 class="text-center mt-2 mb-0">
             {{ $article->title }}
         </h1>
 
+         <p class="text-center mt-3 mb-3! font-heading text-xl font-light">
+            {{ $article->excerpt }}
+        </p>
+
+
+        {{-- CATEGORY/AUTHOR PIPS --}}
+
         <span>
-                    <x-ui.category-pip
-                        href="{{route('categories.show', $article->category->slug)}}"
-                        color="{{$article->category->color}}"
-                    >
-                        {{$article->category->name}}
-                    </x-ui.category-pip>
-                    <a class="inline-flex items-center rounded-full px-3 py-1 text-sm font-normal transition bg-red-500 text-white hover:bg-lime-20">by {{$article->author->display_name}}</a>
-                </span>
+            <x-ui.category-pip
+                href="{{route('categories.show', $article->category->slug)}}"
+                color="{{$article->category->color}}"
+            >
+                {{$article->category->name}}
+            </x-ui.category-pip>
 
-        <h2 class="text-center mt-7 mb-5!">
-            {{ $article->excerpt }}
-        </h2>
+            <a class="inline-flex items-center rounded-full px-3 py-1 text-xs font-normal transition bg-red-500 text-white hover:bg-lime-20 no-underline">
+                by {{$article->author->display_name}}
+            </a>
+        </span>
 
         
-        {{-- FEATURED IMAGE --}}
+        {{-- FEATURED ARTICLE IMAGE --}}
+
+        @php
+            $featured = $article->featured_image;
+        @endphp
+
         <img
-            src="{{ asset($article->featured_image->path) }}"
-            class="my-6 w-full rounded-xs object-contain shadow-sm"
-            alt="{{ $article->featured_image->alt_text }}"
+            src="{{ $featured ? asset($featured->path) : asset('images/default-article.jpg') }}"
+            class="my-6 max-w-3xl rounded-xs shadow-sm aspect-video"
+            alt="{{ $featured?->alt_text ?? 'Default article image' }}"
         >
-        
 
-        <div class="flex flex-col gap-4 border border-zinc-300 w-full px-3 py-2 text-xs mb-6 bg-amber-50">
-            {{ $article->excerpt }}
-            <span>
-                Image source: 
-                <a href="/" target="_blank" class="link ml-1">
-                    {{ $article->featured_image->source }}
-                    <x-ui.icon name="arrow-top-right-on-square" size="xs" class="ml-1 relative -top-1 w-2!" />
-                </a>
-            </span>
-        </div>
+        @if ($featured && $featured->source)
+            <div class="max-w-3xl flex flex-col gap-4 border border-zinc-300 w-full px-2.5 py-1.5 text-xs mb-1 bg-amber-50">
+                <span>
+                    Image source:
+                    <a
+                        href="{{ $featured->source_url ?: '#' }}"
+                        target="_blank"
+                        class="link ml-1"
+                    >
+                        {{ $featured->source }}
+                        <x-ui.icon
+                            name="arrow-top-right-on-square"
+                            size="xs"
+                            class="ml-1 relative -top-1 w-2!"
+                        />
+                    </a>
+                </span>
+            </div>
+        @endif
+
 
         {{-- ARTICLE CONTENT --}}
-        <article class="prose max-w-none markdown">
+
+        <article class="prose-content w-full max-w-3xl">
             {!! $article->contentHtml !!}
         </article>
 

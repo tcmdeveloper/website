@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
+use App\Models\ArticleImage;
 use App\Models\Category;
 use App\Services\RandomStringGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 
@@ -59,54 +61,79 @@ class ArticleController extends Controller
 
     public function store(RandomStringGenerator $generator, Request $request)
     {   
+        
+        // 1. Validate data
+
         $data = $request->validate([
             'title' => ['required', 'string', 'min:5', 'max:120', 'regex:/^[\pL\pN\s\-\:\,\.\'\"\!\?]+$/u'],
             'slug' => ['nullable', 'string', 'max:150', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', 'unique:articles,slug'],
             'excerpt' => ['nullable', 'string', 'min:50', 'max:300'],
-            'content' => 'nullable',
+            'content' => ['nullable', 'string'],
             'cropped_image' => ['nullable', 'string'],
             'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'meta_title' => ['nullable', 'string', 'max:100'],
             'meta_description' => ['nullable', 'string', 'max:160'],
-            'is_published' => ['nullable', 'boolean']
+            'is_published' => ['nullable', 'boolean'],
         ]);
 
-        // Save cropped image
-        $imagePath = null;
 
-        if ($request->cropped_image) {
+        // 2. Create article
 
-            $image = $request->cropped_image;
-            $image = preg_replace('#^data:image/\w+;base64,#i', '', $image);
+        $article = Article::create([
+            'title' => $data['title'],
+            'slug' => $data['slug'] ?? Str::slug($data['title']),
+            'excerpt' => $data['excerpt'] ?? null,
+            'content' => $data['content'] ?? null,
+            'category_id' => $data['category_id'] ?? null,
+            'meta_title' => $data['meta_title'] ?? null,
+            'meta_description' => $data['meta_description'] ?? null,
+            'is_published' => $request->boolean('is_published'),
+            'published_at' => $request->boolean('is_published') ? now() : null,
+            'user_id' => auth()->id(),
+            'hex' => $generator->uniqueHexId(),
+        ]);
+
+
+        // 3. Save image (if exists)
+
+        if ($request->filled('cropped_image')) {
+
+            $image = preg_replace(
+                '#^data:image/\w+;base64,#i',
+                '',
+                $request->cropped_image
+            );
+
             $imageData = base64_decode($image);
 
             if ($imageData === false) {
                 throw new \Exception('Invalid base64 image');
             }
 
-            $filename = \Illuminate\Support\Str::uuid() . '.jpg';
+            $filename = Str::uuid() . '.jpg';
 
             Storage::disk('public')->put(
-                'articles/' . $filename,
+                "articles/{$filename}",
                 $imageData
             );
 
-            $imagePath = 'articles/' . $filename;
-        
-        }
-        
-        $data['featured_image'] = $imagePath;
 
-        $data['user_id'] = auth()->id();
-        $data['hex'] = $generator->uniqueHexId();
-        
-        $data['is_published'] = $request->boolean('is_published');
-        if ($data['is_published']) {
-            $data['published_at'] = now();
+            // 4. Save to article_images
+
+            $article->images()->create([
+                'path' => "articles/{$filename}",
+                'alt_text' => $data['featured_image_alt_text'] ?? null,
+                'caption' => $data['featured_image_caption'] ?? null,
+                'source' => $data['featured_image_source'] ?? null,
+                'source_url' => $data['featured_image_source_url'] ?? null,
+                'is_featured' => true,
+            ]);
         }
 
-        return redirect()->route('articles.index')
+
+        return redirect()->route('admin.articles.index')
             ->with('success', 'Article created');
+
     }
 
 
@@ -195,7 +222,6 @@ class ArticleController extends Controller
         $article->update($data);
 
 
-
         // 6. Get the image to update
 
         $image = null;
@@ -219,12 +245,7 @@ class ArticleController extends Controller
         }
 
 
-
-
-
-
-
-        return redirect()->route('articles.admin-index')
+        return redirect()->route('admin.articles.index')
             ->with('status', [
                 'type' => 'success',
                 'message' => 'Article updated successfully!',
@@ -233,22 +254,196 @@ class ArticleController extends Controller
 
 
     // -----------------------------------------------------
-    // DESTROY
+    // IMAGES INDEX
     // -----------------------------------------------------
 
-    public function uploadImage(Request $request)
+    public function imagesIndex(Article $article)
     {
-        $request->validate([
-            'image' => ['required', 'image']
-        ]);
+        $images = $article->images()
+            ->latest()
+            ->paginate(15);
 
-        $path = $request->file('image')
-            ->store('articles', 'public');
-
-        return response()->json([
-            'url' => Storage::url($path),
+        return view('articles.images-index', [
+            'article' => $article,
+            'images' => $images,
         ]);
     }
+
+
+    // -----------------------------------------------------
+    // SELECT IMAGE
+    // -----------------------------------------------------
+
+    public function selectImage(Article $article)
+    {
+        return view('articles.create-image', compact('article'));
+    }
+
+
+    // -----------------------------------------------------
+    // STORE ARTICLE IMAGE
+    // -----------------------------------------------------
+    public function storeImage(Request $request, Article $article)
+    {
+        $validated = $request->validate([
+            'cropped_image' => ['required', 'string'],
+            'caption' => ['nullable', 'string', 'max:255'],
+            'alt_text' => ['nullable', 'string', 'max:255'],
+            'source' => ['nullable', 'string', 'max:255'],
+            'source_url' => ['nullable', 'url', 'max:255'],
+            'is_featured' => ['nullable', 'boolean'],
+        ]);
+
+        $image = preg_replace(
+            '#^data:image/\w+;base64,#i',
+            '',
+            $validated['cropped_image']
+        );
+
+        $imageData = base64_decode($image);
+
+        if ($imageData === false) {
+            return back()->withErrors([
+                'cropped_image' => 'Invalid image data.',
+            ]);
+        }
+
+        $filename = Str::uuid() . '.jpg';
+        $path = "articles/{$filename}";
+
+        Storage::disk('public')->put($path, $imageData);
+
+        // If this image is becoming featured, clear any existing featured image.
+        if (!empty($validated['is_featured'])) {
+            $article->images()->update([
+                'is_featured' => false,
+            ]);
+        }
+
+        $article->images()->create([
+            'path' => $path,
+            'caption' => $validated['caption'],
+            'alt_text' => $validated['alt_text'],
+            'source' => $validated['source'],
+            'source_url' => $validated['source_url'],
+            'is_featured' => $validated['is_featured'] ?? false,
+        ]);
+
+        return redirect()
+            ->route('admin.articles.images', $article)
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Image uploaded successfully!',
+            ]);
+    }
+
+    
+    // -----------------------------------------------------
+    // EDIT ARTICLE IMAGE
+    // -----------------------------------------------------
+
+    public function editImage(Article $article, ArticleImage $image)
+    {
+        return view('articles.edit-image', compact('article', 'image'));
+    }
+
+
+    // -----------------------------------------------------
+    // UPDATE ARTICLE IMAGE
+    // -----------------------------------------------------
+
+    public function updateImage(Request $request, Article $article, ArticleImage $image)
+    {
+        abort_unless($image->article_id === $article->id, 404);
+
+        $validated = $request->validate([
+            'cropped_image' => ['nullable', 'string'],
+            'caption' => ['nullable', 'string', 'max:255'],
+            'alt_text' => ['nullable', 'string', 'max:255'],
+            'source' => ['nullable', 'string', 'max:255'],
+            'source_url' => ['nullable', 'url', 'max:255'],
+            'is_featured' => ['nullable', 'boolean'],
+        ]);
+
+        // Replace image if a new one was uploaded
+        if (!empty($validated['cropped_image'])) {
+
+            $imageData = preg_replace(
+                '#^data:image/\w+;base64,#i',
+                '',
+                $validated['cropped_image']
+            );
+
+            $imageData = base64_decode($imageData);
+
+            if ($imageData === false) {
+                return back()->withErrors([
+                    'cropped_image' => 'Invalid image data.',
+                ]);
+            }
+
+            // Delete old image
+            if ($image->path && Storage::disk('public')->exists($image->path)) {
+                Storage::disk('public')->delete($image->path);
+            }
+
+            // Save new image
+            $filename = Str::uuid() . '.jpg';
+            $path = "articles/{$filename}";
+
+            Storage::disk('public')->put($path, $imageData);
+
+            $image->path = $path;
+        }
+
+        // Only one featured image per article
+        if ($request->boolean('is_featured')) {
+            $article->images()
+                ->whereKeyNot($image->id)
+                ->update([
+                    'is_featured' => false,
+                ]);
+        }
+
+        $image->caption = $validated['caption'];
+        $image->alt_text = $validated['alt_text'];
+        $image->source = $validated['source'];
+        $image->source_url = $validated['source_url'];
+        $image->is_featured = $request->boolean('is_featured');
+
+        $image->save();
+
+        return redirect()
+            ->route('admin.articles.images', $article)
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Image updated successfully!',
+            ]);
+    }
+
+
+
+
+    public function destroyImage(Article $article, ArticleImage $image)
+    {
+        $image = $article->images()
+            ->whereKey($image->id)
+            ->firstOrFail();
+
+        if ($image->path && Storage::disk('public')->exists($image->path)) {
+            Storage::disk('public')->delete($image->path);
+        }
+
+        $image->delete();
+
+        return redirect()
+            ->route('admin.articles.images', $article)
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Image deleted successfully!',
+            ]);
+    }
+    
 
 
     // -----------------------------------------------------
@@ -257,11 +452,22 @@ class ArticleController extends Controller
 
     public function destroy(Article $article)
     {
+        foreach ($article->images as $image) {
+            if ($image->path && Storage::disk('public')->exists($image->path)) {
+                Storage::disk('public')->delete($image->path);
+            }
+        }
+
+        $article->images()->delete();
+
         $article->delete();
 
         return redirect()
-            ->route('articles.index')
-            ->with('success', 'Article deleted');
+            ->route('admin.articles.index')
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Article deleted!',
+            ]);
     }
 
 }

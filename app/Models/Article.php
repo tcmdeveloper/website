@@ -95,8 +95,11 @@ class Article extends Model
         $image = $this->images()->where('is_featured', true)->first()
             ?? $this->images()->first()
             ?? (object) [
-                'path' => asset('images/default.png'),
-                'alt_text' => 'Default article image'
+                'path' => asset('images/default-article.jpg'),
+                'alt_text' => 'Default article image',
+                'caption' => null,
+                'source' => null,
+                'source_url' => null,
             ];
 
         

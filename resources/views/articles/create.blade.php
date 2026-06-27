@@ -1,42 +1,21 @@
-{{-- resources/views/admin/articles/edit.blade.php --}}
+{{-- resources/views/articles/create.blade.php --}}
 
-@push('scripts')
+<x-layouts.dashboard>
 
-     @include('articles.partials.upload-image-script')
+    <x-ui.card class="max-w-5xl prose-content">
 
-     <script>
-
-        document.addEventListener('DOMContentLoaded', function () {
-
-            const imageInput = document.getElementById('imageInput');
-            const currentImage = document.getElementById('currentImage');
-            
-
-            if (imageInput) {
-                imageInput.addEventListener('change', function (e) {
-                    currentImage.classList.add('hidden');
-                });
-
-            }
-
-        });
-
-    </script>
-
-@endpush
-
-
-<x-layouts.app
-    title="Create a new article"
-    subtitle="Complete this form to create a new article."
->
-
-    <x-ui.card class="mx-auto max-w-5xl">
+        <h1 class="mt-0">
+            Create new article
+        </h1>
+        
+        <p>
+            Complete the form to publish your article.
+        </p>
 
 
         <form 
             method="POST" 
-            action="{{ route('articles.store') }}" 
+            action="{{ route('admin.articles.store') }}" 
             class="space-y-5"
         >
 
@@ -140,139 +119,9 @@
                         Preview
                     </label>
                     <div class="flex-1 border border-zinc-300 rounded-sm p-4 bg-white prose max-w-none overflow-auto shadow-sm">
-                        <div x-html="previewMarkdown" class="markdown"></div>
+                        <div x-html="previewMarkdown" class="prose-content"></div>
                     </div>
                 </div>
-
-            </div>
-
-
-            {{-- Featured image --}}
-
-            <div class="bg-gray-100 border border-zinc-300 rounded-sm shadow-sm p-4 py-10 flex justify-center items-center w-full mx-auto mb-8">
-
-
-                {{-- Current image canvase --}}
-
-                <div 
-                    id="currentImageCanvas" 
-                    class="flex flex-col items-center"
-                >
-
-                    {{-- Featured image --}}
-
-                    <div class="relative group">
-
-                        <img
-                            src="{{ url('images/default-article.jpg') }}"
-                            class="w-2xl"
-                            alt="Default article image"
-                        >
-
-                        
-                        {{-- Edit image --}}
-
-                        <button
-                            type="button"
-                            @click="$refs.featuredImageInput.click()"
-                            class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 cursor-pointer"
-                            aria-label="Change image"
-                        >
-
-                            <x-heroicon-o-pencil class="h-8 w-8 text-white" />
-
-                        </button>
-
-
-                        {{-- Hidden image input --}}
-
-                        <input
-                            x-ref="featuredImageInput"
-                            name="featured_image"
-                            type="file"
-                            accept="image/*"
-                            class="hidden"
-                        />
-
-                    
-                    </div>
-
-
-                    {{-- Featured image meta  --}}
-
-                    <div class="mt-6 w-full flex flex-col space-y-5">
-
-                        {{-- Caption --}}
-
-                        <div>
-                            <x-ui.input
-                                name="featured_image_caption"
-                                type="text"
-                                size="sm"
-                                placeholder="Image caption"
-                                label="Image caption"
-                                :value="old('featured_image_caption')"
-                            />
-                        </div>
-
-
-                        {{-- Alt text --}}
-
-                        <div>
-                            <x-ui.input
-                                name="featured_image_alt_text"
-                                type="text"
-                                size="sm"
-                                label="Alt text"
-                                placeholder="Alt text"
-                                :value="old('featured_image_alt_text')"
-                            />
-                        </div>
-
-
-                        {{-- Source --}}
-
-                        <div>
-                            <x-ui.input
-                                name="featured_image_source"
-                                type="text"
-                                size="sm"
-                                label="Image source"
-                                placeholder="Image source"
-                                :value="old('featured_image_source')"
-                            />
-                        </div>
-
-
-                        {{-- Source URL --}}
-
-                        <div>
-                            <x-ui.input
-                                name="featured_image_source_url"
-                                type="text"
-                                size="sm"
-                                label="Link to source"
-                                placeholder="Image source"
-                                :value="old('featured_image_source_url')"
-                            />
-                        </div>
-
-                    </div>
-
-                </div>
-                {{-- End of featured image canvas --}}
-
-
-                {{-- Image cropper canvase --}}
-
-                <div id="imageCropperCanvas" class="mb-6">
-                    <img
-                        id="preview"
-                        class="max-w-xl rounded-lg"
-                    >
-                    <input type="hidden" name="cropped_image" id="croppedImage">
-                    <x-ui.button variant="secondary" class="hidden!">Cancel</x-ui.button>
-                </div>                
 
             </div>
 
@@ -350,4 +199,4 @@
     </x-ui.card>
 
 
-</x-layouts.app>
+</x-layouts.dashboard>

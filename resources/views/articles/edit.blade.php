@@ -1,38 +1,20 @@
-{{-- resources/views/admin/articles/edit.blade.php --}}
+{{-- resources/views/articles/edit.blade.php --}}
 
-@push('scripts')
+<x-layouts.dashboard>
 
-     @include('articles.partials.upload-image-script')
+    <x-ui.card class="max-w-5xl">
 
-     <script>
-
-        document.addEventListener('DOMContentLoaded', function () {
-
-            const imageInput = document.getElementById('imageInput');
-            const currentImage = document.getElementById('currentImage');
-            
-
-            if (imageInput) {
-                imageInput.addEventListener('change', function (e) {
-                    currentImage.classList.add('hidden');
-                });
-
-            }
-
-        });
-
-    </script>
-
-@endpush
+        <x-ui.header-actions
+            title="Edit article"
+            subtitle="Update the article details in the form below."
+            :href="route('admin.categories.create')"
+            label="All articles"
+            buttonVariant="ghost"
+        />
 
 
-
-<x-layouts.app
-    title="Edit Article"
-    subtitle="Update your article details."
->
-
-    <x-ui.card class="mx-auto max-w-5xl">
+        {{-- Alert --}}
+        <x-ui.alert />
 
 
         <form 
@@ -100,7 +82,7 @@
                     name="excerpt"
                     label="Excerpt"
                     rows="3"
-                    value="{{$article->excerpt}}"
+                    value="{!!html_entity_decode($article->excerpt)!!}"
                     placeholder="Write something..."
                 />
             </div>
@@ -141,143 +123,9 @@
                         Preview
                     </label>
                     <div class="flex-1 border border-zinc-300 rounded-sm p-4 bg-white prose max-w-none overflow-auto shadow-sm">
-                        <div x-html="previewMarkdown" class="markdown"></div>
+                        <div x-html="previewMarkdown" class="prose-content"></div>
                     </div>
                 </div>
-
-            </div>
-
-
-            {{-- Featured image --}}
-
-            <div class="bg-gray-100 border border-zinc-300 rounded-sm shadow-sm p-4 py-10 flex justify-center items-center w-full mx-auto mb-8">
-
-
-                {{-- Current image canvase --}}
-
-                <div 
-                    id="currentImageCanvas" 
-                    class="flex flex-col items-center"
-                >
-
-                    {{-- Featured image --}}
-
-                    <div class="relative group">
-
-                        <img
-                            src="{{ url($article->featured_image->path) }}"
-                            class="w-2xl"
-                            alt="{{ $article->featured_image->alt_text }}"
-                        >
-
-                        
-                        {{-- Edit image --}}
-
-                        <button
-                            type="button"
-                            @click="$refs.featuredImageInput.click()"
-                            class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 cursor-pointer"
-                            aria-label="Change image"
-                        >
-
-                            <x-heroicon-o-pencil class="h-8 w-8 text-white" />
-
-                        </button>
-
-
-                        {{-- Hidden image input --}}
-
-                        <input
-                            x-ref="featuredImageInput"
-                            name="featured_image"
-                            type="file"
-                            accept="image/*"
-                            class="hidden"
-                        />
-
-
-                        {{-- Hidden featured image id --}}
-
-                        <input
-                            type="hidden"
-                            name="featured_image_id"
-                            value="{{ $article->featuredImage?->id }}"
-                        >
-                    
-                    </div>
-
-
-                    {{-- Featured image meta  --}}
-
-                    <div class="mt-6 w-full flex flex-col space-y-5">
-
-                        {{-- Caption --}}
-
-                        <div>
-                            <x-ui.input
-                                name="featured_image_caption"
-                                type="text"
-                                size="sm"
-                                label="Image caption"
-                                :value="old('featured_image_caption', $article->featured_image->caption)"
-                            />
-                        </div>
-
-
-                        {{-- Alt text --}}
-
-                        <div>
-                            <x-ui.input
-                                name="featured_image_alt_text"
-                                type="text"
-                                size="sm"
-                                label="Meta title"
-                                :value="old('featured_image_alt_text', $article->featured_image->alt_text)"
-                            />
-                        </div>
-
-
-                        {{-- Source --}}
-
-                        <div>
-                            <x-ui.input
-                                name="featured_image_source"
-                                type="text"
-                                size="sm"
-                                label="Image source"
-                                :value="old('featured_image_source', $article->featured_image->source)"
-                            />
-                        </div>
-
-
-                        {{-- Source URL --}}
-
-                        <div>
-                            <x-ui.input
-                                name="featured_image_source_url"
-                                type="text"
-                                size="sm"
-                                label="Link to source"
-                                :value="old('featured_image_source_url', $article->featured_image->source_url)"
-                            />
-                        </div>
-
-                    </div>
-
-                </div>
-                {{-- End of featured image canvas --}}
-
-
-                {{-- Image cropper canvase --}}
-
-                <div id="imageCropperCanvas" class="mb-6">
-                    <img
-                        id="preview"
-                        class="max-w-xl rounded-lg"
-                    >
-                    <input type="hidden" name="cropped_image" id="croppedImage">
-                    <x-ui.button variant="secondary" class="hidden!">Cancel</x-ui.button>
-                </div>                
 
             </div>
 
@@ -337,20 +185,29 @@
 
             {{-- Submit form --}}
 
-            <div>
+            <div class="flex justify-start gap-2">
                 <x-ui.button
                     type="submit"
-                    size="lg"
+                    size="sm"
                 >
-                    Update Article
+                    Update article
+                </x-ui.button>
+
+                <x-ui.button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    href="{{ route('admin.articles.index') }}"
+                >
+                    Cancel
                 </x-ui.button>
             </div>
 
 
         </form>
 
-
+    
     </x-ui.card>
 
 
-</x-layouts.app>
+</x-layouts.dashboard>

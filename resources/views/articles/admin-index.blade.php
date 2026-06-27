@@ -1,60 +1,145 @@
-{{-- resources/views/admin/articles/index.blade.php --}}
+{{-- resources/views/articles/admin-index.blade.php --}}
 
-<x-layouts.app 
-    title="Articles"
-    subtitle="Here are the articles you've been working on."
->
+<x-layouts.dashboard>
 
-<x-ui.card class="mx-auto max-w-5xl">
+    <x-ui.card>
 
-    <div class="flex justify-between items-center mb-9">
-        <x-ui.button href="{{ route('dashboard.index') }}" variant="ghost" size="sm" class="gap-2!">
-            <x-heroicon-o-arrow-left class="w-4 aspect-square" />
-            Dashboard
-        </x-ui.button>
-        <x-ui.button href="{{ route('admin.articles.create') }}" variant="primary" size="sm" class="gap-2!">
-            <x-heroicon-o-plus class="w-4 aspect-square" />
-            New Article
-        </x-ui.button>
-    </div>
-
-    @foreach($articles as $article)
-        <div class="bg-white border border-zinc-300 rounded-lg p-4 mb-3 flex justify-between items-center">
-
-            <div>
-                <h2 class="font-semibold">{{ $article->title }}</h2>
-                <p class="text-sm text-gray-500">Article ID: {{ $article->hex }}</p>
-            </div>
-
-            <div class="flex gap-2">
-                <x-ui.button href="{{ route('admin.articles.show', $article) }}" variant="primary" size="xs" class="gap-2!">
-                    <x-heroicon-o-magnifying-glass class="w-4 aspect-square" />
-                    Inspect
-                </x-ui.button>
-                <x-ui.button href="{{ route('admin.articles.edit', $article) }}" variant="secondary" size="xs" class="gap-2!">
-                    <x-heroicon-o-trash class="w-4 aspect-square" />
-                    Edit
-                </x-ui.button>
-
-                <form method="POST" action="{{ route('admin.articles.destroy', $article) }}">
-                    @csrf
-                    @method('DELETE')
+        <x-ui.header-actions
+            title="Articles"
+            subtitle="Manage the articles for this site."
+            :href="route('admin.articles.create')"
+            label="New article"
+        />
 
 
-                    <x-ui.button type="submit" variant="danger" size="xs" class="gap-2!" onclick="return confirm('Delete article?')">
-                        <x-heroicon-o-trash class="w-4 aspect-square" />
-                        Delete
-                    </x-ui.button>
-                </form>
-            </div>
+        {{-- Alert --}}
+        <x-ui.alert />
+        
 
+        {{-- Table --}}
+
+        <table class="w-full border">
+
+            <thead>
+                <tr class="border-b border-zinc-200 bg-zinc-50 text-left text-sm text-zinc-600">
+
+                    <th class="px-6 py-4 font-medium">
+                        Title
+                        
+                    </th>
+
+                    <th class="px-6 py-4 font-medium">
+                        Category
+                    </th>
+
+                    <th class="px-6 py-4 font-medium">
+                        Views
+                    </th>
+
+                    <th class="px-6 py-4 font-medium">
+                        Created
+                    </th>
+
+                    <th class="px-6 py-4 w-32"></th>
+
+                </tr>
+            </thead>
+
+
+            <tbody>
+
+                @forelse($articles as $article)
+
+                    <tr class="border-b border-zinc-100">
+
+                        <td class="px-6 py-4 text-zinc-500">
+                            {{ $article->title }}
+                        </td>
+
+
+                        <td class="px-6 py-4 text-zinc-500">
+                            {{ $article->category->name }}
+                        </td>
+
+                        <td class="px-6 py-4">
+                            {{ $article->views }}
+                        </td>
+
+                        <td class="px-6 py-4 text-zinc-500">
+                            {{ $article->created_at->format('M j, Y') }}
+                        </td>
+
+                        <td class="px-6 py-4">
+
+                            <div class="flex justify-end gap-2">
+
+                                <x-ui.button
+                                    size="xs"
+                                    variant="ghost"
+                                    href="{{ route('admin.articles.edit', $article) }}"
+                                >
+                                    Edit
+                                </x-ui.button>
+
+                                <x-ui.button
+                                    size="xs"
+                                    variant="ghost"
+                                    href="{{ route('admin.articles.images', $article) }}"
+                                >
+                                    Images
+                                </x-ui.button>
+
+                                <form
+                                    method="POST"
+                                    action="{{ route('admin.articles.destroy', $article) }}"
+                                    onsubmit="return confirm('Are you sure you want to delete this article? This action cannot be undone.')"
+                                >
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <x-ui.button
+                                        type="submit"
+                                        size="xs"
+                                        variant="danger"
+                                    >
+                                        Delete
+                                    </x-ui.button>
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                @empty
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="px-6 py-12 text-center text-zinc-500"
+                        >
+                            No articles found.
+                        </td>
+
+                    </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </table>
+
+
+        {{-- Pagination --}}
+
+        <div class="mt-6">
+            {{ $articles->links() }}
         </div>
-    @endforeach
 
-    <div class="mt-6">
-        {{ $articles->links() }}
-    </div>
 
-</x-ui.card>
+    </x-ui.card>
 
-</x-layouts.app>
+
+</x-layouts.dashboard>

@@ -55,6 +55,7 @@
                             name="name"
                             type="text"
                             label="Name"
+                            placeholder="Your name"
                         />
                     </div>
 
@@ -66,6 +67,7 @@
                             type="text"
                             inputmode="email"
                             label="Email"
+                            placeholder="Email"
                         />
                     </div>
 
@@ -76,6 +78,7 @@
                             name="subject"
                             type="text"
                             label="Subject"
+                            placeholder="Subject"
                         />
                     </div>
 

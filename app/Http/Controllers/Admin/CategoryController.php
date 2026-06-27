@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Services\RandomStringGenerator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 
 // -----------------------------------------------------
@@ -20,12 +22,21 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::query()
-            ->whereHas('publishedArticles')
-            ->orderBy('name')
-            ->paginate(10);
+        $categories = Category::withCount([
+            'articles as article_count'
+        ])->orderBy('name')->paginate(10);
         
-        return view('categories.index', compact('categories'));
+        return view('categories.admin-index', compact('categories'));
+    }
+
+
+    // -----------------------------------------------------
+    // CREATE
+    // -----------------------------------------------------
+    
+    public function create()
+    {
+        return view('categories.create');
     }
 
 
@@ -33,18 +44,48 @@ class CategoryController extends Controller
     // STORE
     // -----------------------------------------------------
 
-    public function store(Request $request)
+    public function store(RandomStringGenerator $generator, Request $request)
     {
         $validated = $request->validate([
-            'name'    => ['required', 'string', 'max:100'],
-            'email'   => ['required', 'email:rfc,dns', 'max:150'],
-            'subject'   => ['required', 'string', 'max:150'],
-            'message' => ['required', 'string', 'max:2000'],
+            'name' => ['required', 'string', 'max:100', 'unique:categories,name'],
+            'description' => ['required', 'string', 'max:300'],
         ]);
+
+        // Array of tailwind colors
+        $colors = [
+            'red',
+            'orange',
+            'amber',
+            'yellow',
+            'lime',
+            'green',
+            'emerald',
+            'teal',
+            'cyan',
+            'sky',
+            'blue',
+            'indigo',
+            'violet',
+            'purple',
+            'fuchsia',
+            'pink',
+            'rose',
+        ];
+
+        $validated['color'] = $colors[array_rand($colors)];
+        $validated['slug'] = Str::slug($validated['name']);
+        $validated['hex'] = $generator->uniqueHexId();
+
+        // Ensure the generated slug is unique
+        validator($validated, [
+            'slug' => ['required', 'string', 'max:100', 'unique:categories,slug'],
+        ])->validate();
 
         Category::create($validated);
 
-        return back()->with('success', 'New category added!');
+        return redirect( route('admin.categories.index') )->with('success', 'New category added!');
+
     }
+
     
 }

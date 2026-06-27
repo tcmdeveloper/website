@@ -3,11 +3,14 @@ import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 
 import profileAvatar from './profile-avatar';
+import imageUploader from './image-uploader';
 
 window.Alpine = Alpine;
 window.marked = marked; // IMPORTANT: global sync
 
 Alpine.data('profileAvatar', profileAvatar);
+Alpine.data('imageUploader', imageUploader);
+
 
 // -------------------------
 // Shared form handler

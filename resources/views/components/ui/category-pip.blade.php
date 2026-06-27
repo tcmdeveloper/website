@@ -19,7 +19,7 @@
 <{{ $href ? 'a' : 'span' }}
     @if($href) href="{{ $href }}" @endif
     {{ $attributes->class([
-        'inline-flex items-center rounded-full px-3 py-1 text-sm font-normal transition',
+        'inline-flex items-center rounded-full px-3 py-1 text-xs font-normal transition no-underline',
         $colors[$color] ?? $colors['gray'],
     ]) }}
 >

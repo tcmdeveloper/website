@@ -7,7 +7,7 @@
 >
 
 
-    <x-ui.card class="max-w-3xl mx-auto text-center">
+    <x-ui.card class="max-w-3xl mx-auto text-center prose-content">
 
         <p>I am Metrix, the creator behind True Crime Metrix.</p>
         <p>I cover ongoing criminal cases with a focus on live trials, court documents, police interviews, and evidence-based analysis.</p>

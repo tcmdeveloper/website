@@ -126,14 +126,16 @@ Route::controller(AdminCategoryController::class)
     ->name('admin.categories.')
     ->middleware(['auth'])
     ->group(function () {
-        Route::get('/admin', 'index')->name('index');
+        Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
-        Route::get('/{article}/edit', 'edit')->name('edit');
-        Route::patch('/{article}', 'update')->name('update');
-        Route::delete('/{article}','destroy')->name('destroy');
-        Route::get('/{article}/inspect', 'inspect')->name('inspect');
+        Route::get('/{category}/edit', 'edit')->name('edit');
+        Route::patch('/{category}', 'update')->name('update');
+        Route::delete('/{category}','destroy')->name('destroy');
+        Route::get('/{category}/inspect', 'inspect')->name('inspect');
         Route::post('/upload-image', 'uploadImage');
+
+        Route::get('/{category}', 'show')->name('show');
     })
 ;
 
@@ -162,13 +164,21 @@ Route::controller(AdminArticleController::class)
     ->middleware(['auth', 'verified'])
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/{article}', 'show')->name('show');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::get('/{article}/edit', 'edit')->name('edit');
         Route::patch('/{article}', 'update')->name('update');
-        Route::delete('/{article}','destroy')->name('destroy');
-        Route::post('/upload-image', 'uploadImage');
+        Route::delete('/{article}', 'destroy')->name('destroy');
+
+        Route::patch('/{article}/image/{image}/update', 'updateImage')->name('images.update');
+        Route::delete('/{article}/images/{image}', 'destroyImage')->name('images.destroy');
+        Route::get('/{article}/images/{image}/edit', 'editImage')->name('images.edit');
+        Route::post('/{article}/images/store', 'storeImage')->name('images.store');
+        Route::get('/{article}/images/upload', 'selectImage')->name('images.upload');
+        Route::get('/{article}/images', 'imagesIndex')->name('images');
+        
+
+        Route::get('/{article}', 'show')->name('show');
     })
 ;
 
