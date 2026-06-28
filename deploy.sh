@@ -2,22 +2,28 @@
 
 echo "🚀 Deploying Laravel..."
 
-# 1. Pull latest code
+# 1. Ensure PHP runtime is correct
+php -v
+
+# 2. Hard clear caches
+php artisan optimize:clear
+rm -rf bootstrap/cache/*.php
+
+# 3. Pull latest code
 git pull origin main
 
-# 2. Install PHP deps (optional on server)
+# 4. Install dependencies
 composer install --no-dev --optimize-autoloader
 
-# 3. Sync ONLY safe public files
-cp public/index.php public_html/
-cp public/phpinfo.php public_html/
-cp public/.htaccess public_html/
-
-# 4. Sync Vite build (critical)
+# 5. Sync frontend assets safely
 rm -rf public_html/build
 cp -r public/build public_html/
 
-# 5. Clear Laravel cache
-php artisan optimize:clear
+# 6. Sync entry files
+cp public/index.php public_html/
+cp public/.htaccess public_html/
+
+# 7. Force OPcache reset (IMPORTANT FIX)
+php -r "if (function_exists('opcache_reset')) { opcache_reset(); }"
 
 echo "✅ Deployment complete"
