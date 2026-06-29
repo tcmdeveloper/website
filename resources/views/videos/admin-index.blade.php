@@ -5,10 +5,10 @@
     <x-ui.card>
 
         <x-ui.header-actions
-            title="Articles"
-            subtitle="Manage the articles for this site."
-            :href="route('admin.articles.create')"
-            label="New article"
+            title="Video downloads"
+            subtitle="Manage videos you have downloaded from YouTube."
+            :href="route('admin.videos.create')"
+            label="Download video"
         />
 
 
@@ -24,16 +24,20 @@
                 <tr class="border-b border-zinc-200 bg-zinc-50 text-left text-sm text-zinc-600">
 
                     <th class="px-6 py-4 font-medium">
-                        Title
+                        Video ID
                         
                     </th>
 
                     <th class="px-6 py-4 font-medium">
-                        Category
+                        Title
                     </th>
 
                     <th class="px-6 py-4 font-medium">
-                        Views
+                        Duration
+                    </th>
+
+                    <th class="px-6 py-4 font-medium">
+                        Status
                     </th>
 
                     <th class="px-6 py-4 font-medium">
@@ -48,24 +52,33 @@
 
             <tbody>
 
-                @forelse($articles as $article)
+                @forelse($videos as $video)
 
                     <tr class="border-b border-zinc-100">
 
                         <td class="px-6 py-4 text-zinc-500">
-                            {{ $article->title }}
-                        </td>
-
-                        <td class="px-6 py-4 {{ $article->category ? 'text-zinc-500' : 'text-zinc-300' }}">
-                            {{ $article->category?->name ?? 'Uncategorized' }}
-                        </td>
-
-                        <td class="px-6 py-4">
-                            {{ $article->views }}
+                            {{-- {{ $video->youtube_id }} --}}
+                            <img
+                                src="{{ Storage::url($video->thumbnail) }}"
+                                class="h-16 w-24 rounded object-cover"
+                                alt="{{ $video->title }}"
+                            >
                         </td>
 
                         <td class="px-6 py-4 text-zinc-500">
-                            {{ $article->created_at->format('M j, Y') }}
+                            {{ $video->title }}
+                        </td>
+
+                        <td class="px-6 py-4 text-zinc-500">
+                            {{ $video->duration_formatted }}
+                        </td>
+
+                        <td class="px-6 py-4 text-zinc-500">
+                            {{ $video->status }}
+                        </td>                        
+
+                        <td class="px-6 py-4 text-zinc-500">
+                            {{ $video->created_at->format('M j, Y') }}
                         </td>
 
                         <td class="px-6 py-4">
@@ -75,23 +88,15 @@
                                 <x-ui.button
                                     size="xs"
                                     variant="ghost"
-                                    href="{{ route('admin.articles.edit', $article) }}"
+                                    href="{{ route('admin.videos.edit', $video) }}"
                                 >
                                     Edit
                                 </x-ui.button>
 
-                                <x-ui.button
-                                    size="xs"
-                                    variant="ghost"
-                                    href="{{ route('admin.articles.images', $article) }}"
-                                >
-                                    Images
-                                </x-ui.button>
-
                                 <form
                                     method="POST"
-                                    action="{{ route('admin.articles.destroy', $article) }}"
-                                    onsubmit="return confirm('Are you sure you want to delete this article? This action cannot be undone.')"
+                                    action="{{ route('admin.videos.destroy', $video) }}"
+                                    onsubmit="return confirm('Are you sure you want to delete this video? This action cannot be undone.')"
                                 >
                                     @csrf
                                     @method('DELETE')
@@ -119,7 +124,7 @@
                             colspan="5"
                             class="px-6 py-12 text-center text-zinc-500"
                         >
-                            No articles found.
+                            No videos found.
                         </td>
 
                     </tr>
@@ -131,14 +136,13 @@
         </table>
 
 
+
         {{-- Pagination --}}
 
         <div class="mt-6 flex justify-end">
-            {{ $images->links() }}
+            {{ $videos->links() }}
         </div>
 
-
     </x-ui.card>
-
 
 </x-layouts.dashboard>

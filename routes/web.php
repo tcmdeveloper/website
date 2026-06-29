@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Frontend\ArticleController as FrontendArticleController;
+use App\Http\Controllers\Admin\VideoController as AdminVideoController;
+use App\Http\Controllers\Frontend\VideoController as FrontendVideoController;
 use App\Http\Controllers\Admin\TranscriptionController;
 use Illuminate\Support\Facades\Route;
 
@@ -182,6 +184,23 @@ Route::controller(AdminArticleController::class)
     })
 ;
 
+
+// -----------------------------------------------------
+// VIDEO CONTROLLER (ADMIN)
+// -----------------------------------------------------
+
+Route::controller(AdminVideoController::class)
+    ->prefix('admin/videos')
+    ->name('admin.videos.')
+    ->middleware(['auth', 'verified'])
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/edit', 'edit')->name('edit');
+        Route::delete('/{video}', 'destroy')->name('destroy');
+    })
+;
 
 // -----------------------------------------------------
 // TRANSCRIPTION CONTROLLER

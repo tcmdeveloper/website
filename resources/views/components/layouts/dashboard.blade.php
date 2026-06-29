@@ -49,6 +49,18 @@
                     <div class="space-y-1">
 
                         <a
+                            href="{{ route('admin.categories.index') }}"
+                            @class([
+                                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
+                                'bg-stone-900 text-white' => request()->routeIs('admin.categories.*'),
+                                'text-stone-700 hover:bg-stone-100' => !request()->routeIs('admin.categories.*'),
+                            ])
+                        >
+                            <x-heroicon-o-folder class="w-5 h-5" />
+                            Categories
+                        </a>
+
+                        <a
                             href="{{ route('admin.articles.index') }}"
                             @class([
                                 'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
@@ -61,15 +73,15 @@
                         </a>
 
                         <a
-                            href="{{ route('admin.categories.index') }}"
+                            href="{{ route('admin.videos.index') }}"
                             @class([
                                 'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
-                                'bg-stone-900 text-white' => request()->routeIs('admin.categories.*'),
-                                'text-stone-700 hover:bg-stone-100' => !request()->routeIs('admin.categories.*'),
+                                'bg-stone-900 text-white' => request()->routeIs('admin.videos.*'),
+                                'text-stone-700 hover:bg-stone-100' => !request()->routeIs('admin.videos.*'),
                             ])
                         >
-                            <x-heroicon-o-folder class="w-5 h-5" />
-                            Categories
+                            <x-heroicon-o-film class="w-5 h-5" />
+                            Videos
                         </a>
 
                     </div>

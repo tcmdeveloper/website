@@ -13,10 +13,6 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 
-// -----------------------------------------------------
-// ARTICLE CONTROLLER (ADMIN)
-// -----------------------------------------------------
-
 class ArticleController extends Controller
 {
     
@@ -31,16 +27,16 @@ class ArticleController extends Controller
         return view('articles.admin-index', compact('articles'));
     }
 
+
     // -----------------------------------------------------
     // INSPECT
     // -----------------------------------------------------
 
-    public function show()
+    public function show(Article $article)
     {
-        $articles = Article::latest()->paginate(10);
-
-        return view('articles.admin-show', compact('articles'));
+        return view('articles.admin-show', compact('article'));
     }
+
 
     // -----------------------------------------------------
     // CREATE
@@ -48,12 +44,11 @@ class ArticleController extends Controller
 
     public function create()
     {
-        $categories = Category::query()
-            ->orderBy('name')
-            ->pluck('name', 'id');
+        $categories = Category::orderBy('name')->pluck('name', 'id');
         
         return view('articles.create', compact('categories'));
     }
+
 
     // -----------------------------------------------------
     // STORE
@@ -61,9 +56,6 @@ class ArticleController extends Controller
 
     public function store(RandomStringGenerator $generator, Request $request)
     {   
-        
-        // 1. Validate data
-
         $data = $request->validate([
             'title' => ['required', 'string', 'min:5', 'max:120', 'regex:/^[\pL\pN\s\-\:\,\.\'\"\!\?]+$/u'],
             'slug' => ['nullable', 'string', 'max:150', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', 'unique:articles,slug'],
@@ -75,9 +67,6 @@ class ArticleController extends Controller
             'meta_description' => ['nullable', 'string', 'max:160'],
             'is_published' => ['nullable', 'boolean'],
         ]);
-
-
-        // 2. Create article
 
         $article = Article::create([
             'title' => $data['title'],
@@ -93,47 +82,12 @@ class ArticleController extends Controller
             'hex' => $generator->uniqueHexId(),
         ]);
 
-
-        // 3. Save image (if exists)
-
-        if ($request->filled('cropped_image')) {
-
-            $image = preg_replace(
-                '#^data:image/\w+;base64,#i',
-                '',
-                $request->cropped_image
-            );
-
-            $imageData = base64_decode($image);
-
-            if ($imageData === false) {
-                throw new \Exception('Invalid base64 image');
-            }
-
-            $filename = Str::uuid() . '.jpg';
-
-            Storage::disk('public')->put(
-                "articles/{$filename}",
-                $imageData
-            );
-
-
-            // 4. Save to article_images
-
-            $article->images()->create([
-                'path' => "articles/{$filename}",
-                'alt_text' => $data['featured_image_alt_text'] ?? null,
-                'caption' => $data['featured_image_caption'] ?? null,
-                'source' => $data['featured_image_source'] ?? null,
-                'source_url' => $data['featured_image_source_url'] ?? null,
-                'is_featured' => true,
+        return redirect()
+            ->route('admin.articles.index')
+            ->with('status', [
+                'type' => 'success', 
+                'message' => 'Article created!'
             ]);
-        }
-
-
-        return redirect()->route('admin.articles.index')
-            ->with('success', 'Article created');
-
     }
 
 
@@ -143,13 +97,11 @@ class ArticleController extends Controller
 
     public function edit(Article $article)
     {
-        $categories = Category::query()
-            ->orderBy('name')
-            ->pluck('name', 'id');
+        $categories = Category::orderBy('name')->pluck('name', 'id');
 
         return view('articles.edit', [
-            'categories' => $categories,
             'article' => $article,
+            'categories' => $categories,
         ]);
 
     }
@@ -161,95 +113,32 @@ class ArticleController extends Controller
 
     public function update(Request $request, Article $article)
     {   
-
-        // 1. Validate form input
-
         $data = $request->validate([
             'title' => ['required', 'string', 'min:5', 'max:120', 'regex:/^[\pL\pN\s\-\:\,\.\'\"\!\?]+$/u'],
             'slug' => ['required', 'string', 'max:150', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('articles', 'slug')->ignore($article->id),],
             'excerpt' => ['nullable', 'string', 'max:500'],
             'content' => ['required'],
-            'cropped_image' => ['nullable', 'string', 'max:255'],
-            'featured_image_id' => [
-                'nullable',
-                'integer',
-                Rule::exists('article_images', 'id'),
-            ],
-            'featured_image_caption' => ['nullable', 'string', 'max:255'],
-            'featured_image_alt_text' => ['nullable', 'string', 'max:255'],
-            'featured_image_source' => ['nullable', 'string', 'max:255'],
-            'featured_image_source_url' => ['nullable', 'string', 'max:255'],
-            'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'meta_title' => ['nullable', 'string', 'max:100'],
             'meta_description' => ['nullable', 'string', 'max:300'],
             'is_published' => ['required', 'boolean']
         ]);
-    
 
-        // 2. Gather image data
-
-        $imageData = [
-            'id' => $data['featured_image_id'] ?? null,
-            'cropped_image' => $data['cropped_image'] ?? null,
-            'caption' => $data['featured_image_caption'] ?? null,
-            'alt_text' => $data['featured_image_alt_text'] ?? null,
-            'source' => $data['featured_image_source'] ?? null,
-            'source_url' => $data['featured_image_source_url'] ?? null,
-        ];
-
-
-        // 3. Remove image data from input
-
-        unset(
-            $data['cropped_image'],
-            $data['featured_image_id'],
-            $data['featured_image_caption'],
-            $data['featured_image_alt_text'],
-            $data['featured_image_source'],
-            $data['featured_image_source_url']
-        );
-
-
-        // 4. Set published date if first publish
+        // Set published date if first publish
 
         if ($data['is_published'] && ! $article->published_at) {
             $data['published_at'] = now();
         }
 
-
-        // 5. Update article
-
         $article->update($data);
 
-
-        // 6. Get the image to update
-
-        $image = null;
-
-        if (!empty($imageData['id'])) {
-
-            $image = $article->images()
-                ->whereKey($imageData['id'])
-                ->first();
-            
-            if ($image) {
-                $image->update([
-                    'caption' => $imageData['caption'],
-                    'alt_text' => $imageData['alt_text'],
-                    'source' => $imageData['source'],
-                    'source_url' => $imageData['source_url'],
-                ]);
-
-            }
-
-        }
-
-
-        return redirect()->route('admin.articles.index')
+        return redirect()
+            ->route('admin.articles.index')
             ->with('status', [
                 'type' => 'success',
-                'message' => 'Article updated successfully!',
+                'message' => 'Article updated!',
             ]);
+            
     }
 
 
@@ -261,7 +150,7 @@ class ArticleController extends Controller
     {
         $images = $article->images()
             ->latest()
-            ->paginate(15);
+            ->paginate(1);
 
         return view('articles.images-index', [
             'article' => $article,
@@ -420,7 +309,6 @@ class ArticleController extends Controller
                 'message' => 'Image updated successfully!',
             ]);
     }
-
 
 
 

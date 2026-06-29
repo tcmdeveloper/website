@@ -1,16 +1,20 @@
 {{-- resources/views/articles/create.blade.php --}}
 
+
 <x-layouts.dashboard>
 
-    <x-ui.card class="max-w-5xl prose-content">
+    <x-ui.card class="max-w-5xl">
 
-        <h1 class="mt-0">
-            Create new article
-        </h1>
-        
-        <p>
-            Complete the form to publish your article.
-        </p>
+        <x-ui.header-actions
+            title="Create new article"
+            subtitle="Complete the form to publish your article.."
+            :href="route('admin.articles.index')"
+            label="All articles"
+        />
+
+
+        {{-- Alert --}}
+        <x-ui.alert />
 
 
         <form 
@@ -186,7 +190,7 @@
             <div>
                 <x-ui.button
                     type="submit"
-                    size="md"
+                    size="sm"
                 >
                     Create article
                 </x-ui.button>

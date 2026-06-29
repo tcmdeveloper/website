@@ -1,6 +1,11 @@
 <?php
 
+// -----------------------------------------------------
+// SPLIT GOOGLE NAME
+// -----------------------------------------------------
+
 if (! function_exists('split_google_name')) {
+
     function split_google_name(string $name): array
     {
         $parts = explode(' ', trim($name));
@@ -12,4 +17,5 @@ if (! function_exists('split_google_name')) {
                 : '',
         ];
     }
+
 }

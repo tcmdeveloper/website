@@ -7,10 +7,6 @@ use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
 
 
-// -----------------------------------------------------
-// ADMIN CONTROLLER (ADMIN)
-// -----------------------------------------------------
-
 class AdminController extends Controller
 {
 
@@ -30,6 +26,7 @@ class AdminController extends Controller
             'status' => 'queued'
         ]);
     }
+
 
     // -----------------------------------------------------
     // TRANSLATE SUBTITLES

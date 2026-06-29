@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             JobSeeder::class,
             TermsVersionSeeder::class,
             JailCallLogSeeder::class,
+            VideoSeeder::class,
             
         ]);
     }
