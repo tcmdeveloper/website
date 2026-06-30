@@ -38,13 +38,13 @@
 
 
     <!-- Google Analytics (GA4) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-268245269"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-41956QHQLE"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', 'G-268245269');
+    gtag('config', 'G-41956QHQLE');
     </script>
 
 

@@ -50,23 +50,23 @@
         </button>
 
         {{-- Search button --}}
-        <button @click="searchOpen = !searchOpen; menuOpen = false" class="nav-link">
+        <button @click="searchOpen = !searchOpen; menuOpen = false" class="nav-link md:inline-flex hidden">
             <x-ui.icon name="magnifying-glass" />
         </button>
 
         @auth
-            <a href="{{ route('dashboard.index') }}" class="nav-link">
+            <a href="{{ route('dashboard.index') }}" class="nav-link md:inline-flex hidden">
                 Dashboard
             </a>
 
-            <form method="POST" action="{{ route('logout') }}">
+            <form method="POST" action="{{ route('logout') }}" class="md:inline-flex hidden">
                 @csrf
                 <x-ui.text-button type="submit" class="nav-link">
                     Log out
                 </x-ui.text-button>
             </form>
         @else
-            <a href="{{ route('login') }}" class="nav-link">
+            <a href="{{ route('login') }}" class="nav-link md:inline-flex hidden">
                 Sign in
             </a>
         @endauth

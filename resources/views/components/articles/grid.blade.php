@@ -1,6 +1,6 @@
 {{-- resources/views/components/articles/grid.blade.php --}}
 
-<div class="grid grid-cols-2 gap-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
 
     @forelse($articles as $article)
 
