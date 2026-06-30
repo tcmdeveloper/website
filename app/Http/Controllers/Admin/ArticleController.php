@@ -150,7 +150,7 @@ class ArticleController extends Controller
     {
         $images = $article->images()
             ->latest()
-            ->paginate(1);
+            ->paginate(10);
 
         return view('articles.images-index', [
             'article' => $article,

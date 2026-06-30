@@ -58,7 +58,10 @@
                     <tr>
                         <td class="px-6 py-4">
                             <img
-                                src="{{ asset($image->path) }}"
+                                src="{{ $image->path
+                                    ? Storage::url($image->path) 
+                                    : asset('images/default-article.jpg') 
+                                }}"
                                 class="h-16 w-24 rounded object-cover"
                                 alt="{{ $image->alt_text }}"
                             >

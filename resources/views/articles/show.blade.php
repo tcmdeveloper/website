@@ -43,25 +43,28 @@
         {{-- FEATURED ARTICLE IMAGE --}}
 
         @php
-            $featured = $article->featured_image;
+            $featuredImage = $article->featured_image;
         @endphp
 
         <img
-            src="{{ $featured ? asset($featured->path) : asset('images/default-article.jpg') }}"
+            src="{{ $featuredImage 
+                ? Storage::url($featuredImage->path) 
+                : asset('images/default-article.jpg') 
+            }}"
             class="my-6 max-w-3xl rounded-xs shadow-sm aspect-video"
-            alt="{{ $featured?->alt_text ?? 'Default article image' }}"
+            alt="{{ $featuredImage?->alt_text ?? 'Default article image' }}"
         >
 
-        @if ($featured && $featured->source)
+        @if ($featuredImage && $featuredImage->source)
             <div class="max-w-3xl flex flex-col gap-4 border border-zinc-300 w-full px-2.5 py-1.5 text-xs mb-1 bg-amber-50">
                 <span>
                     Image source:
                     <a
-                        href="{{ $featured->source_url ?: '#' }}"
+                        href="{{ $featuredImage->source_url ?: '#' }}"
                         target="_blank"
                         class="link ml-1"
                     >
-                        {{ $featured->source }}
+                        {{ $featuredImage->source }}
                         <x-ui.icon
                             name="arrow-top-right-on-square"
                             size="xs"

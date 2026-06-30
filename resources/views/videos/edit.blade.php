@@ -118,13 +118,13 @@
             <div class="prose-content">
 
                 <form method="GET" class="mb-4">
-    <input
-        type="text"
-        name="search"
-        value="{{ $search }}"
-        placeholder="Search transcript..."
-        class="w-full rounded border px-3 py-2">
-</form>
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ $search }}"
+                        placeholder="Search transcript..."
+                        class="w-full rounded border px-3 py-2">
+                </form>
 
 
                 <div class="border rounded-lg overflow-y-auto max-h-[700px] divide-y">
