@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\DownloadYoutubeVideo;
+use App\Jobs\TranscribeVideoJob;
+use App\Jobs\TranscriptionJob;
+use App\Models\Transcription;
 use App\Models\Video;
 use App\Services\RandomStringGenerator;
 use App\Services\YoutubeService;
@@ -73,6 +76,58 @@ class VideoController extends Controller
                 'message' => 'Video download started!',
             ]);
     }
+
+
+    // -----------------------------------------------------
+    // EDIT
+    // -----------------------------------------------------
+
+    public function edit(Video $video, Request $request)
+    {
+
+        $search = trim($request->search);
+
+        $segments = $video->transcriptSegments()
+            ->when($search, function ($query) use ($search) {
+                $query->where('text', 'like', "%{$search}%");
+            })
+            ->orderBy('start')
+            ->get();
+
+
+        return view('videos.edit', compact(
+            'video',
+            'segments',
+            'search'
+        ));
+    }
+
+
+    // -----------------------------------------------------
+    // EDIT
+    // -----------------------------------------------------
+
+    public function transcribe(Video $video)
+    {
+        if (!$video['youtube_url']) {
+            return back()->withErrors([
+                'source' => 'Please provide either a YouTube URL or a file.'
+            ]);
+        }
+
+
+        TranscribeVideoJob::dispatch($video);
+
+        return redirect()
+            ->route('admin.videos.edit', $video)
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Your transcription has started.'    
+            ]);
+    
+    }
+
+    
 
 
 

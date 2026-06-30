@@ -21,6 +21,9 @@ class Video extends Model
         'filename',
         'thumbnail',
         'status',
+        'uploader',
+        'uploader_id',
+        'channel_url',
     ];
 
     /*
@@ -54,5 +57,16 @@ class Video extends Model
         }
 
         return gmdate('H:i:s', $this->duration);
+    }
+
+
+
+
+    // RELATIONSHIPS
+
+    // Transcript segments
+    public function transcriptSegments()
+    {
+        return $this->hasMany(TranscriptSegment::class);
     }
 }

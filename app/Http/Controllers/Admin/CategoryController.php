@@ -22,7 +22,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::withCount('publishedArticles as article_count')->orderBy('name')->get();
+        $categories = Category::withCount('publishedArticles as article_count')->orderBy('name')->paginate(10);
         
         return view('categories.admin-index', [
             'categories' => $categories

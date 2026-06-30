@@ -197,8 +197,10 @@ Route::controller(AdminVideoController::class)
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
-        Route::get('/edit', 'edit')->name('edit');
+        Route::get('/{video}/edit', 'edit')->name('edit');
+        Route::get('/{video}/transcribe', 'transcribe')->name('transcribe');
         Route::delete('/{video}', 'destroy')->name('destroy');
+
     })
 ;
 

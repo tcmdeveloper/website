@@ -134,7 +134,7 @@
         {{-- Pagination --}}
 
         <div class="mt-6 flex justify-end">
-            {{ $images->links() }}
+            {{ $articles->links() }}
         </div>
 
 

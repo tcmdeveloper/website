@@ -59,8 +59,8 @@
                         <td class="px-6 py-4 text-zinc-500">
                             {{-- {{ $video->youtube_id }} --}}
                             <img
-                                src="{{ Storage::url($video->thumbnail) }}"
-                                class="h-16 w-24 rounded object-cover"
+                                src="{{ $video->thumbnail ? Storage::url($video->thumbnail) : asset('images/default-video-thumbnail.jpg') }}"
+                                class="w-24 aspect-video rounded object-cover"
                                 alt="{{ $video->title }}"
                             >
                         </td>

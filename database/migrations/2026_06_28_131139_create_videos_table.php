@@ -28,6 +28,12 @@ return new class extends Migration
 
             $table->string('status')->default('pending');
 
+            $table->string('uploader')->nullable();
+            $table->string('uploader_id')->nullable();
+            $table->string('channel_url')->nullable();
+
+            $table->longText('transcript')->nullable();
+
             $table->timestamps();
         });
     }

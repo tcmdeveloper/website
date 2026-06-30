@@ -33,6 +33,9 @@ class VideoSeeder extends Seeder
                 'filename' => $item->filename,
                 'thumbnail' => $item->thumbnail,
                 'status' => $item->status,
+                'uploader' => $item->uploader,
+                'uploader_id' => $item->uploader_id,
+                'channel_url' => $item->channel_url,
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at
             ]);

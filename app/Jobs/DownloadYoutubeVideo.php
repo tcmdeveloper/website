@@ -51,6 +51,7 @@ class DownloadYoutubeVideo implements ShouldQueue
                 JSON_THROW_ON_ERROR
             );
 
+            
             /*
              * ---------------------------------------------------------
              * Download video
@@ -143,6 +144,10 @@ class DownloadYoutubeVideo implements ShouldQueue
                 'filename' => 'videos/' . $filename,
                 'thumbnail' => 'thumbnails/' . $thumbnailFilename,
                 'status' => 'completed',
+                'uploader' => $metadata['uploader'] ?? null,
+                'uploader_id' => $metadata['uploader_id'] ?? null,
+                'channel_url' => $metadata['channel_url'] ?? null,
+
             ]);
         } catch (\Throwable $e) {
 
