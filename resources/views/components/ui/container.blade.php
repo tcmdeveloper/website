@@ -4,7 +4,7 @@
 ])
 
 <div {{ $attributes->class([
-    'mx-auto mb-12',
+    'mx-auto mb-12 px-3',
     $maxWidth,
 ]) }}>
     {{ $slot }}

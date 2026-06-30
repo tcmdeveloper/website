@@ -5,7 +5,7 @@
     @click.away="searchOpen = false"
     class="
         fixed top-0 left-0 w-full h-[61px] z-50 
-        grid grid-cols-3 items-center
+        flex
         px-6 py-4
         bg-zinc-900 text-sm font-light
         border-b
@@ -15,7 +15,7 @@
 >
 
     {{-- Left side --}}
-    <div class="justify-self-start">
+    <div class="justify-self-start md:w-84 w-22">
         <a href="/">
             <img src="{{ asset('images/true-crime-metrix-logo.png') }}"
                 alt="True Crime Metrix"
@@ -26,7 +26,7 @@
 
 
     {{-- Center --}}
-    <div class="justify-self-center">
+    <div class="justify-self-center flex-1 text-center">
         <a href="/" class="group font-brand nav-link font-bold tracking-wide text-lg">
             <span
                 class="
@@ -42,7 +42,7 @@
 
 
     {{-- Right side --}}
-    <div class="justify-self-end flex items-center gap-5">
+    <div class="justify-self-end flex justify-end items-center gap-5 md:w-84 w-22">
 
         {{-- Main menu button --}}
         <button @click="menuOpen = true; searchOpen = false" class="nav-link">
