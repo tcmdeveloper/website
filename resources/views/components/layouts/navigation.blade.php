@@ -15,7 +15,7 @@
 >
 
     {{-- Left side --}}
-    <div class="justify-self-start md:w-84 w-22">
+    <div class="justify-self-start lg:w-80 md:w-64 w-16">
         <a href="/">
             <img src="{{ asset('images/true-crime-metrix-logo.png') }}"
                 alt="True Crime Metrix"
@@ -42,7 +42,7 @@
 
 
     {{-- Right side --}}
-    <div class="justify-self-end flex justify-end items-center gap-5 md:w-84 w-22">
+    <div class="justify-self-end flex justify-end items-center gap-5 lg:w-80 md:w-64 w-16">
 
         {{-- Main menu button --}}
         <button @click="menuOpen = true; searchOpen = false" class="nav-link">
