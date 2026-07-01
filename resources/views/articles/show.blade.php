@@ -59,7 +59,7 @@
                 ? Storage::url($featuredImage->path) 
                 : asset('images/default-article.jpg') 
             }}"
-            class="my-6 max-w-3xl rounded-xs shadow-sm aspect-video"
+            class="my-6 w-full max-w-3xl rounded-xs shadow-sm aspect-video"
             alt="{{ $featuredImage?->alt_text ?? 'Default article image' }}"
         >
 
