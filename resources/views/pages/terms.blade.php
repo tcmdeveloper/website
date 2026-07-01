@@ -3,13 +3,17 @@
 <x-layouts.app
     title="Terms of Service"
     subtitle="Rules, responsibilities, and conditions for using this website."
+    :meta="[
+        'title' => 'Terms of Service',
+        'description' => 'Read the Terms & Conditions for True Crime Metrix. Learn about the rules, responsibilities, acceptable use, and legal terms that apply when using our website and services.',
+    ]"
 >
 
-    <x-ui.container maxWidth="max-w-3xl prose-content">
+    <x-ui.container class="max-w-3xl prose-content">
 
         {{-- Introduction --}}
         <section>
-            <h2>Introduction</h2>
+            <h3>Introduction</h3>
             <p>
                 Welcome to {{ config('app.name') }}. By accessing or using this website,
                 you agree to be bound by these Terms of Service. If you do not agree,
@@ -20,7 +24,7 @@
 
         {{-- Use of site --}}
         <section>
-            <h2>Use of the Website</h2>
+            <h3>Use of the Website</h3>
             <ul>
                 <li>You agree to use this website only for lawful purposes.</li>
                 <li>You must not attempt to disrupt or misuse the service.</li>
@@ -31,7 +35,7 @@
 
         {{-- Accounts --}}
         <section>
-            <h2>Accounts</h2>
+            <h3>Accounts</h3>
             <p>
                 When you create an account, you are responsible for maintaining the confidentiality
                 of your login credentials and all activity under your account.
@@ -45,7 +49,7 @@
 
         {{-- Google login --}}
         <section>
-            <h2>Google Authentication</h2>
+            <h3>Google Authentication</h3>
             <p>
                 If you sign in using Google, you authorize us to receive basic profile information
                 such as your name, email address, and profile image.
@@ -55,7 +59,7 @@
 
         {{-- Content --}}
         <section>
-            <h2>Content</h2>
+            <h3>Content</h3>
             <ul>
                 <li>All content provided on this site is for informational purposes only.</li>
                 <li>We do not guarantee accuracy, completeness, or reliability of content.</li>
@@ -66,7 +70,7 @@
 
         {{-- Prohibited use --}}
         <section>
-            <h2>Prohibited Activities</h2>
+            <h3>Prohibited Activities</h3>
             <ul>
                 <li>Hacking, scraping, or reverse engineering the platform</li>
                 <li>Uploading malicious code or attempting to harm the system</li>
@@ -77,7 +81,7 @@
 
         {{-- Liability --}}
         <section>
-            <h2>Limitation of Liability</h2>
+            <h3>Limitation of Liability</h3>
             <p>
                 We are not liable for any damages arising from the use or inability to use this website.
                 The service is provided “as is” without warranties of any kind.
@@ -87,7 +91,7 @@
 
         {{-- Changes --}}
         <section>
-            <h2>Changes to Terms</h2>
+            <h3>Changes to Terms</h3>
             <p class="mt-2">
                 We may update these Terms of Service at any time. Continued use of the website
                 after changes means you accept the updated terms.
@@ -100,7 +104,7 @@
 
         {{-- Contact --}}
         <section>
-            <h2>Contact</h2>
+            <h3>Contact</h3>
 
             <p>
                 If you have questions about these Terms, contact us at:
@@ -117,7 +121,8 @@
 
         {{-- Footer --}}
         <p class="text-sm text-zinc-400">
-            Last updated: {{ now()->format('F d, Y') }}
+            {{-- Last updated: {{ now()->format('F d, Y') }} --}}
+            Last updated: May 05, 2026
         </p>
 
         

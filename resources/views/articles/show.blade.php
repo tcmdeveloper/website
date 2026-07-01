@@ -1,6 +1,8 @@
 {{-- resources/views/articles/show.blade.php --}}
 
-<x-layouts.app>
+<x-layouts.app
+    title="AssFuck"
+>
     
        
     <x-ui.card class="max-w-4xl mx-auto flex flex-col items-center prose-content shadow-none! bg-transparent! border-none! ">

@@ -3,6 +3,10 @@
 <x-layouts.app 
     title="Contact me" 
     subtitle="Send me a message and I'll get back to you as soon as I can."
+    :meta="[
+        'title' => 'Contact me',
+        'description' => 'Get in touch with us for any questions, support, or feedback. We’re here to help and will respond as soon as possible.'
+    ]"
 >
 
     {{-- Page container --}}

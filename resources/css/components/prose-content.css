@@ -47,7 +47,8 @@
     /* Paragraphs */
 
     .prose-content p {
-        @apply my-5;
+        @apply my-0;
+        @apply leading-normal;
     }
 
     /* Links */
@@ -59,15 +60,15 @@
     /* Lists */
 
     .prose-content ul {
-        @apply list-disc pl-6 my-5 space-y-2;
+        @apply list-disc pl-6 my-5 space-y-0;
     }
 
     .prose-content ol {
-        @apply list-decimal pl-6 my-5 space-y-2;
+        @apply list-decimal pl-6 my-5 space-y-0;
     }
 
     .prose-content li {
-        @apply leading-8;
+        @apply leading-loose;
     }
 
     /* Quotes */

@@ -1,5 +1,21 @@
 {{-- resources/views/components/layouts/app.blade.php --}}
 
+@props([
+    'title' => null,
+    'subtitle' => null,
+    'meta' => [],
+])
+
+@php
+    $meta = array_merge([
+        'title' => 'Official website',
+        'description' => 'Official site of True Crime Metrix. This is where we put all the information about the true crime cases we cover on the YouTube channel.',
+        'image' => asset('images/og-default.jpg'),
+        'canonical' => url()->current(),
+        'robots' => 'index,follow',
+    ], $meta);
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,12 +27,12 @@
 
 
     {{-- Title --}}
-    <title>{{ $title ?? config('app.name') }}</title>
-    <meta name="title" content="{{ $title ?? config('app.name') }}">
+    <title>{{ $meta['title'] . ' | ' . config('app.name') }}</title>
+    <meta name="title" content="{{ $meta['title'] . ' | ' . config('app.name') }}">
 
 
     {{-- SEO description --}}
-    <meta name="description" content="{{ $meta_description ?? 'Default description for your application' }}">
+    <meta name="description" content="{{ $meta['description'] }}">
 
 
     {{-- Favicons --}}
@@ -27,8 +43,8 @@
 
     {{-- Open Graph (social sharing) --}}
     <meta property="og:type" content="website">
-    <meta property="og:title" content="{{ $title ?? config('app.name') }}">
-    <meta property="og:description" content="{{ $meta_description ?? '' }}">
+    <meta property="og:title" content="{{ $meta['title'] . ' | ' . config('app.name') }}">
+    <meta property="og:description" content="{{ $meta['description'] }}">
     <meta property="og:image" content="{{ $og_image ?? asset('images/default-og.jpg') }}">
     <meta property="og:url" content="{{ url()->current() }}">
 
@@ -37,7 +53,7 @@
     <meta name="twitter:card" content="summary_large_image">
 
 
-    <!-- Google Analytics (GA4) -->
+    {{-- Google Analytics (GA4) --}}
     @if(app()->environment('production') && !auth()->check())
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-41956QHQLE"></script>
         <script>

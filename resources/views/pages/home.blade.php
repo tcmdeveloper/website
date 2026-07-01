@@ -4,7 +4,7 @@
     title="True Crime Cases, Live Trials &<br>Evidence-Based Snark" 
     subtitle="Live trial coverage, court documents, and structured case breakdowns<br>from True Crime Metrix."
 >   
-    <x-ui.container>
+    <x-ui.container class="max-w-5xl">
 
         <section aria-labelledby="latest-articles-heading">
 
