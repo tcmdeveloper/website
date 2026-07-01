@@ -5,7 +5,7 @@
 
     @if (! request()->routeIs('home'))
         <div 
-            class="py-10 px-3 relative text-center w-5xl mx-auto"
+            class="py-10 px-3 relative text-center max-w-5xl mx-auto"
         >
             @if($title)
                 <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-700">

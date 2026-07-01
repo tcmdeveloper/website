@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Frontend\ArticleController as FrontendArticleController;
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 use App\Http\Controllers\Frontend\VideoController as FrontendVideoController;
+use App\Http\Controllers\Frontend\SearchController as FrontendSearchController;
 use App\Http\Controllers\Admin\TranscriptionController;
 use Illuminate\Support\Facades\Route;
 
@@ -181,6 +182,19 @@ Route::controller(AdminArticleController::class)
         
 
         Route::get('/{article}', 'show')->name('show');
+    })
+;
+
+
+// -----------------------------------------------------
+// SEARCH CONTROLLER (FRONT-END)
+// -----------------------------------------------------
+
+Route::controller(FrontendSearchController::class)
+    ->prefix('search')
+    ->name('search.')
+    ->group(function(){
+        Route::get('/', 'index')->name('index');
     })
 ;
 

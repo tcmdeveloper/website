@@ -45,7 +45,7 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{ $meta['title'] . ' | ' . config('app.name') }}">
     <meta property="og:description" content="{{ $meta['description'] }}">
-    <meta property="og:image" content="{{ $og_image ?? asset('images/default-og.jpg') }}">
+    <meta property="og:image" content="{{ $meta['image'] }}">
     <meta property="og:url" content="{{ url()->current() }}">
 
 

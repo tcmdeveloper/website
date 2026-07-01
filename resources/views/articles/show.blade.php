@@ -1,8 +1,18 @@
 {{-- resources/views/articles/show.blade.php --}}
 
-<x-layouts.app
-    title="AssFuck"
->
+@php
+    $featuredImage = $article->featured_image;
+@endphp
+
+<x-layouts.app :meta="[
+    'title' => $article->title,
+    'description' => Str::limit(
+        strip_tags($article->excerpt),
+        160),
+    'image' => $featuredImage 
+        ? Storage::url($featuredImage->path) 
+        : asset('images/default-article.jpg') 
+]">
     
        
     <x-ui.card class="max-w-4xl mx-auto flex flex-col items-center prose-content shadow-none! bg-transparent! border-none! ">
@@ -43,10 +53,6 @@
 
         
         {{-- FEATURED ARTICLE IMAGE --}}
-
-        @php
-            $featuredImage = $article->featured_image;
-        @endphp
 
         <img
             src="{{ $featuredImage 

@@ -47,8 +47,9 @@
     /* Paragraphs */
 
     .prose-content p {
-        @apply my-0;
+        @apply my-5;
         @apply leading-normal;
+        font-family: var(--font-heading);
     }
 
     /* Links */

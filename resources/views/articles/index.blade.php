@@ -5,7 +5,7 @@
     subtitle="Exploring ideas, analysis, and insights from the cases covered on True Crime Metrix."
 >
 
-    <x-ui.container>
+    <x-ui.container class="max-w-5xl">
 
         <section aria-labelledby="latest-articles-heading">
 

@@ -5,7 +5,7 @@
     subtitle="Explore posts organized by topic"
 >
 
-    <div class="max-w-6xl mx-auto px-4 py-10">
+    <x-ui.container class="max-w-5xl">
 
 
 
@@ -56,6 +56,6 @@
 
         </div>
 
-    </div>
+    </x-ui.container>
 
 </x-layouts.app>

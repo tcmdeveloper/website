@@ -5,13 +5,13 @@
     subtitle="Send me a message and I'll get back to you as soon as I can."
     :meta="[
         'title' => 'Contact me',
-        'description' => 'Get in touch with us for any questions, support, or feedback. We’re here to help and will respond as soon as possible.'
+        'description' => 'Get in touch with us for any questions, support, or feedback. We\'re here to help and will respond as soon as possible.'
     ]"
 >
 
     {{-- Page container --}}
     
-    <div class="max-w-2xl mx-auto">
+    <x-ui.container class="max-w-3xl">
 
         @if(session('success'))
 
@@ -27,7 +27,7 @@
             {{-- Link to email --}}
 
             <x-ui.card class="p-6 my-0! flex justify-center">
-                <a href="mailto:metrix@truecrimemetrix.com" class="text-3xl text-zinc-600 font-bold hover:text-yellow-500">
+                <a href="mailto:metrix@truecrimemetrix.com" class="text-2xl text-zinc-600 font-bold hover:text-yellow-500">
                     <x-ui.icon name="envelope" size="lg" class="mr-2" /> metrix@truecrimemetrix.com
                 </a>
             </x-ui.card>
@@ -112,7 +112,7 @@
         @endif
 
 
-    </div>
+    </x-ui.container>
 
 
 </x-layouts.app>
