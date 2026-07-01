@@ -17,14 +17,44 @@
 @font-face {
    font-family: "Lemon Milk";
    src:
-      url("/fonts/LemonMilk/LemonMilk.woff2") format("woff2"),
-      url("/fonts/LemonMilk/LemonMilk.woff") format("woff"),
-      url("/fonts/LemonMilk/LemonMilk.otf") format("opentype");
-
+      url("/fonts/LemonMilk/LEMONMILK-Light.woff2") format("woff2"),
+      url("/fonts/LemonMilk/LEMONMILK-Light.otf") format("opentype");
+   font-weight: 300;
+   font-style: normal;
    font-display: swap;
+}
+
+@font-face {
+   font-family: "Lemon Milk";
+   src:
+      url("/fonts/LemonMilk/LEMONMILK-Regular.woff2") format("woff2"),
+      url("/fonts/LemonMilk/LEMONMILK-Regular.otf") format("opentype");
    font-weight: 400;
    font-style: normal;
+   font-display: swap;
 }
+
+@font-face {
+   font-family: "Lemon Milk";
+   src:
+      url("/fonts/LemonMilk/LEMONMILK-Medium.woff2") format("woff2"),
+      url("/fonts/LemonMilk/LEMONMILK-Medium.otf") format("opentype");
+   font-weight: 500;
+   font-style: normal;
+   font-display: swap;
+}
+
+@font-face {
+   font-family: "Lemon Milk";
+   src:
+      url("/fonts/LemonMilk/LEMONMILK-Bold.woff2") format("woff2"),
+      url("/fonts/LemonMilk/LEMONMILK-Bold.otf") format("opentype");
+   font-weight: 700; /* 🔥 FIXED (was incorrectly 300) */
+   font-style: normal;
+   font-display: swap;
+}
+
+
 
 
 
