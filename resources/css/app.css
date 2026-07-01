@@ -17,8 +17,13 @@
 @font-face {
    font-family: "Lemon Milk";
    src:
-      url("/fonts/lemon-milk/LEMONMILK-Regular.otf") format("otf");
+      url("/fonts/LemonMilk/LemonMilk.woff2") format("woff2"),
+      url("/fonts/LemonMilk/LemonMilk.woff") format("woff"),
+      url("/fonts/LemonMilk/LemonMilk.otf") format("opentype");
+
    font-display: swap;
+   font-weight: 400;
+   font-style: normal;
 }
 
 
