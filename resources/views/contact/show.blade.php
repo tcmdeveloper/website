@@ -27,7 +27,7 @@
             {{-- Link to email --}}
 
             <x-ui.card class="p-6 my-0! flex justify-center">
-                <a href="mailto:metrix@truecrimemetrix.com" class="text-2xl text-zinc-600 font-bold hover:text-yellow-500">
+                <a href="mailto:metrix@truecrimemetrix.com" class="text-xl text-zinc-600 font-bold hover:text-yellow-500">
                     <x-ui.icon name="envelope" size="lg" class="mr-2" /> metrix@truecrimemetrix.com
                 </a>
             </x-ui.card>
