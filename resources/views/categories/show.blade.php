@@ -5,7 +5,7 @@
     :subtitle="$category->description"
 >
 
-    <x-ui.container>
+    <x-ui.container class="max-w-5xl">
 
         <section aria-labelledby="latest-articles-heading">
 
