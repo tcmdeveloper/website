@@ -35,7 +35,7 @@
                     group-hover:translate-y-[2px] group-hover:scale-[101%]
                 "
             >
-                True Crime Metrix</span>
+                True Crime Metrix
             </span>
         </a>
     </div>
@@ -105,10 +105,10 @@
 
         {{-- Menu items --}}
         <div class="w-full p-8 mt-32 flex flex-col items-center space-y-5 text-6xl font-heading font-bold">
-            <a href="{{ route('cases.index') }}" class="text-zinc-100 hover:text-yellow-300">Criminal cases</a>
-            <a href="{{ route('articles.index') }}" class="text-zinc-100 hover:text-yellow-300">Articles</a>
-            <a href="{{ route('categories.index') }}" class="text-zinc-100 hover:text-yellow-300">Categories</a>
-            <a href="{{ route('contact.show') }}" class="text-zinc-100 hover:text-yellow-300">Contact me</a>
+            <a href="{{ route('cases.index') }}" class="flex items-center justify-center  text-zinc-100 hover:text-yellow-300">Criminal cases</a>
+            <a href="{{ route('articles.index') }}" class="flex items-center justify-center  text-zinc-100 hover:text-yellow-300">Articles</a>
+            <a href="{{ route('categories.index') }}" class="flex items-center justify-center  text-zinc-100 hover:text-yellow-300">Categories</a>
+            <a href="{{ route('contact.show') }}" class="flex items-center justify-center  text-zinc-100 hover:text-yellow-300">Contact me</a>
         </div>
 
     </div>
