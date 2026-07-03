@@ -25,3 +25,7 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Ignore all files in storage/app/public
+/storage/app/public/*
+!/storage/app/public/.gitignore
