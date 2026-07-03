@@ -30,6 +30,12 @@ class Article extends Model
         'is_published',
         'meta_title',
         'meta_description',
+        'og_image',
+        'user_id',
+        'category_id',
+        'criminal_case_id',
+        'published_at',
+        'is_published',
         'views',
     ];
 

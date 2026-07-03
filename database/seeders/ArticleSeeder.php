@@ -26,6 +26,7 @@ class ArticleSeeder extends Seeder
                 'content' => $item->content,
                 'meta_title' => $item->meta_title,
                 'meta_description' => $item->meta_description,
+                'og_image' => $item->og_image,
                 'user_id' => $item->user_id,
                 'category_id' => $item->category_id,
                 'criminal_case_id' => $item->criminal_case_id,

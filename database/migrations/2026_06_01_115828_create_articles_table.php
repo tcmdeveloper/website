@@ -21,7 +21,8 @@ return new class extends Migration {
             
             // SEO
             $table->string('meta_title')->nullable();
-            $table->string('meta_description')->nullable();
+            $table->text('meta_description')->nullable();
+            $table->string('og_image')->nullable();
 
             // Stats
             $table->unsignedInteger('views')->default(0);

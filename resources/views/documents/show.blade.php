@@ -1,6 +1,21 @@
 {{-- resources/views/documents/show.blade.php --}}
 
-<x-layouts.app>
+<x-layouts.app
+    :meta="[
+        'title' => filled($document->meta_title)
+            ? $document->meta_title
+            : $document->name,
+
+        'description' => Str::limit(
+            strip_tags(
+                filled($document->meta_description)
+                    ? $document->meta_description
+                    : $document->description
+            ),
+            200
+        ),
+    ]"
+>
 
     <x-ui.card class="max-w-3xl mx-auto flex flex-col items-center shadow-none! bg-transparent! border-none! ">
         
@@ -31,7 +46,7 @@
                 <x-ui.category-pip
                     href="{{route('cases.show', $document->criminalCase->slug)}}"
                 >
-                    {{$document->criminalCase->name}}
+                    {{$document->criminalCase->name}} case
                 </x-ui.category-pip>
 
                 <a class="inline-flex items-center rounded-full px-3 py-1 text-xs font-normal transition bg-red-500 text-white hover:bg-lime-20 no-underline">

@@ -65,7 +65,7 @@ class ArticleController extends Controller
             'cropped_image' => ['nullable', 'string'],
             'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'meta_title' => ['nullable', 'string', 'max:100'],
-            'meta_description' => ['nullable', 'string', 'max:160'],
+            'meta_description' => ['nullable', 'string', 'max:200'],
             'is_published' => ['nullable', 'boolean'],
         ]);
 

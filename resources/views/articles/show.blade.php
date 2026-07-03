@@ -4,15 +4,26 @@
     $featuredImage = $article->featured_image;
 @endphp
 
-<x-layouts.app :meta="[
-    'title' => $article->title,
-    'description' => Str::limit(
-        strip_tags($article->excerpt),
-        160),
-    'image' => $featuredImage 
-        ? Storage::url($featuredImage->path) 
-        : asset('images/default-article.jpg') 
-]">
+<x-layouts.app
+    :meta="[
+        'title' => filled($article->meta_title)
+            ? $article->meta_title
+            : $article->title,
+
+        'description' => Str::limit(
+            strip_tags(
+                filled($article->meta_description)
+                    ? $article->meta_description
+                    : $article->description
+            ),
+            200
+        ),
+
+        'image' => $featuredImage 
+            ? Storage::url($featuredImage->path) 
+            : asset('images/default-article.jpg'),
+    ]"
+>
     
        
     <x-ui.card class="max-w-4xl mx-auto flex flex-col items-center prose-content shadow-none! bg-transparent! border-none! ">

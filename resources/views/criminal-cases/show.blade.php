@@ -1,8 +1,14 @@
 {{-- resources/views/criminal-cases/show.blade.php --}}
 
 <x-layouts.app
-    :title="$criminalCase->name"
+    title="The {{$criminalCase->name}} Case"
     :subtitle="$criminalCase->description"
+    :meta="[
+        'title' => $criminalCase->name . ' Case',
+        'description' => Str::limit(
+            strip_tags($criminalCase->description),
+            160),
+    ]"
 >
 
     <x-ui.container class="max-w-5xl">

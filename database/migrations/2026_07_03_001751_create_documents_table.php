@@ -25,6 +25,11 @@ return new class extends Migration
             $table->unsignedInteger('pages')->default(0);
             $table->unsignedBigInteger('filesize')->nullable();
 
+            // Meta
+            $table->string('meta_title')->nullable();
+            $table->text('meta_description')->nullable();
+            $table->string('og_image')->nullable();
+
             // Stats
             $table->unsignedInteger('views')->default(0);
 
