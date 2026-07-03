@@ -84,7 +84,7 @@ foreach ($files as $index => $filePath) {
         'hex' => $generator->uniqueHexId(),
         'document_id' => $document->id,
         'page_number' => $index + 1,
-        'image_path' => '/document-pages' . $relativePath,
+        'image_path' => 'document-pages' . $relativePath,
         'width' => $imageSize[0] ?? null,
         'height' => $imageSize[1] ?? null,
     ]);
