@@ -81,6 +81,7 @@
             <img
                 src="{{ Storage::url($featuredImage->path . '.jpg') }}"
                 alt="{{ $featuredImage->alt_text }}"
+                class="max-w-3xl mb-4 rounded-xs"
                 loading="eager"
                 fetchpriority="high"
                 decoding="async">
