@@ -4,16 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Video;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class VideoSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        
         // SEED FROM IMPORT DATABASE
 
         $model = new Video();
@@ -36,14 +31,13 @@ class VideoSeeder extends Seeder
                 'uploader' => $item->uploader,
                 'uploader_id' => $item->uploader_id,
                 'channel_url' => $item->channel_url,
+                'transcript' => $item->transcript,
+                'user_id' => $item->user_id,
+                'category_id' => $item->category_id,
+                'criminal_case_id' => $item->criminal_case_id,
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at
             ]);
-
         }
-
-
     }
-
-
 }

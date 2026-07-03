@@ -130,6 +130,19 @@
             </div>
 
 
+            {{-- Criminal case --}}
+
+            <div>
+                <x-ui.select
+                    name="criminal_case_id"
+                    label="Criminal case"
+                    :options="$criminalCases"
+                    value="{{old('criminal_case_id', $article->criminal_case_id)}}"
+                    placeholder="Select a criminal case"
+                />
+            </div>
+
+
             {{-- Category --}}
 
             <div>

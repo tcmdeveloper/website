@@ -23,6 +23,13 @@ return new class extends Migration
 
             $table->text('text');
 
+            // Relations
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
+
+
             $table->timestamps();
 
             // 🔥 important for search

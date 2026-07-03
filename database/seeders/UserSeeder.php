@@ -4,16 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        
         // SEED FROM IMPORT DATABASE
     
         $model = new User();
@@ -43,12 +38,6 @@ class UserSeeder extends Seeder
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at,
             ]);
-
         }
-
-
     }
-
-    
-
 }

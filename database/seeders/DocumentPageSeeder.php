@@ -2,16 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
+use App\Models\DocumentPage;
 use Illuminate\Database\Seeder;
 
-class CategorySeeder extends Seeder
+class DocumentPageSeeder extends Seeder
 {
     public function run(): void
     {
         // SEED FROM IMPORT DATABASE
 
-        $model = new Category();
+        $model = new DocumentPage();
         
         $items = $model::on('mysql_import')->get();
 
@@ -20,15 +20,15 @@ class CategorySeeder extends Seeder
             $model::create([
                 'id' => $item->id,
                 'hex' => $item->hex,
-                'name' => $item->name,
-                'slug' => $item->slug,
-                'description' => $item->description,
-                'color' => $item->color,
                 'user_id' => $item->user_id,
-                'category_id' => $item->category_id,
-                'criminal_case_id' => $item->criminal_case_id,
+                'document_id' => $item->document_id,
+                'page_number' => $item->page_number,
+                'image_path' => $item->image_path,
+                'width' => $item->width,
+                'height' => $item->height,
+                'views' => $item->views,
                 'created_at' => $item->created_at,
-                'updated_at' => $item->updated_at,
+                'updated_at' => $item->updated_at
             ]);
         }
     }

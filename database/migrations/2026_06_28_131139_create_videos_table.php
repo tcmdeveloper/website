@@ -12,10 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('videos', function (Blueprint $table) {
-            $table->id();
 
+            // Identifiers
+            $table->id();
             $table->string('hex', 11)->unique();
 
+            // Core content
             $table->string('youtube_url');
             $table->string('youtube_id');
 
@@ -34,7 +36,25 @@ return new class extends Migration
 
             $table->longText('transcript')->nullable();
 
+            // Relations
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->foreignId('category_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
+
+            $table->foreignId('criminal_case_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
+
+
             $table->timestamps();
+
         });
     }
 

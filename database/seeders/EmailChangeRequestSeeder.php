@@ -4,16 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\EmailChangeRequest;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class EmailChangeRequestSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        
         // SEED FROM IMPORT DATABASE
 
         $model = new EmailChangeRequest();
@@ -35,11 +30,6 @@ class EmailChangeRequestSeeder extends Seeder
                 'created_at' => $item->created_at,
                 'updated_at	' => $item->updated_at
             ]);
-
         }
-
-
     }
-
-
 }

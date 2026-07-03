@@ -4,16 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\TermsVersion;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class TermsVersionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        
         // SEED FROM IMPORT DATABASE
 
         $model = new TermsVersion();
@@ -30,11 +25,6 @@ class TermsVersionSeeder extends Seeder
                 'created_at' => $item->created_at,
                 'updated_at	' => $item->updated_at,
             ]);
-
         }
-
-
     }
-
-
 }

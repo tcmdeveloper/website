@@ -9,6 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jail_call_logs', function (Blueprint $table) {
+
+            // Identifiers
             $table->id();
 
             $table->string('site')->nullable();

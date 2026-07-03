@@ -4,16 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Transcription;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class TranscriptionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        
         // SEED FROM IMPORT DATABASE
 
         $model = new Transcription();
@@ -44,11 +39,6 @@ class TranscriptionSeeder extends Seeder
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at
             ]);
-
         }
-
-
     }
-
-
 }

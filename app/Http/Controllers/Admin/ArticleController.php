@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\ArticleImage;
 use App\Models\Category;
+use App\Models\CriminalCase;
 use App\Services\RandomStringGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -97,10 +98,12 @@ class ArticleController extends Controller
 
     public function edit(Article $article)
     {
+        $criminalCases = CriminalCase::orderBy('name')->pluck('name', 'id');
         $categories = Category::orderBy('name')->pluck('name', 'id');
 
         return view('articles.edit', [
             'article' => $article,
+            'criminalCases' => $criminalCases,
             'categories' => $categories,
         ]);
 

@@ -1,20 +1,26 @@
 <?php
 
-use App\Http\Controllers\Frontend\PageController;
-use App\Http\Controllers\Frontend\ContactController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
-use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
+// PAGE
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
-use App\Http\Controllers\Frontend\ArticleController as FrontendArticleController;
-use App\Http\Controllers\Admin\VideoController as AdminVideoController;
-use App\Http\Controllers\Frontend\VideoController as FrontendVideoController;
-use App\Http\Controllers\Frontend\SearchController as FrontendSearchController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\CriminalCaseController as AdminCriminalCaseController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\TranscriptionController;
-use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Admin\VideoController as AdminVideoController;
+use App\Http\Controllers\Frontend\ArticleController as FrontendArticleController;
+use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
+use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Frontend\CriminalCaseController as FrontendCriminalCaseController;
+use App\Http\Controllers\Frontend\DocumentController as FrontendDocumentController;
+use App\Http\Controllers\Frontend\PageController;
+use App\Http\Controllers\Frontend\SearchController as FrontendSearchController;
+use App\Http\Controllers\Frontend\VideoController as FrontendVideoController;
 use App\Http\Controllers\JailCallLogController;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 
 
 // -----------------------------------------------------
@@ -28,6 +34,16 @@ use App\Http\Controllers\JailCallLogController;
 // edit    GET          /users/{user}/edit
 // update  PUT/PATCH    /users/{user}
 // destroy DELETE /     users/{user}
+
+Route::get('/db-check', function () {
+    return [
+        'db' => DB::connection()->getDatabaseName(),
+        'host' => config('database.connections.mysql.host'),
+        'port' => config('database.connections.mysql.port'),
+        'columns' => Schema::getColumnListing('documents'),
+    ];
+});
+
 
 Route::get('call-logs', [JailCallLogController::class, 'show'])->middleware(['auth', 'verified']);
 Route::get('call-logs/edit/{jailCallLog}', [JailCallLogController::class, 'edit'])->middleware(['auth', 'verified']);
@@ -101,6 +117,44 @@ Route::controller(ProfileController::class)
         Route::get('/password', 'editPassword')->name('password.edit');
         Route::patch('/password', 'updatePassword')->name('password.update');
         Route::post('/avatar', 'updateAvatar')->name('avatar');
+    })
+;
+
+
+// -----------------------------------------------------
+// CRIMINAL CASE CONTROLLER (FRONT-END)
+// -----------------------------------------------------
+
+Route::controller(FrontendCriminalCaseController::class)
+    ->prefix('categories')
+    ->name('categories.')
+    ->group(function(){
+        Route::get('/', 'index')->name('index');
+        Route::get('/{criminalCase}', 'show')->name('show');
+        
+    })
+;
+
+
+// -----------------------------------------------------
+// CRIMINAL CASE CONTROLLER (ADMIN)
+// -----------------------------------------------------
+
+Route::controller(AdminCriminalCaseController::class)
+    ->prefix('admin/criminal-cases')
+    ->name('admin.criminal-cases.')
+    ->middleware(['auth'])
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{criminalCase}/edit', 'edit')->name('edit');
+        Route::patch('/{criminalCase}', 'update')->name('update');
+        Route::delete('/{criminalCase}','destroy')->name('destroy');
+        Route::get('/{criminalCase}/inspect', 'inspect')->name('inspect');
+        Route::post('/upload-image', 'uploadImage');
+
+        Route::get('/{criminalCase}', 'show')->name('show');
     })
 ;
 
@@ -182,6 +236,49 @@ Route::controller(AdminArticleController::class)
         
 
         Route::get('/{article}', 'show')->name('show');
+    })
+;
+
+
+// -----------------------------------------------------
+// DOCUMENT CONTROLLER (FRONT-END)
+// -----------------------------------------------------
+
+Route::controller(FrontendDocumentController::class)
+    ->prefix('documents')
+    ->name('documents.')
+    ->group(function(){
+        Route::get('/', 'index')->name('index');
+        Route::get('/{document}', 'show')->name('show');
+    })
+;
+
+
+// -----------------------------------------------------
+// DOCUMENT CONTROLLER (ADMIN)
+// -----------------------------------------------------
+
+Route::controller(AdminDocumentController::class)
+    ->prefix('admin/documents')
+    ->name('admin.documents.')
+    ->middleware(['auth', 'verified'])
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{document}/edit', 'edit')->name('edit');
+        Route::patch('/{document}', 'update')->name('update');
+        Route::delete('/{document}', 'destroy')->name('destroy');
+
+        Route::patch('/{document}/image/{image}/update', 'updateImage')->name('images.update');
+        Route::delete('/{document}/images/{image}', 'destroyImage')->name('images.destroy');
+        Route::get('/{document}/images/{image}/edit', 'editImage')->name('images.edit');
+        Route::post('/{document}/images/store', 'storeImage')->name('images.store');
+        Route::get('/{document}/images/upload', 'selectImage')->name('images.upload');
+        Route::get('/{document}/images', 'imagesIndex')->name('images');
+
+
+        Route::get('/{document}', 'show')->name('show');
     })
 ;
 

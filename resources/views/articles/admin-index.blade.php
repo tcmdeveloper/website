@@ -29,6 +29,10 @@
                     </th>
 
                     <th class="px-6 py-4 font-medium">
+                        Case
+                    </th>
+
+                    <th class="px-6 py-4 font-medium">
                         Category
                     </th>
 
@@ -54,6 +58,10 @@
 
                         <td class="px-6 py-4 text-zinc-500">
                             {{ $article->title }}
+                        </td>
+
+                        <td class="px-6 py-4 {{ $article->criminalCase ? 'text-zinc-500' : 'text-zinc-300' }}">
+                            {{ $article->criminalCase?->name ?? '...' }}
                         </td>
 
                         <td class="px-6 py-4 {{ $article->category ? 'text-zinc-500' : 'text-zinc-300' }}">

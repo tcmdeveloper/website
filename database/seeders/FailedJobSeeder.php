@@ -4,16 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\FailedJob;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class FailedJobSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        
         // SEED FROM IMPORT DATABASE
 
         $model = new FailedJob();
@@ -31,11 +26,6 @@ class FailedJobSeeder extends Seeder
                 'exception' => $item->exception,
                 'failed_at' => $item->failed_at,
             ]);
-
         }
-
-
     }
-
-
 }

@@ -49,6 +49,18 @@
                     <div class="space-y-1">
 
                         <a
+                            href="{{ route('admin.criminal-cases.index') }}"
+                            @class([
+                                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
+                                'bg-stone-900 text-white' => request()->routeIs('admin.categories.*'),
+                                'text-stone-700 hover:bg-stone-100' => !request()->routeIs('admin.categories.*'),
+                            ])
+                        >
+                            <x-heroicon-o-finger-print class="w-5 h-5" />
+                            Criminal cases
+                        </a>
+
+                        <a
                             href="{{ route('admin.categories.index') }}"
                             @class([
                                 'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
@@ -70,6 +82,18 @@
                         >
                             <x-heroicon-o-document-text class="w-5 h-5" />
                             Articles
+                        </a>
+
+                        <a
+                            href="{{ route('admin.documents.index') }}"
+                            @class([
+                                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
+                                'bg-stone-900 text-white' => request()->routeIs('admin.documents.*'),
+                                'text-stone-700 hover:bg-stone-100' => !request()->routeIs('admin.documents.*'),
+                            ])
+                        >
+                            <x-heroicon-o-document-text class="w-5 h-5" />
+                            Documents
                         </a>
 
                         <a

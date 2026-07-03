@@ -7,19 +7,13 @@ use Illuminate\Database\Seeder;
 
 class JailCallLogSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-
-    // SEED FROM IMPORT DATABASE
+        // SEED FROM IMPORT DATABASE
 
         $model = new JailCallLog();
-        
-        $items = $model::on('mysql_import')
-            ->orderBy('start_time', 'asc')
-            ->get();
+
+        $items = $model::on('mysql_import')->get();
 
         foreach($items as $item){
 
@@ -48,11 +42,6 @@ class JailCallLogSeeder extends Seeder
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at,
             ]);
-
         }
-
-        
-
-
     }
 }

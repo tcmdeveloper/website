@@ -8,9 +8,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('articles', function (Blueprint $table) {
-            $table->id();
 
-            // Public identifier
+            // Identifiers
+            $table->id();
             $table->string('hex', 11)->unique();
 
             // Core content
@@ -18,13 +18,26 @@ return new class extends Migration {
             $table->string('slug')->unique();
             $table->text('excerpt')->nullable();
             $table->text('content');
+            
+            // SEO
+            $table->string('meta_title')->nullable();
+            $table->string('meta_description')->nullable();
+
+            // Stats
+            $table->unsignedInteger('views')->default(0);
 
             // Relations
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained()
-                ->cascadeOnDelete();
+                ->nullOnDelete();
 
             $table->foreignId('category_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
+
+            $table->foreignId('criminal_case_id')
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();
@@ -32,13 +45,6 @@ return new class extends Migration {
             // Publishing
             $table->timestamp('published_at')->nullable();
             $table->boolean('is_published')->default(false);
-
-            // SEO
-            $table->string('meta_title')->nullable();
-            $table->string('meta_description')->nullable();
-
-            // Stats (optional but useful for SaaS/blogs)
-            $table->unsignedInteger('views')->default(0);
 
             $table->timestamps();
 

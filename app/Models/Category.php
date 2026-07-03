@@ -102,6 +102,11 @@ class Category extends Model
         return $this->hasMany(Article::class);
     }
 
+    // Criminal Case
+    public function criminalCase()
+    {
+        return $this->belongsTo(CriminalCase::class);
+    }
 
     // Published articles
 

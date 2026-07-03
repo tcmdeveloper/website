@@ -17,23 +17,28 @@ return new class extends Migration
             $table->id();
             $table->string('hex', 11)->unique();
 
-            // Relations
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnDelete();
-
             // Core content
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
 
+             // SEO
+            $table->string('meta_title')->nullable();
+            $table->string('meta_description')->nullable();
+
+            // Stats
+            $table->unsignedInteger('views')->default(0);
+
+            // Relations
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
+
             // Publishing
             $table->timestamp('published_at')->nullable();
             $table->boolean('is_published')->default(false);
 
-            // Stats (optional but useful for SaaS/blogs)
-            $table->unsignedInteger('views')->default(0);
-            
             $table->timestamps();
         });
     }

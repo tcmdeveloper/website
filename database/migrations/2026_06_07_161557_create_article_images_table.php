@@ -12,7 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('article_images', function (Blueprint $table) {
+
+            // Identifiers
             $table->id();
+            $table->string('hex', 11)->unique();
+
+            // Core content
             $table->foreignId('article_id')->constrained()->cascadeOnDelete();
             $table->string('path');
             $table->string('caption')->nullable();
@@ -21,6 +26,13 @@ return new class extends Migration
             $table->string('alt_text')->nullable();
             $table->boolean('is_featured')->default(false);
             $table->integer('sort_order')->default(0);
+            
+            // Relations
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
+
             $table->timestamps();
         });
     }

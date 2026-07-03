@@ -4,16 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Job;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class JobSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        
         // SEED FROM IMPORT DATABASE
 
         $model = new Job();
@@ -31,11 +26,6 @@ class JobSeeder extends Seeder
                 'available_at' => $item->available_at,
                 'created_at' => $item->created_at,
             ]);
-
         }
-
-
     }
-
-
 }

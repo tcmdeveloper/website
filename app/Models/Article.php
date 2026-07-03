@@ -66,6 +66,12 @@ class Article extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    // Criminal Case
+    public function criminalCase()
+    {
+        return $this->belongsTo(CriminalCase::class);
+    }
+
     // Category
     public function category()
     {
