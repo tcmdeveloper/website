@@ -65,14 +65,26 @@
         
         {{-- FEATURED ARTICLE IMAGE --}}
 
-        <img
-            src="{{ $featuredImage 
-                ? Storage::url($featuredImage->path) 
-                : asset('images/default-article.jpg') 
-            }}"
-            class="my-6 w-full max-w-3xl rounded-xs shadow-sm aspect-video"
-            alt="{{ $featuredImage?->alt_text ?? 'Default article image' }}"
-        >
+        <picture>
+            @if(Storage::disk('public')->exists($featuredImage->path . '.avif'))
+                <source
+                    srcset="{{ Storage::url($featuredImage->path . '.avif') }}"
+                    type="image/avif">
+            @endif
+
+            @if(Storage::disk('public')->exists($featuredImage->path . '.webp'))
+                <source
+                    srcset="{{ Storage::url($featuredImage->path . '.webp') }}"
+                    type="image/webp">
+            @endif
+
+            <img
+                src="{{ Storage::url($featuredImage->path . '.jpg') }}"
+                alt="{{ $featuredImage->alt_text }}"
+                loading="lazy"
+                decoding="async">
+        </picture>
+
 
         @if ($featuredImage && $featuredImage->source)
             <div class="max-w-3xl flex flex-col gap-4 border border-zinc-300 w-full px-2.5 py-1.5 text-xs mb-1 bg-amber-50">
