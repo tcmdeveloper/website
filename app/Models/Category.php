@@ -109,7 +109,6 @@ class Category extends Model
     }
 
     // Published articles
-
     public function publishedArticles()
     {
         return $this->hasMany(Article::class)->published();

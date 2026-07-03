@@ -23,6 +23,19 @@
             @csrf
 
 
+            {{-- Criminal Case --}}
+
+            <div>
+                <x-ui.select
+                    name="criminal_case_id"
+                    label="Criminal case"
+                    :options="$criminalCases"
+                    value="{{old('criminal_case_id')}}"
+                    placeholder="Select a criminal case"
+                />
+            </div>
+
+
             {{-- PDF document --}}
 
             <div x-data="{ filename: '' }">
@@ -112,6 +125,22 @@
                     rows="3"
                     placeholder="Description"
                     :value="old('description')"
+                />
+            </div>
+
+
+            {{-- Visibility --}}
+
+            <div>
+                <x-ui.select
+                    name="is_published"
+                    label="Status"
+                    :options="[
+                        1 => 'Public',
+                        0 => 'Private',
+                    ]"
+                    :value="old('is_published')"
+                    placeholder="Set visibility"
                 />
             </div>
 

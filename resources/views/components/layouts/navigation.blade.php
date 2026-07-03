@@ -105,7 +105,7 @@
 
         {{-- Menu items --}}
         <div class="w-full p-8 mt-32 flex flex-col items-center space-y-5 text-6xl font-heading font-bold">
-            <a href="{{ route('pages.about') }}" class="text-zinc-100 hover:text-yellow-300">Case files</a>
+            <a href="{{ route('cases.index') }}" class="text-zinc-100 hover:text-yellow-300">Criminal cases</a>
             <a href="{{ route('articles.index') }}" class="text-zinc-100 hover:text-yellow-300">Articles</a>
             <a href="{{ route('categories.index') }}" class="text-zinc-100 hover:text-yellow-300">Categories</a>
             <a href="{{ route('contact.show') }}" class="text-zinc-100 hover:text-yellow-300">Contact me</a>

@@ -35,24 +35,15 @@ use Illuminate\Support\Facades\Schema;
 // update  PUT/PATCH    /users/{user}
 // destroy DELETE /     users/{user}
 
-Route::get('/db-check', function () {
-    return [
-        'db' => DB::connection()->getDatabaseName(),
-        'host' => config('database.connections.mysql.host'),
-        'port' => config('database.connections.mysql.port'),
-        'columns' => Schema::getColumnListing('documents'),
-    ];
-});
 
-
-Route::get('call-logs', [JailCallLogController::class, 'show'])->middleware(['auth', 'verified']);
-Route::get('call-logs/edit/{jailCallLog}', [JailCallLogController::class, 'edit'])->middleware(['auth', 'verified']);
-Route::patch('call-logs/patch', [JailCallLogController::class, 'update'])->middleware(['auth', 'verified']);
+// Route::get('call-logs', [JailCallLogController::class, 'show'])->middleware(['auth', 'verified']);
+// Route::get('call-logs/edit/{jailCallLog}', [JailCallLogController::class, 'edit'])->middleware(['auth', 'verified']);
+// Route::patch('call-logs/patch', [JailCallLogController::class, 'update'])->middleware(['auth', 'verified']);
 
 
 
-Route::get('/import-csv', [JailCallLogController::class, 'showForm'])->middleware(['auth', 'verified'])->name('jail-call-logs.show');
-Route::post('/import-csv', [JailCallLogController::class, 'import'])->middleware(['auth', 'verified'])->name('jail-call-logs.import');
+// Route::get('/import-csv', [JailCallLogController::class, 'showForm'])->middleware(['auth', 'verified'])->name('jail-call-logs.show');
+// Route::post('/import-csv', [JailCallLogController::class, 'import'])->middleware(['auth', 'verified'])->name('jail-call-logs.import');
 
 
 // -----------------------------------------------------
@@ -126,8 +117,8 @@ Route::controller(ProfileController::class)
 // -----------------------------------------------------
 
 Route::controller(FrontendCriminalCaseController::class)
-    ->prefix('categories')
-    ->name('categories.')
+    ->prefix('cases')
+    ->name('cases.')
     ->group(function(){
         Route::get('/', 'index')->name('index');
         Route::get('/{criminalCase}', 'show')->name('show');
@@ -245,13 +236,12 @@ Route::controller(AdminArticleController::class)
 // -----------------------------------------------------
 
 Route::controller(FrontendDocumentController::class)
-    ->prefix('documents')
+    ->prefix('cases/{criminalCase:slug}/documents')
     ->name('documents.')
-    ->group(function(){
+    ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/{document}', 'show')->name('show');
-    })
-;
+        Route::get('/{document:slug}', 'show')->name('show');
+    });
 
 
 // -----------------------------------------------------

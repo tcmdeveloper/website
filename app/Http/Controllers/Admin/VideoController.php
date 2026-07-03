@@ -73,7 +73,7 @@ class VideoController extends Controller
             ->route('admin.videos.index')
             ->with('status', [
                 'type' => 'success',
-                'message' => 'Video download started!',
+                'message' => 'Video download started. Check back in a few minutes.',
             ]);
     }
 

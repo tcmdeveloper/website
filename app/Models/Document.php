@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\DocumentPage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Document extends Model
@@ -24,6 +25,17 @@ class Document extends Model
         'criminal_case_id',
         'published_at',
         'is_published',
+    ];
+    
+
+     /*
+    |--------------------------------------------------------------------------
+    | Attribute Casting
+    |--------------------------------------------------------------------------
+    */
+    protected $casts = [
+        'published_at' => 'datetime',
+        'is_published' => 'boolean',
     ];
 
     protected static function booted()
@@ -49,18 +61,17 @@ class Document extends Model
 
 
 
-//This is from categories
     // -----------------------------------------------------
     // SCOPES
     // -----------------------------------------------------
 
-    // public function scopePublished($query)
-    // {
-    //     return $query
-    //         ->where('is_published', true)
-    //         ->whereNotNull('published_at')
-    //         ->where('published_at', '<=', now());
-    // }
+    public function scopePublished($query)
+    {
+        return $query
+            ->where('is_published', true)
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
+    }
 
     
     
@@ -76,8 +87,8 @@ class Document extends Model
         return $this->belongsTo(CriminalCase::class);
     }
 
-    // Pages
-    public function pages()
+    // Document Pages
+    public function documentPages()
     {
         return $this->hasMany(DocumentPage::class);
     }

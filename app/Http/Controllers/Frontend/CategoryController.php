@@ -7,7 +7,7 @@ use App\Models\Category;
 
 
 // -----------------------------------------------------
-// CATEGORY CONTROLLER (FRONTEND)
+// CATEGORY CONTROLLER (FRONT-END)
 // -----------------------------------------------------
 
 class CategoryController extends Controller

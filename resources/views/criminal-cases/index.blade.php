@@ -1,8 +1,8 @@
 {{-- resources/views/criminal-cases/index.blade.php --}}
 
 <x-layouts.app
-    title="Categories"
-    subtitle="Explore posts organized by topic"
+    title="Criminal Cases"
+    subtitle="Browse the criminal cases we cover."
 >
 
     <x-ui.container class="max-w-5xl">
@@ -14,7 +14,7 @@
             @forelse($criminalCases as $case)
 
                 <a
-                    href="{{ route('criminal-cases.show', $case->slug) }}"
+                    href="{{ route('cases.show', $case->slug) }}"
                     class="group block rounded-xl border border-zinc-200 p-6 hover:shadow-md hover:border-green-400 transition bg-white"
                 >
 
@@ -34,7 +34,7 @@
                     <div class="mt-4 flex items-center justify-between text-sm text-zinc-400">
 
                         <span>
-                            0 posts
+                            {{ $case->documents_count }} documents
                         </span>
 
                         <span class="group-hover:text-green-500 transition">
@@ -55,6 +55,15 @@
 
         </div>
 
+
+        {{-- Pagination --}}
+
+        <div class="mt-6">
+            {{ $criminalCases->links() }}
+        </div>
+
+
     </x-ui.container>
+
 
 </x-layouts.app>

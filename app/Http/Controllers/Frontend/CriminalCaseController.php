@@ -20,10 +20,27 @@ class CriminalCaseController extends Controller
 
     public function index()
     {
-        $criminalCases = CriminalCase::orderBy('name')->paginate(10);
+        $criminalCases = CriminalCase::query()
+            ->orderBy('name')
+            ->withCount('documents')
+            ->paginate(12);
         
-        return view('categories.index', [
+        return view('criminal-cases.index', [
             'criminalCases' => $criminalCases
+        ]);
+    }
+
+
+    // -----------------------------------------------------
+    // SHOW
+    // -----------------------------------------------------
+
+    public function show(CriminalCase $criminalCase)
+    {
+        $criminalCase->increment('views');
+
+        return view('criminal-cases.show', [
+            'criminalCase' => $criminalCase,
         ]);
     }
     

@@ -70,6 +70,7 @@ class ArticleController extends Controller
         ]);
 
         $article = Article::create([
+            'hex' => $generator->uniqueHexId(),
             'title' => $data['title'],
             'slug' => $data['slug'] ?? Str::slug($data['title']),
             'excerpt' => $data['excerpt'] ?? null,
@@ -77,10 +78,10 @@ class ArticleController extends Controller
             'category_id' => $data['category_id'] ?? null,
             'meta_title' => $data['meta_title'] ?? null,
             'meta_description' => $data['meta_description'] ?? null,
+            'user_id' => auth()->id(),
             'is_published' => $request->boolean('is_published'),
             'published_at' => $request->boolean('is_published') ? now() : null,
-            'user_id' => auth()->id(),
-            'hex' => $generator->uniqueHexId(),
+            
         ]);
 
         return redirect()

@@ -12,6 +12,10 @@
         />
 
 
+        {{-- Alert --}}
+        <x-ui.alert />
+
+
         {{-- Table --}}
 
         <table class="w-full border">

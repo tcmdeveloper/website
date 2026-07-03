@@ -21,7 +21,7 @@
         {{-- PUBLISHED DATE --}}
 
         <div class="mt-5 text-xs font-light uppercase tracking-widest">
-            <span>{{ $article->created_at->format('M d, Y') }}</span>
+            <span>{{ $article->published_at->format('M d Y') }}</span>
         </div>
 
 
@@ -31,7 +31,7 @@
             {{ $article->title }}
         </h1>
 
-         <p class="text-center mt-3 mb-3! font-heading text-xl font-light">
+        <p class="text-center mt-3 mb-3! font-heading text-xl font-light">
             {{ $article->excerpt }}
         </p>
 

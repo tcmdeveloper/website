@@ -40,9 +40,22 @@ class CriminalCase extends Model
     }
 
 
+    // -----------------------------------------------------
+    // SCOPES
+    // -----------------------------------------------------
+
+    public function scopePublished($query)
+    {
+        return $query
+            ->where('is_published', true)
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
+    }
+
+
     /*
     |--------------------------------------------------------------------------
-    | Relationships
+    | RELATIONSHIPS
     |--------------------------------------------------------------------------
     */
 
@@ -58,9 +71,15 @@ class CriminalCase extends Model
         return $this->hasMany(Article::class);
     }
 
-    // Images
-    public function images()
+    // Documents
+    public function documents()
     {
-        return $this->hasMany(ArticleImage::class);
+        return $this->hasMany(Document::class);
+    }
+
+    // Published articles
+    public function publishedDocuments()
+    {
+        return $this->hasMany(Document::class)->published();
     }
 }
