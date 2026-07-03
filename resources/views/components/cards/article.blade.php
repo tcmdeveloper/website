@@ -27,6 +27,7 @@
             <img
                 src="{{ Storage::url($featuredImage->path . '.jpg') }}"
                 alt="{{ $featuredImage->alt_text }}"
+                class="w-full h-48 object-cover"
                 loading="eager"
                 fetchpriority="high"
                 decoding="async">
