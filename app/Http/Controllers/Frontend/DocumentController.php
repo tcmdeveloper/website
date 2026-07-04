@@ -16,7 +16,7 @@ class DocumentController extends Controller
     {
         // Optional: ensure the document belongs to the case
         abort_unless($document->criminal_case_id === $criminalCase->id, 404);
-
+        
         // Increment the views
         $document->increment('views');
 

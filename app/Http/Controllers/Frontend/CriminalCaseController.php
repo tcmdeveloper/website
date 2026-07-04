@@ -36,8 +36,10 @@ class CriminalCaseController extends Controller
     // -----------------------------------------------------
 
     public function show(CriminalCase $criminalCase)
-    {
+    {   
+        $criminalCase->load('documents.coverPage');
         $criminalCase->increment('views');
+        
 
         return view('criminal-cases.show', [
             'criminalCase' => $criminalCase,

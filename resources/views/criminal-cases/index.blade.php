@@ -20,7 +20,7 @@
 
                     {{-- Case name --}}
                     <h2 class="text-lg font-semibold group-hover:text-green-600 transition">
-                        {{ $case->name }}
+                        The {{ $case->name }} Case
                     </h2>
 
                     {{-- Description --}}

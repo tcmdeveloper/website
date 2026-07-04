@@ -3,6 +3,7 @@
     'excerpt' => null,
     'featuredImage' => null,
     'authorName' => null,
+    'views' => 0,
     'publishedAt' => null,
     'url' => '#',
 ])
@@ -62,6 +63,10 @@
                 @if($publishedAt)
                     <span>{{ $publishedAt->format('M d Y') }}</span>
                 @endif
+
+                <span class="inline-flex items-center gap-1 text-xs text-zinc-500">
+                    {{ number_format($views) }} views
+                </span>
 
             </div>
         @endif

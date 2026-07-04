@@ -96,6 +96,18 @@ class Document extends Model
         return $this->hasMany(DocumentPage::class);
     }
 
+    // Cover page
+    public function coverPage()
+    {
+        return $this->hasOne(DocumentPage::class)->oldestOfMany('page_number');
+    }
+
+    // Author
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
 
 
 

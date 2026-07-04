@@ -33,6 +33,10 @@
 
         <div class="mt-5 text-xs font-light uppercase tracking-widest">
             <span>{{ $article->published_at->format('M d Y') }}</span>
+            <span>&middot;</span>
+            <span class="inline-flex items-center gap-1 text-xs text-zinc-500">
+                {{ number_format($article->views) }} views
+            </span>
         </div>
 
 
@@ -89,7 +93,7 @@
 
 
         @if ($featuredImage && $featuredImage->source)
-            <div class="max-w-3xl flex flex-col gap-4 border border-zinc-300 w-full px-2.5 py-1.5 text-xs mb-1 bg-amber-50">
+            <div class="max-w-3xl flex flex-col gap-4 border border-amber-800/10 w-full px-2.5 py-1.5 text-xs mb-1 bg-amber-50/50">
                 <span>
                     Image source:
                     <a

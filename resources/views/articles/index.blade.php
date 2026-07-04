@@ -1,8 +1,8 @@
 {{-- resources/views/admin/articles/index.blade.php --}}
 
 <x-layouts.app 
-    title="Metrix blog articles"
-    subtitle="Exploring ideas, analysis, and insights from the cases covered on True Crime Metrix."
+    title="True Crime Articles"
+    subtitle="Explore in-depth articles covering criminal cases, court documents, timelines, legal analysis, and the latest developments featured on True Crime Metrix."
 >
 
     <x-ui.container class="max-w-5xl">
