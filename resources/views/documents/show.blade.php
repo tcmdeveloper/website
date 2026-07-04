@@ -67,6 +67,9 @@
             @endforeach
         ],
 
+        touchStartX: 0,
+        touchEndX: 0,
+
         show(index) {
             this.current = index;
             this.open = true;
@@ -79,16 +82,34 @@
         },
 
         next() {
-            if (this.current < this.images.length - 1) {
-                this.current++;
-            }
+            this.current = (this.current + 1) % this.images.length;
         },
 
         prev() {
-            if (this.current > 0) {
-                this.current--;
+    this.current =
+        (this.current - 1 + this.images.length) % this.images.length;
+},
+
+
+
+        touchStart(e) {
+            this.touchStartX = e.changedTouches[0].screenX;
+        },
+
+        touchEnd(e) {
+            this.touchEndX = e.changedTouches[0].screenX;
+
+            const distance = this.touchEndX - this.touchStartX;
+
+            // Ignore tiny movements
+            if (Math.abs(distance) < 50) return;
+
+            if (distance < 0) {
+                this.next();
+            } else {
+                this.prev();
             }
-        }
+        },
     }"
 
     @keydown.escape.window="close()"
@@ -121,8 +142,12 @@
         x-cloak
         x-show="open"
         x-transition.opacity
-        class="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
+
         @click="close()"
+
+        @touchstart="touchStart($event)"
+        @touchend="touchEnd($event)"
     >
 
         {{-- Previous --}}
