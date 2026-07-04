@@ -33,12 +33,12 @@ return new class extends Migration {
                 ->constrained()
                 ->nullOnDelete();
 
-            $table->foreignId('category_id')
+            $table->foreignId('criminal_case_id')
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();
 
-            $table->foreignId('criminal_case_id')
+            $table->foreignId('category_id')
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();

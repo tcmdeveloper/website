@@ -9,74 +9,111 @@
             strip_tags($criminalCase->description),
             160),
     ]"
+    :breadcrumbs="[
+        'href' => route('cases.index'),
+        'label' => 'Criminal Cases'
+    ]"
 >
 
     <x-ui.container class="max-w-5xl">
+        
 
-        <section aria-labelledby="documents-heading">
+        {{-- TITLE AND EXCERPT --}}
 
-            <h2 id="documents-heading" class="sr-only">
-                Documents
+        <section aria-labelledby="criminal-case-heading" class="prose-content">
+
+            <h1 id="criminal-case-heading class="text-center mt-2 mb-0">
+                The {{ $criminalCase->name }} Case
+            </h1>
+
+            <p class="text-center mt-3 mb-3! font-heading text-xl font-light">
+                {{ $criminalCase->description }}
+            </p>
+
+        </section>
+        
+
+
+        {{-- CASE DOCUMENTS --}}
+
+        <section aria-labelledby="case-documents-heading">
+
+            {{-- Screen reader heading --}}
+
+            <h2 id="case-documents-heading" class="sr-only">
+                Court documents for the {{ $criminalCase->name }} case
             </h2>
 
+
+            {{-- Document list --}}
+
             @if($criminalCase->documents->isEmpty())
+
                 <div class="mt-6 rounded-lg border border-gray-200 bg-white p-8 text-center">
                     <p class="text-gray-600">
                         No documents have been added for this criminal case yet.
                     </p>
                 </div>
+
             @else
+
                 <div class="mt-6 divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white">
-    @foreach($criminalCase->documents as $document)
-    <a
-        href="{{ route('documents.show', [$document->criminalCase, $document]) }}"
-        class="block p-6 transition hover:bg-gray-50"
-    >
-        <div class="flex gap-5">
 
-            {{-- Thumbnail --}}
-            @if($document->coverPage)
-                <div class="shrink-0">
-                    <img
-                        src="{{ Storage::url($document->coverPage->image_path) }}"
-                        alt="{{ $document->name }}"
-                        class="w-24 rounded border border-gray-300 shadow-sm"
-                        loading="lazy"
-                    >
+                    @foreach($criminalCase->documents as $document)
+
+                        <a
+                            href="{{ route('documents.show', [$document->criminalCase, $document]) }}"
+                            class="block p-6 transition hover:bg-gray-50"
+                        >
+                            <div class="flex gap-5">
+
+                                {{-- Thumbnail --}}
+                                @if($document->coverPage)
+                                    <div class="shrink-0">
+                                        <img
+                                            src="{{ Storage::url($document->coverPage->image_path) }}"
+                                            alt="{{ $document->name }}"
+                                            class="w-24 rounded border border-gray-300 shadow-sm"
+                                            loading="lazy"
+                                        >
+                                    </div>
+                                @endif
+
+                                {{-- Text --}}
+                                <div class="min-w-0 flex-1">
+                                    <h3 class="text-lg font-semibold text-gray-900">
+                                        {{ $document->name }}
+                                    </h3>
+
+                                    @if($document->description)
+                                        <p class="mt-2 line-clamp-2 text-sm text-gray-600">
+                                            {{ $document->description }}
+                                        </p>
+                                    @endif
+
+                                    <div class="mt-3 flex flex-wrap gap-x-2 gap-y-2 text-xs text-gray-500">
+                                        <span>{{ $document->pages }} pages</span>
+                                        <span>&middot;</span>
+                                        <span>{{ $document->published_at->format('j M Y') }}</span>
+                                        <span>&middot;</span>
+                                        <span>{{ number_format($document->views) }} views</span>
+                                    </div>
+                                </div>
+
+                                {{-- Button --}}
+                                <div class="shrink-0 text-sm font-medium text-indigo-600">
+                                    Open →
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    @endforeach
+
                 </div>
-            @endif
 
-            {{-- Text --}}
-            <div class="min-w-0 flex-1">
-                <h3 class="text-lg font-semibold text-gray-900">
-                    {{ $document->name }}
-                </h3>
-
-                @if($document->description)
-                    <p class="mt-2 line-clamp-2 text-sm text-gray-600">
-                        {{ $document->description }}
-                    </p>
-                @endif
-
-                <div class="mt-3 flex flex-wrap gap-x-2 gap-y-2 text-xs text-gray-500">
-                    <span>{{ $document->pages }} pages</span>
-                    <span>&middot;</span>
-                    <span>{{ $document->published_at->format('j M Y') }}</span>
-                    <span>&middot;</span>
-                    <span>{{ number_format($document->views) }} views</span>
-                </div>
-            </div>
-
-            <div class="shrink-0 text-sm font-medium text-indigo-600">
-                Open →
-            </div>
-
-        </div>
-    </a>
-@endforeach
-</div>
-
-
+                
                 @if(method_exists($criminalCase->documents, 'links'))
                     <div class="mt-8">
                         {{ $criminalCase->documents->links() }}

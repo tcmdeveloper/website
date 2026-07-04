@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class CriminalCase extends Model
@@ -81,5 +82,13 @@ class CriminalCase extends Model
     public function publishedDocuments()
     {
         return $this->hasMany(Document::class)->published();
+    }
+
+    // Formatted views (25419 -> 25,419)
+    protected function formattedViews(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => number_format($this->views),
+        );
     }
 }

@@ -21,11 +21,19 @@ class ArticleController extends Controller
     // INDEX
     // -----------------------------------------------------
 
-    public function index()
+    public function index(Request $request)
     {
-        $articles = Article::latest()->paginate(10);
 
-        return view('articles.admin-index', compact('articles'));
+        $articles = Article::query()
+        ->when($request->filled('case'), function ($query) use ($request) {
+            $query->whereHas('criminalCase', function ($q) use ($request) {
+                $q->where('slug', $request->case);
+            });
+        })
+        ->latest()
+        ->paginate();
+
+    return view('articles.admin-index', compact('articles'));
     }
 
 

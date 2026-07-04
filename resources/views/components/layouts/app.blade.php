@@ -4,6 +4,7 @@
     'title' => null,
     'subtitle' => null,
     'meta' => [],
+    'breadcrumbs' => [],  
 ])
 
 @php
@@ -96,6 +97,10 @@
 >
 
     <x-layouts.navigation />
+
+    @if(! empty($breadcrumbs))
+        <x-ui.breadcrumbs :breadcrumbs="$breadcrumbs" />
+    @endif
 
     <x-ui.page-headings
         :title="$title ?? null"

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\DocumentPage;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -106,6 +107,14 @@ class Document extends Model
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Formatted views (25419 -> 25,419)
+    protected function formattedViews(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => number_format($this->views),
+        );
     }
 
 
