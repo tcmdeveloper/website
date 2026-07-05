@@ -8,23 +8,23 @@
 
 
          {{-- Stats --}}
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-5">
 
-        {{-- Articles --}}
+        {{-- Criminal Cases --}}
         <div class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-stone-500">
-                        Articles
+                        Criminal Cases
                     </p>
 
                     <p class="mt-2 text-4xl font-bold text-stone-900">
-                        {{ number_format($articleCount) }}
+                        {{ number_format($criminalCaseCount) }}
                     </p>
                 </div>
 
                 <div class="rounded-full bg-stone-100 p-3">
-                    <x-heroicon-o-document-text class="h-7 w-7 text-stone-700" />
+                    <x-heroicon-o-finger-print class="h-7 w-7 text-stone-700" />
                 </div>
             </div>
         </div>
@@ -48,40 +48,61 @@
             </div>
         </div>
 
-        {{-- Users --}}
+        {{-- Articles --}}
         <div class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-stone-500">
-                        Users
+                        Articles
                     </p>
 
                     <p class="mt-2 text-4xl font-bold text-stone-900">
-                        {{ number_format($userCount) }}
+                        {{ number_format($articleCount) }}
                     </p>
                 </div>
 
                 <div class="rounded-full bg-stone-100 p-3">
-                    <x-heroicon-o-users class="h-7 w-7 text-stone-700" />
+                    <x-heroicon-o-document class="h-7 w-7 text-stone-700" />
                 </div>
             </div>
         </div>
 
-        {{-- Published --}}
+        
+
+        {{-- Documents --}}
         <div class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-stone-500">
-                        Published
+                        Documents
                     </p>
 
                     <p class="mt-2 text-4xl font-bold text-stone-900">
-                        {{ number_format($publishedCount) }}
+                        {{ number_format($documentCount) }}
                     </p>
                 </div>
 
                 <div class="rounded-full bg-stone-100 p-3">
-                    <x-heroicon-o-check-badge class="h-7 w-7 text-stone-700" />
+                    <x-heroicon-o-document-text class="h-7 w-7 text-stone-700" />
+                </div>
+            </div>
+        </div>
+
+        {{-- Videos --}}
+        <div class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-stone-500">
+                        Videos
+                    </p>
+
+                    <p class="mt-2 text-4xl font-bold text-stone-900">
+                        {{ number_format($videoCount) }}
+                    </p>
+                </div>
+
+                <div class="rounded-full bg-stone-100 p-3">
+                    <x-heroicon-o-play class="h-7 w-7 text-stone-700" />
                 </div>
             </div>
         </div>

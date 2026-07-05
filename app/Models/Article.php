@@ -145,7 +145,14 @@ class Article extends Model
             ->getContent();
     }
 
+    
 
+
+
+
+
+
+    // Formatted views (25419 -> 25,419)
     protected function formattedViews(): Attribute
     {
         return Attribute::make(

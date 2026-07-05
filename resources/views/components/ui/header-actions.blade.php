@@ -1,16 +1,15 @@
-{{-- resources/views/categories/admin-index.blade.php --}}
+{{-- resources/views/componenets/ui/header-actions.blade.php --}}
 
 @props([
     'title' => null,
     'subtitle' => null,
-    'href' => null,
-    'label' => null,
-    'buttonVariant' => 'primary'
+    'actions' => [],
 ])
 
-<div class="flex items-center justify-between mb-6">
+<div class="flex items-center justify-between mb-6 space-x-2">
 
-    <div>
+
+    <div class="grow">
         <h1 class="text-2xl font-semibold">
             {{$title}}
         </h1>
@@ -20,12 +19,22 @@
         </p>
     </div>
 
-    <x-ui.button
-        href="{{ $href }}"
-        size="sm"
-        variant="{{ $buttonVariant }}"
-    >
-        {{$label}}
-    </x-ui.button>
+
+    @if($actions)
+        
+        @foreach($actions as $action)
+            <x-ui.button
+                href="{{ $action['href'] }}"
+                size="sm"
+                variant="{{ 
+                    $action['variant'] ?? 'primary'
+                }}"
+            >
+                {{ $action['label'] }}
+            </x-ui.button>
+        @endforeach
+
+    @endif
+
 
 </div>

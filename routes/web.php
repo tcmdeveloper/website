@@ -18,9 +18,7 @@ use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\SearchController as FrontendSearchController;
 use App\Http\Controllers\Frontend\VideoController as FrontendVideoController;
 use App\Http\Controllers\JailCallLogController;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Schema;
 
 
 // -----------------------------------------------------
@@ -197,7 +195,7 @@ Route::controller(FrontendArticleController::class)
     ->name('articles.')
     ->group(function(){
         Route::get('/', 'index')->name('index');
-        Route::get('/{article}', 'show')->name('show');
+        Route::get('/{article:slug}', 'show')->name('show');
     })
 ;
 
@@ -214,19 +212,19 @@ Route::controller(AdminArticleController::class)
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
-        Route::get('/{article}/edit', 'edit')->name('edit');
-        Route::patch('/{article}', 'update')->name('update');
-        Route::delete('/{article}', 'destroy')->name('destroy');
+        Route::get('/{article:hex}/edit', 'edit')->name('edit');
+        Route::patch('/{article:hex}', 'update')->name('update');
+        Route::delete('/{article:hex}', 'destroy')->name('destroy');
 
-        Route::patch('/{article}/image/{image}/update', 'updateImage')->name('images.update');
-        Route::delete('/{article}/images/{image}', 'destroyImage')->name('images.destroy');
-        Route::get('/{article}/images/{image}/edit', 'editImage')->name('images.edit');
-        Route::post('/{article}/images/store', 'storeImage')->name('images.store');
-        Route::get('/{article}/images/upload', 'selectImage')->name('images.upload');
-        Route::get('/{article}/images', 'imagesIndex')->name('images');
+        Route::patch('/{article:hex}/image/{image}/update', 'updateImage')->name('images.update');
+        Route::delete('/{article:hex}/images/{image}', 'destroyImage')->name('images.destroy');
+        Route::get('/{article:hex}/images/{image}/edit', 'editImage')->name('images.edit');
+        Route::post('/{article:hex}/images/store', 'storeImage')->name('images.store');
+        Route::get('/{article:hex}/images/upload', 'selectImage')->name('images.upload');
+        Route::get('/{article:hex}/images', 'imagesIndex')->name('images');
         
 
-        Route::get('/{article}', 'show')->name('show');
+        Route::get('/{article:hex}', 'show')->name('show');
     })
 ;
 

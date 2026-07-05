@@ -1,21 +1,22 @@
 {{-- resources/views/articles/create.blade.php --}}
 
-
 <x-layouts.dashboard>
 
-    <x-ui.card class="max-w-5xl">
+    <x-ui.card>
 
         <x-ui.header-actions
-            title="Create new article"
-            subtitle="Complete the form to publish your article.."
-            :href="route('admin.articles.index')"
-            label="All articles"
+            :title="$title ?? 'True Crime Articles'"
+            :subtitle="$subtitle ?? 'Manage and organize your true crime articles.'"
+            :actions="[
+                'back' => [
+                    'label' => 'Back to Articles',
+                    'href' => route('admin.articles.index'),
+                    'variant' => 'ghost',
+                ]
+            ]"
         />
 
-
-        {{-- Alert --}}
         <x-ui.alert />
-
 
         <form 
             method="POST" 
@@ -130,6 +131,19 @@
             </div>
 
 
+            {{-- Criminal case --}}
+
+            <div>
+                <x-ui.select
+                    name="criminal_case_id"
+                    label="Criminal case"
+                    :options="$criminalCases"
+                    value="{{old('criminal_case_id', $selectedCase?->id)}}"
+                    placeholder="Select a criminal case"
+                />
+            </div>
+
+
             {{-- Category --}}
 
             <div>
@@ -137,7 +151,7 @@
                     name="category_id"
                     label="Category"
                     :options="$categories"
-                    value="{{old('category_id')}}"
+                    value="{{old('criminal_case_id', $selectedCategory?->id)}}"
                     placeholder="Select a category"
                 />
             </div>

@@ -2,14 +2,13 @@
 
 <x-layouts.dashboard>
 
+
     <x-ui.card class="max-w-4xl">
 
         <x-ui.header-actions
-            title="Edit image details"
-            subtitle="Update the details for this image."
-            :href="route('admin.articles.images', $article)"
-            label="Article images"
-            buttonVariant="ghost"
+            title="{{ $title }}"
+            subtitle="{{ $subtitle }}"
+            :actions="$actions"
         />
 
         <x-ui.alert />
@@ -18,7 +17,7 @@
             id="imageForm"
             method="POST"
             action="{{ route('admin.articles.images.update', [$article, $image]) }}"
-            x-data="imageUploader('{{ isset($image) ? asset($image->path) : '' }}')"
+            x-data="imageUploader('{{ $image?->image_url ?? '' }}')"
             @submit.prevent="submit"
             class="space-y-6"
         >
@@ -39,20 +38,11 @@
                 x-model="croppedImage"
             >
 
+            
+            
             <div
-                class="flex aspect-video items-center justify-center rounded border border-zinc-300 bg-zinc-50 overflow-hidden"
+                class="relative flex aspect-video items-center justify-center overflow-hidden rounded border border-zinc-300 bg-zinc-50"
             >
-
-                <template x-if="!preview">
-                    <x-ui.button
-                        type="button"
-                        @click="$refs.file.click()"
-                        size="sm"
-                        variant="secondary"
-                    >
-                        Choose image
-                    </x-ui.button>
-                </template>
 
                 <img
                     x-show="preview"
@@ -61,10 +51,34 @@
                     class="max-h-full max-w-full object-contain"
                 >
 
-                
+                <template x-if="!preview">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <x-ui.button
+                            type="button"
+                            @click="$refs.file.click()"
+                            size="sm"
+                            variant="primary"
+                        >
+                            Choose Image
+                        </x-ui.button>
+                    </div>
+                </template>
+
+                <div
+                    x-show="preview"
+                    class="absolute bottom-3 right-3"
+                >
+                    <x-ui.button
+                        type="button"
+                        @click="$refs.file.click()"
+                        size="sm"
+                        variant="ghost"
+                    >
+                        Replace Image
+                    </x-ui.button>
+                </div>
 
             </div>
-
 
             {{-- Caption --}}
 
@@ -120,17 +134,9 @@
                     type="submit"
                     size="sm"
                 >
-                    Upload image
+                    Update Image
                 </x-ui.button>
 
-                <x-ui.button 
-                    type="button" 
-                    @click="$refs.file.click()"
-                    size="sm"
-                    variant="secondary"
-                >
-                    Choose another
-                </x-ui.button>
 
             </div>
 

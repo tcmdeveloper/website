@@ -5,19 +5,22 @@
     <x-ui.card>
 
         <x-ui.header-actions
-            title="Article images"
-            subtitle="View and edit images for this article."
-            :href="route('admin.articles.images.upload', $article)"
-            label="Add new image"
-
+            title="Manage Article Images"
+            subtitle="Upload, organize, and manage the images used in this article."
+            :actions="[
+                'back' => [
+                    'label' => 'Back to Articles',
+                    'href' => route('admin.articles.index'),
+                    'variant' => 'ghost',
+                ],
+                'uploadImage' => [
+                    'label' => 'Upload New Image',
+                    'href' => route('admin.articles.images.upload', $article),
+                ]
+            ]"
         />
 
-
-        {{-- Alert --}}
         <x-ui.alert />
-        
-
-        {{-- Table --}}
 
         <table class="w-full border">
 
@@ -57,14 +60,27 @@
                 @forelse ($images as $image)
                     <tr>
                         <td class="px-6 py-4">
-                            <img
-                                src="{{ $image->path
-                                    ? Storage::url($image->path) 
-                                    : asset('images/default-article.jpg') 
-                                }}"
-                                class="h-16 w-24 rounded object-cover"
-                                alt="{{ $image->alt_text }}"
-                            >
+                            <picture>
+                                @if(Storage::disk('public')->exists($image->path . '.avif'))
+                                    <source
+                                        srcset="{{ Storage::url($image->path . '.avif') }}"
+                                        type="image/avif">
+                                @endif
+
+                                @if(Storage::disk('public')->exists($image->path . '.webp'))
+                                    <source
+                                        srcset="{{ Storage::url($image->path . '.webp') }}"
+                                        type="image/webp">
+                                @endif
+
+                                <img
+                                    src="{{ Storage::url($image->path . '.jpg') }}"
+                                    alt="{{ $image->alt_text }}"
+                                    class="w-20 rounded-xs"
+                                    loading="eager"
+                                    fetchpriority="high"
+                                    decoding="async">
+                            </picture>
                         </td>
 
                         <td class="px-6 py-4">{{ Str::limit($image->caption, 50) }}</td>

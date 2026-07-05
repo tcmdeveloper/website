@@ -23,22 +23,36 @@ class ArticleController extends Controller
 
     public function index(Request $request)
     {
+        $articles = Article::query();
 
-        $articles = Article::query()
-        ->when($request->filled('case'), function ($query) use ($request) {
-            $query->whereHas('criminalCase', function ($q) use ($request) {
-                $q->where('slug', $request->case);
-            });
-        })
-        ->latest()
-        ->paginate();
+        // Filter by case
+        if ($request->filled('case')) {
+            $criminalCase = CriminalCase::where('slug', $request->case)->firstOrFail();
+            $articles->whereBelongsTo($criminalCase);
+            $title = $criminalCase->name . ' Case Articles';
+            $subtitle = 'Manage and organize articles about the ' . $criminalCase->name . ' case.';
+        }
 
-    return view('articles.admin-index', compact('articles'));
+        // Filter by category
+        if ($request->filled('category')) {
+            $category = Category::where('slug', $request->category)->firstOrFail();
+            $articles->whereBelongsTo($category);
+            $title = $category->singular_name . ' Articles';
+            $subtitle = 'Manage and organize articles in the ' . $category->singular_name . ' category.';
+        }
+
+        $articles = $articles->latest()->paginate();
+
+        return view('articles.admin-index', [
+            'articles' => $articles,
+            'title' => $title ?? null,
+            'subtitle' => $subtitle ?? null,
+        ]);
     }
 
 
     // -----------------------------------------------------
-    // INSPECT
+    // SHOW
     // -----------------------------------------------------
 
     public function show(Article $article)
@@ -51,11 +65,29 @@ class ArticleController extends Controller
     // CREATE
     // -----------------------------------------------------
 
-    public function create()
-    {
+    public function create(Request $request)
+    {   
+        $criminalCases = CriminalCase::orderBy('name')->pluck('name', 'id');
         $categories = Category::orderBy('name')->pluck('name', 'id');
         
-        return view('articles.create', compact('categories'));
+        if ($request->filled('case')) {
+            $selectedCase = CriminalCase::where('slug', $request->case)->first();
+            $subtitle = 'Create a new article for the ' . $selectedCase->name . ' case.';
+        }
+
+        if ($request->filled('category')) {
+            $selectedCategory = Category::where('slug', $request->category)->first();
+            $subtitle = 'Create a new article for the ' . Str::singular($selectedCategory->name) . ' category.';
+        }
+        
+        return view('articles.create', [
+            'criminalCases' => $criminalCases,
+            'categories' => $categories,
+            'selectedCase' => $selectedCase ?? null,
+            'selectedCategory' => $selectedCategory ?? null,
+            'title' => $title ?? null,
+            'subtitle' => $subtitle ?? null,
+        ]);
     }
 
 
@@ -77,7 +109,7 @@ class ArticleController extends Controller
             'is_published' => ['nullable', 'boolean'],
         ]);
 
-        $article = Article::create([
+        Article::create([
             'hex' => $generator->uniqueHexId(),
             'title' => $data['title'],
             'slug' => $data['slug'] ?? Str::slug($data['title']),
@@ -89,7 +121,6 @@ class ArticleController extends Controller
             'user_id' => auth()->id(),
             'is_published' => $request->boolean('is_published'),
             'published_at' => $request->boolean('is_published') ? now() : null,
-            
         ]);
 
         return redirect()
@@ -106,7 +137,7 @@ class ArticleController extends Controller
     // -----------------------------------------------------
 
     public function edit(Article $article)
-    {
+    {   
         $criminalCases = CriminalCase::orderBy('name')->pluck('name', 'id');
         $categories = Category::orderBy('name')->pluck('name', 'id');
 
@@ -115,7 +146,6 @@ class ArticleController extends Controller
             'criminalCases' => $criminalCases,
             'categories' => $categories,
         ]);
-
     }
 
 
@@ -176,8 +206,10 @@ class ArticleController extends Controller
     // -----------------------------------------------------
 
     public function selectImage(Article $article)
-    {
-        return view('articles.create-image', compact('article'));
+    {   
+        return view('articles.create-image', [
+            'article' => $article,
+        ]);
     }
 
 
@@ -244,8 +276,25 @@ class ArticleController extends Controller
     // -----------------------------------------------------
 
     public function editImage(Article $article, ArticleImage $image)
-    {
-        return view('articles.edit-image', compact('article', 'image'));
+    {   
+        // Header actions
+        $title = 'Edit Image';
+        $subtitle = 'Replace the image or update its details and metadata.';
+        $actions = [
+            'back' => [
+                'label' => 'Back to Articles',
+                'href' => route('admin.articles.index'),
+                'variant' => 'ghost',
+            ]
+        ];
+
+        return view('articles.edit-image', [
+            'article' => $article,
+            'image' => $image,
+            'title' => $title,
+            'subtitle' => $subtitle,
+            'actions' => $actions
+        ]);
     }
 
 

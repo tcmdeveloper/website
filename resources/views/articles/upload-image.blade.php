@@ -1,3 +1,7 @@
+{{-- resources/views/articles/upload-image.blade.php --}}
+
+
+
 {{-- Featured image --}}
 
             <div class="bg-gray-100 border border-zinc-300 rounded-sm shadow-sm p-4 py-10 flex justify-center items-center w-full mx-auto mb-8">

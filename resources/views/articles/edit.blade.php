@@ -2,20 +2,21 @@
 
 <x-layouts.dashboard>
 
-    <x-ui.card class="max-w-5xl">
+    <x-ui.card>
 
         <x-ui.header-actions
-            title="Edit article"
-            subtitle="Update the article details in the form below."
-            :href="route('admin.categories.create')"
-            label="All articles"
-            buttonVariant="ghost"
+            title="Edit Article"
+            subtitle="Update and manage your true crime article."
+            :actions="[
+                'back' => [
+                    'label' => 'Back to Articles',
+                    'href' => route('admin.articles.index'),
+                    'variant' => 'ghost',
+                ]
+            ]"
         />
 
-
-        {{-- Alert --}}
         <x-ui.alert />
-
 
         <form 
             method="POST" 

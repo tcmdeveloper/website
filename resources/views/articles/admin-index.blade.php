@@ -1,20 +1,40 @@
 {{-- resources/views/articles/admin-index.blade.php --}}
 
-<x-layouts.dashboard>
+{{-- ACTION BUTTONS --}}
 
+@php
+    $actions = [
+        'create' => [
+            'label' => 'Create New Article',
+            'href' => route('admin.articles.create', request()->only('case')),
+            'variant' => 'primary',
+        ]
+    ];
+
+    // Add back button if results are filtered
+    if (request()->filled('case') || request()->filled('category')) {
+        $actions = array_merge([
+            'back' => [
+                'label' => 'Back to Articles',
+                'href' => route('admin.articles.index'),
+                'variant' => 'ghost',
+            ],
+        ], $actions);
+    }
+@endphp
+
+<x-layouts.dashboard>
+    
     <x-ui.card>
 
         <x-ui.header-actions
-            title="Articles"
-            subtitle="Manage the articles for this site."
-            :href="route('admin.articles.create')"
-            label="New article"
+            :title="$title ?? 'True Crime Articles'"
+            :subtitle="$subtitle ?? 'Manage and organize your true crime articles.'"
+            :actions="$actions"
         />
-
 
         <x-ui.alert />
         
-
         <table class="w-full border text-sm">
 
             <thead>
@@ -29,20 +49,48 @@
                 </tr>
             </thead>
 
-
             <tbody>
 
                 @forelse($articles as $article)
 
                     <tr class="border-b border-zinc-100 text-zinc-500">
 
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 flex gap-4 items-center">
+
+                            @php
+                                $featuredImage = $article->featured_image;
+                            @endphp
+
+                            <picture>
+                                @if(Storage::disk('public')->exists($featuredImage->path . '.avif'))
+                                    <source
+                                        srcset="{{ Storage::url($featuredImage->path . '.avif') }}"
+                                        type="image/avif">
+                                @endif
+
+                                @if(Storage::disk('public')->exists($featuredImage->path . '.webp'))
+                                    <source
+                                        srcset="{{ Storage::url($featuredImage->path . '.webp') }}"
+                                        type="image/webp">
+                                @endif
+
+                                <img
+                                    src="{{ Storage::url($featuredImage->path . '.jpg') }}"
+                                    alt="{{ $featuredImage->alt_text }}"
+                                    class="w-20 rounded-xs"
+                                    loading="eager"
+                                    fetchpriority="high"
+                                    decoding="async">
+                            </picture>
+
                             <div class="max-w-md line-clamp-2">
                                 {{ $article->title }}
                             </div>
+
                         </td>
 
                         <td class="px-6 py-4">
+
                             @if($article->isPublished())
                                 <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-800">
                                     Public
@@ -52,16 +100,26 @@
                                     Private
                                 </span>
                             @endif
+
                         </td>
 
                         <td class="px-6 py-4">
-                            <a href="{{ url('admin/articles?case=' . $article->criminalCase?->slug) }}" class="text-sky-800 hover:text-green-600">
+                            <a 
+                                href="{{ url('admin/articles?case=' . $article->criminalCase?->slug) }}" 
+                                class="text-sky-800 hover:text-green-600"
+                            >
                                 {{ $article->criminalCase?->name ?? '...' }}
                             </a>
                         </td>
 
                         <td class="px-6 py-4">
-                            {{ $article->category?->name ?? '...' }}
+                            <a 
+                                href="{{ url('admin/articles?category=' . $article->category?->slug) }}" 
+                                class="text-sky-800 hover:text-green-600"
+                            >
+                                {{ $article->category?->name ?? '...' }}
+                            </a>
+                           
                         </td>
 
                         <td class="px-6 py-4">
@@ -119,7 +177,7 @@
                     <tr>
 
                         <td
-                            colspan="5"
+                            colspan="7"
                             class="px-6 py-12 text-center text-zinc-500"
                         >
                             No articles found.
@@ -136,9 +194,13 @@
 
         {{-- Pagination --}}
 
-        <div class="mt-6 flex justify-end">
-            {{ $articles->links() }}
-        </div>
+        @if(method_exists($criminalCase->documents, 'links'))
+
+            <div class="mt-6 flex justify-end">
+                {{ $criminalCase->documents->links() }}
+            </div>
+
+        @endif
 
 
     </x-ui.card>

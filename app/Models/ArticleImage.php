@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleImage extends Model
 {
@@ -46,6 +47,21 @@ class ArticleImage extends Model
     public function article()
     {
         return $this->belongsTo(Article::class);
+    }
+
+
+    public function getImageUrlAttribute(): string
+    {
+        foreach (['avif', 'webp', 'jpg'] as $extension) {
+
+            $path = "{$this->path}.{$extension}";
+
+            if (Storage::disk('public')->exists($path)) {
+                return Storage::url($path);
+            }
+        }
+
+        return '';
     }
 
     

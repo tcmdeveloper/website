@@ -116,6 +116,26 @@ class Category extends Model
 
 
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Accessors
+    |--------------------------------------------------------------------------
+    |
+    | Generate the publicly accessible URL for the stored image.
+    | This allows `$model->image_url` to return a full URL instead
+    | of the raw storage path saved in the database.
+    |
+    */
+    
+    // Singular name
+    public function getSingularNameAttribute(): string
+    {
+        return Str::singular($this->name);
+    }
+
+
+
     
     
 }
