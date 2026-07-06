@@ -1,6 +1,5 @@
 {{-- resources/views/pages/about.blade.php --}}
 
-
 <x-layouts.app 
     title="About Metrix" 
     subtitle="Who is True Crime Metrix?"
