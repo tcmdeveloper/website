@@ -17,7 +17,7 @@
             id="imageForm"
             method="POST"
             action="{{ route('admin.articles.images.update', [$article, $image]) }}"
-            x-data="imageUploader('{{ $image?->image_url ?? '' }}')"
+            x-data="imageUploader('{{ $image?->image_path ?? '' }}')"
             @submit.prevent="submit"
             class="space-y-6"
         >
@@ -104,26 +104,26 @@
             </div>
 
 
-            {{-- Source --}}
+            {{-- Credit name --}}
 
             <div>
                 <x-ui.input
-                    name="source"
+                    name="credit_name"
                     type="text"
-                    label="Image source"
-                    :value="old('source', $image->source)"
+                    label="Credit source"
+                    :value="old('credit_name', $image->credit_name)"
                 />
             </div>
 
 
-            {{-- Source URL --}}
+            {{-- Credit URL --}}
 
             <div>
                 <x-ui.input
-                    name="source_url"
+                    name="credit_url"
                     type="text"
-                    label="Source URL"
-                    :value="old('source_url', $image->source_url)"
+                    label="Credit URL"
+                    :value="old('credit_url', $image->credit_url)"
                 />
             </div>
 

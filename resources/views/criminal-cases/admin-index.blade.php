@@ -5,58 +5,89 @@
     <x-ui.card>
 
         <x-ui.header-actions
-            title="Criminal Cases"
-            subtitle="Manage the criminal cases for this site."
-            :href="route('admin.criminal-cases.create')"
-            label="New criminal case"
+            :title="$title ?? 'Criminal Cases'"
+            :subtitle="$subtitle ?? 'Manage and organize your criminal cases.'"
+            :actions="[
+                'create' => [
+                    'label' => 'Create New Article',
+                    'href' => route('admin.articles.create', request()->only('case')),
+                    'variant' => 'primary',
+                ]
+            ]"
         />
 
+        <x-ui.alert />
 
-        {{-- Table --}}
-
-        <table class="w-full border">
+        <table class="w-full border text-sm">
 
             <thead>
-                <tr class="border-b border-zinc-200 bg-zinc-50 text-left text-sm text-zinc-600">
-
-                    <th class="px-6 py-4 font-medium">
-                        Name
-                        
-                    </th>
-
-                    <th class="px-6 py-4 font-medium">
-                        Slug
-                    </th>
-
-                    <th class="px-6 py-4 font-medium">
-                        Articles
-                    </th>
-
-                    <th class="px-6 py-4 font-medium">
-                        Created
-                    </th>
-
-                    <th class="px-6 py-4 w-32"></th>
-
+                <tr class="bg-zinc-50 border-b border-zinc-200 text-left text-zinc-600 font-medium">
+                    <th class="px-6 py-4 max-w-[12rem]">Name</th>
+                    <th class="px-6 py-4">Visibility</th>
+                    <th class="px-6 py-4">Articles</th>
+                    <th class="px-6 py-4">Documents</th>
+                    <th class="px-6 py-4">Views</th>
+                    <th class="px-6 py-4">Created</th>
+                    <th class="px-6 py-4"></th>
                 </tr>
             </thead>
 
             <tbody>
 
-                @forelse($criminalCases as $case)
+                @forelse($criminalCases as $criminalCase)
 
-                    <tr class="border-b border-zinc-100 text-xs">
+                    <tr class="border-b border-zinc-100">
 
-                        <td class="px-6 py-4 text-zinc-500 font-medium">
-                            <div class="flex items-stretch">
-                                <span>
-                                    {{ $case->name }}
-                                </span>
+                        <td class="px-6 py-4 flex gap-4 items-center">
+
+                            {{-- @php
+                                $featuredImage = $article->featured_image;
+                            @endphp
+
+                            <picture>
+                                @if(Storage::disk('public')->exists($featuredImage->path . '.avif'))
+                                    <source
+                                        srcset="{{ Storage::url($featuredImage->path . '.avif') }}"
+                                        type="image/avif">
+                                @endif
+
+                                @if(Storage::disk('public')->exists($featuredImage->path . '.webp'))
+                                    <source
+                                        srcset="{{ Storage::url($featuredImage->path . '.webp') }}"
+                                        type="image/webp">
+                                @endif
+
+                                <img
+                                    src="{{ Storage::url($featuredImage->path . '.jpg') }}"
+                                    alt="{{ $featuredImage->alt_text }}"
+                                    class="w-20 rounded-xs"
+                                    loading="eager"
+                                    fetchpriority="high"
+                                    decoding="async">
+                            </picture> --}}
+
+                            <div class="max-w-md line-clamp-2">
+                                {{ $criminalCase->name }}
                             </div>
+
+                        </td>
+
+                        <td class="px-6 py-4">
+
+                            @if($criminalCase->isPublished())
+                                <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-800">
+                                    Public
+                                </span>
+                            @else
+                                <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">
+                                    Private
+                                </span>
+                            @endif
+
                         </td>
 
                         <td class="px-6 py-4 text-zinc-500">
-                            {{ $case->slug }}
+                            {{ number_format($criminalCase->article_count) }}
                         </td>
 
                         <td class="px-6 py-4">
@@ -64,7 +95,7 @@
                         </td>
 
                         <td class="px-6 py-4 text-zinc-500">
-                            {{ $case->created_at->format('M j, Y') }}
+                            {{ $criminalCase->created_at->format('M j, Y') }}
                         </td>
 
                         <td class="px-6 py-4">
@@ -74,14 +105,14 @@
                                 <x-ui.button
                                     size="xs"
                                     variant="ghost"
-                                    href="{{ route('admin.criminal-cases.edit', $case) }}"
+                                    href="{{ route('admin.criminal-cases.edit', $criminalCase) }}"
                                 >
                                     Edit
                                 </x-ui.button>
 
                                 <form
                                     method="POST"
-                                    action="{{ route('admin.criminal-cases.destroy', $case) }}"
+                                    action="{{ route('admin.criminal-cases.destroy', $criminalCase) }}"
                                     onsubmit="return confirm('Are you sure you want to delete this criminal case? This action cannot be undone.')"
                                 >
                                     @csrf

@@ -69,39 +69,22 @@
         
         {{-- FEATURED ARTICLE IMAGE --}}
 
-        <picture>
-            @if(Storage::disk('public')->exists($featuredImage->path . '.avif'))
-                <source
-                    srcset="{{ Storage::url($featuredImage->path . '.avif') }}"
-                    type="image/avif">
-            @endif
-
-            @if(Storage::disk('public')->exists($featuredImage->path . '.webp'))
-                <source
-                    srcset="{{ Storage::url($featuredImage->path . '.webp') }}"
-                    type="image/webp">
-            @endif
-
-            <img
-                src="{{ Storage::url($featuredImage->path . '.jpg') }}"
-                alt="{{ $featuredImage->alt_text }}"
-                class="max-w-3xl w-full mb-4 rounded-xs"
-                loading="eager"
-                fetchpriority="high"
-                decoding="async">
-        </picture>
+        <x-ui.image
+            :image="$article->display_image"
+            class="aspect-video w-full rounded"
+        />
 
 
-        @if ($featuredImage && $featuredImage->source)
+        @if ($featuredImage && $featuredImage->credit_name)
             <div class="max-w-3xl flex flex-col gap-4 border border-amber-800/10 w-full px-2.5 py-1.5 text-xs mb-1 bg-amber-50/50">
                 <span>
                     Image source:
                     <a
-                        href="{{ $featuredImage->source_url ?: '#' }}"
+                        href="{{ $featuredImage->credit_url ?: '#' }}"
                         target="_blank"
                         class="link ml-1"
                     >
-                        {{ $featuredImage->source }}
+                        {{ $featuredImage->credit_name }}
                         <x-ui.icon
                             name="arrow-top-right-on-square"
                             size="xs"

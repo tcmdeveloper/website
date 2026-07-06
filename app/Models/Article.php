@@ -13,6 +13,8 @@ class Article extends Model
 {
     use HasFactory;
 
+    public const PER_PAGE = 12;
+
     /*
     |--------------------------------------------------------------------------
     | Mass Assignable Fields
@@ -85,12 +87,19 @@ class Article extends Model
         return $this->belongsTo(Category::class);
     }
 
+
+
     // Images
     public function images()
     {
-        return $this->hasMany(ArticleImage::class);
+        return $this->morphMany(Image::class, 'imageable');
     }
 
+    public function featuredImage()
+    {
+        return $this->morphOne(Image::class, 'imageable')
+            ->where('is_featured', true);
+    }
     /*
     |--------------------------------------------------------------------------
     | Accessors
@@ -101,27 +110,23 @@ class Article extends Model
     | of the raw storage path saved in the database.
     |
     */
-    
-    // Image URL attribute
-    public function getFeaturedImageAttribute()
-    {
-        $image = $this->images()->where('is_featured', true)->first()
-            ?? $this->images()->first()
-            ?? (object) [
-                'path' => asset('images/default-article.jpg'),
+
+
+
+    protected function displayImage(): Attribute
+{
+    return Attribute::make(
+        get: fn () => $this->featuredImage
+            ?? new Image([
+                'image_path' => 'images/default-article',
                 'alt_text' => 'Default article image',
-                'caption' => null,
-                'source' => null,
-                'source_url' => null,
-            ];
+            ]),
+    );
+}
 
-        
 
-        return $image;
-        // return $image
-        //     ? asset('storage/' . $image->path)
-        //     : asset('images/default-article.jpg');
-    }
+
+
 
     // Get article HTML content for markdown
     public function getExcerptHtmlAttribute()

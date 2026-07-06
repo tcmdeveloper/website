@@ -61,20 +61,20 @@
                     <tr>
                         <td class="px-6 py-4">
                             <picture>
-                                @if(Storage::disk('public')->exists($image->path . '.avif'))
+                                @if(Storage::disk('public')->exists($image->image_path . '.avif'))
                                     <source
-                                        srcset="{{ Storage::url($image->path . '.avif') }}"
+                                        srcset="{{ Storage::url($image->image_path . '.avif') }}"
                                         type="image/avif">
                                 @endif
 
-                                @if(Storage::disk('public')->exists($image->path . '.webp'))
+                                @if(Storage::disk('public')->exists($image->image_path . '.webp'))
                                     <source
-                                        srcset="{{ Storage::url($image->path . '.webp') }}"
+                                        srcset="{{ Storage::url($image->image_path . '.webp') }}"
                                         type="image/webp">
                                 @endif
 
                                 <img
-                                    src="{{ Storage::url($image->path . '.jpg') }}"
+                                    src="{{ Storage::url($image->image_path . '.jpg') }}"
                                     alt="{{ $image->alt_text }}"
                                     class="w-20 rounded-xs"
                                     loading="eager"

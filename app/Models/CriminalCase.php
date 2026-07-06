@@ -91,4 +91,10 @@ class CriminalCase extends Model
             get: fn () => number_format($this->views),
         );
     }
+
+    // Published check
+    public function isPublished(): bool
+    {
+        return $this->is_published && $this->published_at !== null;
+    }
 }

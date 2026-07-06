@@ -8,31 +8,16 @@
     'url' => '#',
 ])
 
+
+
 <article class="border border-gray-200 rounded-sm overflow-hidden bg-white hover:shadow-md transition-shadow duration-200">
         
     {{-- Featured image --}}
     <a href="{{ $url }}" class="block">
-        <picture>
-            @if(Storage::disk('public')->exists($featuredImage->path . '.avif'))
-                <source
-                    srcset="{{ Storage::url($featuredImage->path . '.avif') }}"
-                    type="image/avif">
-            @endif
-
-            @if(Storage::disk('public')->exists($featuredImage->path . '.webp'))
-                <source
-                    srcset="{{ Storage::url($featuredImage->path . '.webp') }}"
-                    type="image/webp">
-            @endif
-
-            <img
-                src="{{ Storage::url($featuredImage->path . '.jpg') }}"
-                alt="{{ $featuredImage->alt_text }}"
-                class="w-full h-48 object-cover"
-                loading="eager"
-                fetchpriority="high"
-                decoding="async">
-        </picture>
+        <x-ui.image
+            :image="$featuredImage"
+            class="w-full rounded-sm h-48 object-cover"
+         />
     </a>
 
     {{-- Content --}}

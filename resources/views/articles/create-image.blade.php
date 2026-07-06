@@ -87,26 +87,26 @@
             </div>
 
 
-            {{-- Source --}}
+            {{-- Credit name --}}
 
             <div>
                 <x-ui.input
-                    name="source"
+                    name="credit_name"
                     type="text"
-                    label="Image source"
-                    :value="old('source', $article->source)"
+                    label="Credit source"
+                    :value="old('credit_name', $article->credit_name)"
                 />
             </div>
 
 
-            {{-- Source URL --}}
+            {{-- Credit URL --}}
 
             <div>
                 <x-ui.input
-                    name="source_url"
+                    name="credit_url"
                     type="text"
-                    label="Source URL"
-                    :value="old('source_url', $article->source_url)"
+                    label="Credit URL"
+                    :value="old('credit_url', $article->credit_url)"
                 />
             </div>
 

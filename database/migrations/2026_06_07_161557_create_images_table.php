@@ -6,28 +6,30 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    // RUN MIGRATION
     public function up(): void
     {
-        Schema::create('article_images', function (Blueprint $table) {
+        Schema::create('images', function (Blueprint $table) {
 
             // Identifiers
             $table->id();
             $table->string('hex', 11)->unique();
 
+            // Polymorphic relationship
+            $table->morphs('imageable');
+
             // Core content
-            $table->foreignId('article_id')->constrained()->cascadeOnDelete();
-            $table->string('path');
-            $table->string('caption')->nullable();
-            $table->string('source')->nullable();
-            $table->string('source_url')->nullable();
+            $table->string('image_path');
             $table->string('alt_text')->nullable();
+            $table->text('caption')->nullable();
+            $table->string('credit_name')->nullable();
+            $table->string('credit_url')->nullable();
+
+            // Display
             $table->boolean('is_featured')->default(false);
-            $table->integer('sort_order')->default(0);
-            
-            // Relations
+            $table->unsignedInteger('sort_order')->default(0);
+
+            // Uploaded by
             $table->foreignId('user_id')
                 ->nullable()
                 ->constrained()
@@ -42,6 +44,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('article_images');
+        Schema::dropIfExists('images');
     }
+
 };

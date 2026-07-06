@@ -2,16 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\ArticleImage;
+use App\Models\Image;
 use Illuminate\Database\Seeder;
 
-class ArticleImageSeeder extends Seeder
+class ImageSeeder extends Seeder
 {
     public function run(): void
     {
         // SEED FROM IMPORT DATABASE
 
-        $model = new ArticleImage();
+        $model = new Image();
         
         $items = $model::on('mysql_import')->get();
 
@@ -20,12 +20,13 @@ class ArticleImageSeeder extends Seeder
             $model::create([
                 'id' => $item->id,
                 'hex' => $item->hex,
-                'article_id' => $item->article_id,
-                'path' => $item->path,
-                'caption' => $item->caption,
-                'source' => $item->source,
-                'source_url' => $item->source_url,
+                'imageable_type' => $item->imageable_type,
+                'imageable_id' => $item->imageable_id,
+                'image_path' => $item->image_path,
                 'alt_text' => $item->alt_text,
+                'caption' => $item->caption,
+                'credit_name' => $item->credit_name,
+                'credit_url' => $item->credit_url,
                 'is_featured' => $item->is_featured,
                 'sort_order' => $item->sort_order,
                 'user_id' => $item->user_id,

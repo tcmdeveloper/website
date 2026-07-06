@@ -20,9 +20,15 @@ class CriminalCaseController extends Controller
     // INDEX
     // -----------------------------------------------------
 
-    public function index()
+    public function index(Request $request)
     {
-        $criminalCases = CriminalCase::orderBy('name')->paginate(10);
+        $criminalCases = CriminalCase::query();
+
+        //
+        // Put filters here if required.
+        //
+
+        $criminalCases = $criminalCases->latest()->paginate();
         
         return view('criminal-cases.admin-index', [
             'criminalCases' => $criminalCases

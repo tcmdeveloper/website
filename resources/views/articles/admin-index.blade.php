@@ -57,31 +57,10 @@
 
                         <td class="px-6 py-4 flex gap-4 items-center">
 
-                            @php
-                                $featuredImage = $article->featured_image;
-                            @endphp
-
-                            <picture>
-                                @if(Storage::disk('public')->exists($featuredImage->path . '.avif'))
-                                    <source
-                                        srcset="{{ Storage::url($featuredImage->path . '.avif') }}"
-                                        type="image/avif">
-                                @endif
-
-                                @if(Storage::disk('public')->exists($featuredImage->path . '.webp'))
-                                    <source
-                                        srcset="{{ Storage::url($featuredImage->path . '.webp') }}"
-                                        type="image/webp">
-                                @endif
-
-                                <img
-                                    src="{{ Storage::url($featuredImage->path . '.jpg') }}"
-                                    alt="{{ $featuredImage->alt_text }}"
-                                    class="w-20 rounded-xs"
-                                    loading="eager"
-                                    fetchpriority="high"
-                                    decoding="async">
-                            </picture>
+                            <x-ui.image
+                                :image="$article->display_image"
+                                class="w-20"
+                            />
 
                             <div class="max-w-md line-clamp-2">
                                 {{ $article->title }}
@@ -194,10 +173,10 @@
 
         {{-- Pagination --}}
 
-        @if(method_exists($criminalCase->documents, 'links'))
+        @if(method_exists($articles, 'links'))
 
             <div class="mt-6 flex justify-end">
-                {{ $criminalCase->documents->links() }}
+                {{ $articles->links() }}
             </div>
 
         @endif

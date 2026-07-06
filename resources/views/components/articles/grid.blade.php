@@ -7,7 +7,7 @@
         <x-cards.article
             :title="$article->title"
             :excerpt="$article->excerpt"
-            :featuredImage="$article->featured_image"
+            :featuredImage="$article->display_image"
             :authorName="$article->author->display_name"
             :views="$article->views"
             :publishedAt="$article->published_at"

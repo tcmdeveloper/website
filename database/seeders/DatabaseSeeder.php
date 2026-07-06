@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             CriminalCaseSeeder::class,
             CategorySeeder::class,
             ArticleSeeder::class,
-            ArticleImageSeeder::class,
+            ImageSeeder::class,
             TranscriptionSeeder::class,
             EmailChangeRequestSeeder::class,
             FailedJobSeeder::class,

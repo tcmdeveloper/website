@@ -36,7 +36,9 @@ class PageController extends Controller
     {
         $articles = Article::published()
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            // ->paginate(config('pagination.per_page'))
+            ->paginate(Article::PER_PAGE);
+            
 
         return view('pages.home', compact('articles'));
     }
