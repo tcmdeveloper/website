@@ -6,7 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    
     // RUN MIGRATION
+
     public function up(): void
     {
         Schema::create('images', function (Blueprint $table) {
@@ -39,9 +41,9 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    
+    // REVERSE MIGRATION
+
     public function down(): void
     {
         Schema::dropIfExists('images');

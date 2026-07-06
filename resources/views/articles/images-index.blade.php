@@ -60,27 +60,10 @@
                 @forelse ($images as $image)
                     <tr>
                         <td class="px-6 py-4">
-                            <picture>
-                                @if(Storage::disk('public')->exists($image->image_path . '.avif'))
-                                    <source
-                                        srcset="{{ Storage::url($image->image_path . '.avif') }}"
-                                        type="image/avif">
-                                @endif
-
-                                @if(Storage::disk('public')->exists($image->image_path . '.webp'))
-                                    <source
-                                        srcset="{{ Storage::url($image->image_path . '.webp') }}"
-                                        type="image/webp">
-                                @endif
-
-                                <img
-                                    src="{{ Storage::url($image->image_path . '.jpg') }}"
-                                    alt="{{ $image->alt_text }}"
-                                    class="w-20 rounded-xs"
-                                    loading="eager"
-                                    fetchpriority="high"
-                                    decoding="async">
-                            </picture>
+                            <x-ui.image
+                                :image="$image"
+                                class="w-20"
+                            />
                         </td>
 
                         <td class="px-6 py-4">{{ Str::limit($image->caption, 50) }}</td>

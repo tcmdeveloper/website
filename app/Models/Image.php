@@ -64,9 +64,9 @@ class Image extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function article()
+    public function imageable()
     {
-        return $this->belongsTo(Article::class);
+        return $this->morphTo();
     }
 
 
@@ -76,31 +76,30 @@ class Image extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected function imageUrl(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                foreach (['avif', 'webp', 'jpg'] as $extension) {
-                    $path = "{$this->image_path}.{$extension}";
+protected function imageUrl(): Attribute
+{
+    return Attribute::make(
+        get: function () {
+            foreach (['avif', 'webp', 'jpg'] as $extension) {
+                $path = "{$this->image_path}.{$extension}";
 
-                    if (Storage::disk('public')->exists($path)) {
-                        return Storage::url($path);
-                    }
+                if (Storage::disk('public')->exists($path)) {
+                    return Storage::url($path);
                 }
-
-                // Fallback for images stored in /public
-                foreach (['avif', 'webp', 'jpg'] as $extension) {
-                    $path = public_path("{$this->image_path}.{$extension}");
-
-                    if (file_exists($path)) {
-                        return asset("{$this->image_path}.{$extension}");
-                    }
-                }
-
-                return '';
             }
-        );
-    }
+
+            foreach (['avif', 'webp', 'jpg'] as $extension) {
+                $path = public_path("{$this->image_path}.{$extension}");
+
+                if (file_exists($path)) {
+                    return asset("{$this->image_path}.{$extension}");
+                }
+            }
+
+            return '';
+        },
+    );
+}
 
     
 }

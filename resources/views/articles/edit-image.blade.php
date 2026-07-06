@@ -2,7 +2,6 @@
 
 <x-layouts.dashboard>
 
-
     <x-ui.card class="max-w-4xl">
 
         <x-ui.header-actions
@@ -17,7 +16,7 @@
             id="imageForm"
             method="POST"
             action="{{ route('admin.articles.images.update', [$article, $image]) }}"
-            x-data="imageUploader('{{ $image?->image_path ?? '' }}')"
+            x-data="imageUploader('{{ $image?->image_url ?? '' }}')"
             @submit.prevent="submit"
             class="space-y-6"
         >
