@@ -4,6 +4,7 @@
     'title' => null,
     'subtitle' => null,
     'actions' => [],
+
 ])
 
 <div class="flex items-center justify-between mb-6 space-x-2">
@@ -23,13 +24,24 @@
     @if($actions)
         
         @foreach($actions as $action)
+
             <x-ui.button
                 href="{{ $action['href'] }}"
                 size="sm"
                 variant="{{ 
                     $action['variant'] ?? 'primary'
                 }}"
-            >
+            >   
+
+                {{-- Show icon if set in actions --}}
+                @if(isset($action['icon']))
+                    <x-dynamic-component
+                        :component="$action['icon']"
+                        class="w-3 h-3"
+                    />
+                @endif
+
+
                 {{ $action['label'] }}
             </x-ui.button>
         @endforeach

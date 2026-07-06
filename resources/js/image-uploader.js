@@ -1,9 +1,11 @@
 import Cropper from 'cropperjs';
 
-export default (initialPreview = '') => ({
+export default (initialPreview = '', initialFeatured = false) => ({
     cropper: null,
     preview: initialPreview,
     croppedImage: '',
+
+    featured: initialFeatured,
 
     selectImage(event) {
 

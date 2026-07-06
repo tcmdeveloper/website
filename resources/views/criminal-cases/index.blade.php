@@ -9,14 +9,22 @@
 
 
         {{-- Criminal Case Grid --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
 
             @forelse($criminalCases as $case)
 
                 <a
                     href="{{ route('cases.show', $case->slug) }}"
                     class="group block rounded-xl border border-zinc-200 p-6 hover:shadow-md hover:border-green-400 transition bg-white"
-                >
+                >   
+
+                    {{-- Featured image --}}
+
+                    <x-ui.image
+                        :image="$case->featuredImage"
+                        class="w-full rounded-sm h-48 object-cover mb-4"
+                    />
+    
 
                     {{-- Case name --}}
                     <h2 class="text-lg font-semibold group-hover:text-green-600 transition">

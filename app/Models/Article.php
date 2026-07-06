@@ -114,15 +114,15 @@ class Article extends Model
 
 
     protected function displayImage(): Attribute
-{
-    return Attribute::make(
-        get: fn () => $this->featuredImage
-            ?? new Image([
-                'image_path' => 'images/default-article',
-                'alt_text' => 'Default article image',
-            ]),
-    );
-}
+    {
+        return Attribute::make(
+            get: fn () => $this->featuredImage
+                ?? new Image([
+                    'image_path' => 'images/default-article',
+                    'alt_text' => 'Default article image',
+                ]),
+        );
+    }
 
 
 

@@ -35,9 +35,9 @@
 
 {{-- Pagination --}}
 
-@if($articles->hasPages())
+{{-- @if($articles->hasPages())
     <div class="mt-12">
         {{ $articles->links() }}
     </div>
-@endif
+@endif --}}
 

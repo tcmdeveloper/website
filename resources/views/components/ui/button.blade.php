@@ -27,7 +27,7 @@
     $variants = [
         'primary' => '
             mt-1
-            gap-3
+            gap-2
             bg-gradient-to-r
             from-blue-600 to-sky-500
             border-blue-500
@@ -37,7 +37,7 @@
 
         'secondary' => '
             mt-1
-            gap-3
+            gap-2
             bg-gradient-to-r
             from-slate-600 to-gray-500
             border-slate-500
@@ -47,7 +47,7 @@
 
         'danger' => '
             mt-1
-            gap-3
+            gap-2
             bg-gradient-to-r
             from-red-600 to-orange-500
             border-red-500
@@ -57,7 +57,7 @@
 
         'success' => '
             mt-1
-            gap-3
+            gap-2
             bg-gradient-to-r
             from-green-600 to-lime-500
             border-green-500
@@ -67,7 +67,7 @@
 
         'warning' => '
             mt-1
-            gap-3
+            gap-2
             bg-gradient-to-r
             from-indigo-600 to-blue-500
             border-indigo-500
@@ -77,7 +77,7 @@
 
         'ghost' => '
             mt-1
-            gap-3
+            gap-2
             bg-gradient-to-t
             from-gray-100 via-gray-50 to-white
             border-gray-300

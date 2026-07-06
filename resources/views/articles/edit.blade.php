@@ -11,6 +11,7 @@
                 'back' => [
                     'label' => 'Back to Articles',
                     'href' => route('admin.articles.index'),
+                    'icon' => 'heroicon-o-check',
                     'variant' => 'ghost',
                 ]
             ]"

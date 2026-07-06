@@ -21,7 +21,8 @@ class CriminalCaseController extends Controller
     public function index()
     {
         $criminalCases = CriminalCase::query()
-            ->orderBy('name')
+            ->published()
+            ->latestFirst()
             ->withCount('documents')
             ->paginate(12);
         

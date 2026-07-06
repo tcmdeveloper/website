@@ -9,8 +9,8 @@
             :subtitle="$subtitle ?? 'Manage and organize your criminal cases.'"
             :actions="[
                 'create' => [
-                    'label' => 'Create New Article',
-                    'href' => route('admin.articles.create', request()->only('case')),
+                    'label' => 'Create New Case',
+                    'href' => route('admin.criminal-cases.create', request()->only('case')),
                     'variant' => 'primary',
                 ]
             ]"
@@ -22,7 +22,7 @@
 
             <thead>
                 <tr class="bg-zinc-50 border-b border-zinc-200 text-left text-zinc-600 font-medium">
-                    <th class="px-6 py-4 max-w-[12rem]">Name</th>
+                    <th class="px-6 py-4 w-[24rem]">Name</th>
                     <th class="px-6 py-4">Visibility</th>
                     <th class="px-6 py-4">Articles</th>
                     <th class="px-6 py-4">Documents</th>
@@ -35,36 +35,15 @@
             <tbody>
 
                 @forelse($criminalCases as $criminalCase)
-
+                    
                     <tr class="border-b border-zinc-100">
 
                         <td class="px-6 py-4 flex gap-4 items-center">
 
-                            {{-- @php
-                                $featuredImage = $article->featured_image;
-                            @endphp
-
-                            <picture>
-                                @if(Storage::disk('public')->exists($featuredImage->path . '.avif'))
-                                    <source
-                                        srcset="{{ Storage::url($featuredImage->path . '.avif') }}"
-                                        type="image/avif">
-                                @endif
-
-                                @if(Storage::disk('public')->exists($featuredImage->path . '.webp'))
-                                    <source
-                                        srcset="{{ Storage::url($featuredImage->path . '.webp') }}"
-                                        type="image/webp">
-                                @endif
-
-                                <img
-                                    src="{{ Storage::url($featuredImage->path . '.jpg') }}"
-                                    alt="{{ $featuredImage->alt_text }}"
-                                    class="w-20 rounded-xs"
-                                    loading="eager"
-                                    fetchpriority="high"
-                                    decoding="async">
-                            </picture> --}}
+                            <x-ui.image
+                                :image="$criminalCase->display_image"
+                                class="w-20"
+                            />
 
                             <div class="max-w-md line-clamp-2">
                                 {{ $criminalCase->name }}
@@ -91,7 +70,11 @@
                         </td>
 
                         <td class="px-6 py-4">
-                            0
+                            {{ number_format($criminalCase->document_count) }}
+                        </td>
+
+                        <td class="px-6 py-4">
+                           {{ number_format($criminalCase->formatted_views) }}
                         </td>
 
                         <td class="px-6 py-4 text-zinc-500">
@@ -108,6 +91,14 @@
                                     href="{{ route('admin.criminal-cases.edit', $criminalCase) }}"
                                 >
                                     Edit
+                                </x-ui.button>
+
+                                <x-ui.button
+                                    size="xs"
+                                    variant="ghost"
+                                    href="{{ route('admin.criminal-cases.images', $criminalCase) }}"
+                                >
+                                    Images
                                 </x-ui.button>
 
                                 <form

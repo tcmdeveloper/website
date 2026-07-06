@@ -4,9 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CriminalCase;
+use App\Models\Image;
 use App\Services\RandomStringGenerator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Encoders\AvifEncoder;
+use Intervention\Image\Encoders\JpegEncoder;
+use Intervention\Image\Encoders\WebpEncoder;
+use Intervention\Image\ImageManager;
 
 
 // -----------------------------------------------------
@@ -53,7 +61,7 @@ class CriminalCaseController extends Controller
     public function store(RandomStringGenerator $generator, Request $request)
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:100', 'unique:categories,name'],
+            'name' => ['required', 'string', 'max:100', 'unique:criminal_cases,name'],
             'description' => ['required', 'string', 'max:300'],
         ]);
 
@@ -68,8 +76,339 @@ class CriminalCaseController extends Controller
 
         CriminalCase::create($validated);
 
-        return redirect( route('admin.criminal-cases.index') )->with('success', 'New case added.');
+        return redirect( route('admin.criminal-cases.index') )->with('status', [
+            'type' => 'status',
+            'message' => 'New case added.'
+        ]);
 
+    }
+
+
+
+    // -----------------------------------------------------
+    // EDIT
+    // -----------------------------------------------------
+    
+    public function edit(CriminalCase $criminalCase)
+    {
+        return view('criminal-cases.edit', compact('criminalCase'));
+    }
+
+
+
+    // -----------------------------------------------------
+    // UPDATE
+    // -----------------------------------------------------
+
+    public function update(Request $request, CriminalCase $criminalCase)
+    {   
+        
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:100', Rule::unique('criminal_cases', 'name')->ignore($criminalCase->id)],
+            'description' => ['required', 'string', 'max:300'],
+            'is_published' => ['required', 'boolean']
+        ]);
+
+        $validated['slug'] = Str::slug($validated['name']);
+
+        // Ensure the generated slug is unique
+        validator($validated, [
+            'slug' => ['required', 'string', 'max:100', Rule::unique('criminal_cases', 'slug')->ignore($criminalCase->id)],
+        ])->validate();
+
+
+        // Set published date if first publish
+
+        if ($validated['is_published'] && ! $criminalCase->published_at) {
+            $validated['published_at'] = now();
+        }
+
+        $criminalCase->update($validated);
+
+        return redirect()
+            ->route('admin.criminal-cases.index')
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Criminal case updated.',
+            ]);
+            
+    }
+
+
+    
+
+
+
+
+
+
+
+
+
+
+     // -----------------------------------------------------
+    // DESTROY
+    // -----------------------------------------------------
+
+    public function destroy(CriminalCase $criminalCase)
+    {
+        foreach ($criminalCase->images as $image) {
+            if ($image->path && Storage::disk('public')->exists($image->display_path)) {
+                Storage::disk('public')->delete($image->display_path);
+            }
+        }
+
+        $criminalCase->images()->delete();
+
+        $criminalCase->delete();
+
+        return redirect()
+            ->route('admin.criminal-cases.index')
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Criminal Case deleted.',
+            ]);
+    }
+
+
+
+
+
+
+
+
+
+    // -----------------------------------------------------
+    // IMAGES INDEX
+    // -----------------------------------------------------
+
+    public function imagesIndex(CriminalCase $criminalCase)
+    {
+        $images = $criminalCase->images()
+            ->latest()
+            ->paginate(10);
+
+        return view('criminal-cases.images-index', [
+            'criminalCase' => $criminalCase,
+            'images' => $images,
+        ]);
+    }
+
+
+    // -----------------------------------------------------
+    // SELECT IMAGE
+    // -----------------------------------------------------
+
+    public function selectImage(CriminalCase $criminalCase)
+    {   
+        return view('criminal-cases.create-image', [
+            'criminalCase' => $criminalCase,
+        ]);
+    }
+
+
+    // -----------------------------------------------------
+    // STORE ARTICLE IMAGE
+    // -----------------------------------------------------
+    
+    public function storeImage(Request $request, CriminalCase $criminalCase)
+    {
+        $validated = $request->validate([
+            'cropped_image' => ['required', 'string'],
+            'caption' => ['nullable', 'string', 'max:255'],
+            'alt_text' => ['nullable', 'string', 'max:255'],
+            'credit_name' => ['nullable', 'string', 'max:255'],
+            'credit_url' => ['nullable', 'url', 'max:255'],
+            'is_featured' => ['nullable', 'boolean'],
+        ]);
+
+        $image = preg_replace(
+            '#^data:image/\w+;base64,#i',
+            '',
+            $validated['cropped_image']
+        );
+
+        $imageData = base64_decode($image);
+
+        if ($imageData === false) {
+            return back()->with('status', [
+                'type' => 'error',
+                'message' => 'Invalid image data.',
+            ]);
+        }
+
+
+        // Upload images to article.hex directory
+
+        $filename = (string) Str::uuid();
+        $path = "articles/{$criminalCase->hex}/{$filename}";
+
+        $manager = ImageManager::usingDriver(Driver::class);
+        $image = $manager->decodeBinary($imageData);
+
+
+        Storage::disk('public')->put(
+            "{$path}.avif",
+            (string) $image->encode(new AvifEncoder(quality: 80))
+        );
+
+        Storage::disk('public')->put(
+            "{$path}.webp",
+            (string) $image->encode(new WebpEncoder(quality: 85))
+        );
+
+        Storage::disk('public')->put(
+            "{$path}.jpg",
+            (string) $image->encode(new JpegEncoder(quality: 90))
+        );
+
+
+        // If this image is becoming featured, clear any existing featured image.
+        if (!empty($validated['is_featured'])) {
+            $criminalCase->images()->update([
+                'is_featured' => false,
+            ]);
+        }
+
+
+        $criminalCase->images()->create([
+            'image_path'   => $path,
+            'caption'      => $validated['caption'],
+            'alt_text'     => $validated['alt_text'],
+            'credit_name'  => $validated['credit_name'],
+            'credit_url'   => $validated['credit_url'],
+            'is_featured'  => $validated['is_featured'] ?? false,
+        ]);
+
+
+        return redirect()
+            ->route('admin.criminal-cases.images', $criminalCase)
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Image uploaded successfully.',
+            ]);
+    }
+
+    
+    // -----------------------------------------------------
+    // EDIT ARTICLE IMAGE
+    // -----------------------------------------------------
+
+    public function editImage(CriminalCase $criminalCase, Image $image)
+    {   
+        // Header actions
+        $title = 'Edit Image';
+        $subtitle = 'Replace the image or update its details and metadata.';
+        $actions = [
+            'back' => [
+                'label' => 'Back to Articles',
+                'href' => route('admin.criminal-cases.index'),
+                'variant' => 'ghost',
+            ]
+        ];
+
+        return view('criminal-cases.edit-image', [
+            'criminalCase' => $criminalCase,
+            'image' => $image,
+            'title' => $title,
+            'subtitle' => $subtitle,
+            'actions' => $actions
+        ]);
+    }
+
+
+    // -----------------------------------------------------
+    // UPDATE ARTICLE IMAGE
+    // -----------------------------------------------------
+
+    public function updateImage(Request $request, CriminalCase $criminalCase, Image $image)
+    {
+
+        $validated = $request->validate([
+            'cropped_image' => ['nullable', 'string'],
+            'caption' => ['nullable', 'string', 'max:255'],
+            'alt_text' => ['nullable', 'string', 'max:255'],
+            'credit_name' => ['nullable', 'string', 'max:255'],
+            'credit_url' => ['nullable', 'url', 'max:255'],
+            'is_featured' => ['nullable', 'boolean'],
+        ]);
+
+        // Replace image if a new one was uploaded
+        if (!empty($validated['cropped_image'])) {
+
+            $imageData = preg_replace(
+                '#^data:image/\w+;base64,#i',
+                '',
+                $validated['cropped_image']
+            );
+
+            $imageData = base64_decode($imageData);
+
+            if ($imageData === false) {
+                return back()->withErrors([
+                    'cropped_image' => 'Invalid image data.',
+                ]);
+            }
+
+            // Delete old image
+            if ($image->image_path && Storage::disk('public')->exists($image->display_path)) {
+                Storage::disk('public')->delete($image->display_path);
+            }
+
+            // Save new image
+            $filename = Str::uuid() . '.jpg';
+            $path = "criminal-cases/{$filename}";
+
+            Storage::disk('public')->put($path, $imageData);
+
+            $image->path = $path;
+        }
+
+        // Only one featured image per article
+        if ($request->boolean('is_featured')) {
+            $criminalCase->images()
+                ->whereKeyNot($image->id)
+                ->update([
+                    'is_featured' => false,
+                ]);
+        }
+
+        $image->caption = $validated['caption'];
+        $image->alt_text = $validated['alt_text'];
+        $image->credit_name = $validated['credit_name'];
+        $image->credit_url = $validated['credit_url'];
+        $image->is_featured = $request->boolean('is_featured');
+
+        $image->save();
+
+        return redirect()
+            ->route('admin.criminal-cases.images', $criminalCase)
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Image updated successfully.',
+            ]);
+    }
+
+
+
+    public function destroyImage(CriminalCase $criminalCase, Image $image)
+    {
+        $image = $criminalCase->images()
+            ->whereKey($image->id)
+            ->firstOrFail();
+
+        if ($image->path && Storage::disk('public')->exists($image->display_path)) {
+            Storage::disk('public')->delete($image->display_path);
+        }
+
+        $image->delete();
+
+        return redirect()
+            ->route('admin.criminal-cases.images', $criminalCase)
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Image deleted successfully.',
+            ]);
     }
     
 }

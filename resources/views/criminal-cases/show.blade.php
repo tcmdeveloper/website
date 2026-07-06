@@ -16,27 +16,11 @@
 >
 
     <x-ui.container class="max-w-5xl">
-        
-
-        {{-- TITLE AND EXCERPT --}}
-
-        <section aria-labelledby="criminal-case-heading" class="prose-content">
-
-            <h1 id="criminal-case-heading class="text-center mt-2 mb-0">
-                The {{ $criminalCase->name }} Case
-            </h1>
-
-            <p class="text-center mt-3 mb-3! font-heading text-xl font-light">
-                {{ $criminalCase->description }}
-            </p>
-
-        </section>
-        
 
 
         {{-- CASE DOCUMENTS --}}
 
-        <section aria-labelledby="case-documents-heading">
+        <section aria-labelledby="case-documents-heading" class="mb-20">
 
             {{-- Screen reader heading --}}
 
@@ -51,7 +35,7 @@
 
                 <div class="mt-6 rounded-lg border border-gray-200 bg-white p-8 text-center">
                     <p class="text-gray-600">
-                        No documents have been added for this criminal case yet.
+                        No documents have been added for this case.
                     </p>
                 </div>
 
@@ -122,6 +106,25 @@
 
             @endif
 
+
+        </section>
+
+
+
+
+        {{-- ARTICLES --}}
+
+        <section aria-labelledby="case-articles-heading">
+
+            <div 
+                class="my-10 px-3 relative text-center max-w-5xl mx-auto"
+            >
+                <h2 id="case-articles-heading" class="text-xl sm:text-3xl font-bold tracking-tight text-zinc-700">
+                    True crime articles about the {{ $criminalCase->name }} case
+                </h2>
+            </div>
+
+            <x-articles.grid :articles="$criminalCase->articles" />
 
         </section>
         

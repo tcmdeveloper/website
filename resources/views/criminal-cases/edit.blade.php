@@ -5,25 +5,28 @@
     <x-ui.card class="max-w-5xl">
 
         <x-ui.header-actions
-            title="Create a New Case File"
-            subtitle="Enter the details for the new criminal case."
+            title="Edit Criminal Case"
+            subtitle="Update and manage your true crime article."
             :actions="[
                 'back' => [
                     'label' => 'Back to Criminal Cases',
                     'href' => route('admin.criminal-cases.index'),
+                    'icon' => 'heroicon-o-arrow-left',
                     'variant' => 'ghost',
                 ]
             ]"
         />
 
+        <x-ui.alert />
 
         <form 
             method="POST" 
-            action="{{ route('admin.criminal-cases.store') }}" 
+            action="{{ route('admin.criminal-cases.update', $criminalCase) }}" 
             class="space-y-5"
         >
 
             @csrf
+            @method('PATCH')
 
             {{-- Criminal case name --}}
 
@@ -33,7 +36,7 @@
                     type="text"
                     label="Case name"
                     placeholder="Case name"
-                    :value="old('name')"
+                    :value="old('name', $criminalCase->name)"
                 />
             </div>
 
@@ -46,7 +49,23 @@
                     label="Description"
                     rows="3"
                     placeholder="Description"
-                    :value="old('description')"
+                    :value="old('description', $criminalCase->description)"
+                />
+            </div>
+
+
+            {{-- Visibility --}}
+
+            <div>
+                <x-ui.select
+                    name="is_published"
+                    label="Visibility"
+                    :options="[
+                        1 => 'Public',
+                        0 => 'Private',
+                    ]"
+                    :value="old('is_published', (int) $criminalCase->is_published)"
+                    placeholder="Set visibility"
                 />
             </div>
 

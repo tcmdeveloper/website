@@ -52,8 +52,8 @@
                             href="{{ route('admin.criminal-cases.index') }}"
                             @class([
                                 'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
-                                'bg-stone-900 text-white' => request()->routeIs('admin.categories.*'),
-                                'text-stone-700 hover:bg-stone-100' => !request()->routeIs('admin.categories.*'),
+                                'bg-stone-900 text-white' => request()->routeIs('admin.criminal-cases.*'),
+                                'text-stone-700 hover:bg-stone-100' => !request()->routeIs('admin.criminal-cases.*'),
                             ])
                         >
                             <x-heroicon-o-finger-print class="w-5 h-5" />

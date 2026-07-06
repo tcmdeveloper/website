@@ -1,4 +1,4 @@
-{{-- resources/views/articles/edit-image.blade.php --}}
+{{-- resources/views/criminal-cases/edit-image.blade.php --}}
 
 <x-layouts.dashboard>
 
@@ -15,7 +15,7 @@
         <form
             id="imageForm"
             method="POST"
-            action="{{ route('admin.articles.images.update', [$article, $image]) }}"
+            action="{{ route('admin.criminal-cases.images.update', [$criminalCase, $image]) }}"
             x-data="imageUploader(
                 '{{ $image->image_url ?? '' }}',
                 @js($image->is_featured ?? false)
@@ -139,7 +139,7 @@
             </div>
 
 
-           <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
             
                 {{-- Credit name --}}
 
@@ -165,6 +165,7 @@
                 </div>
 
             </div>
+
 
             <div class="flex gap-2">
 

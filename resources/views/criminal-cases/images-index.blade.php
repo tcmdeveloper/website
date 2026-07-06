@@ -5,17 +5,17 @@
     <x-ui.card>
 
         <x-ui.header-actions
-            title="Manage Article Images"
-            subtitle="Upload, organize, and manage the images used in this article."
+            title="Manage Case Images"
+            subtitle="Upload, organize, and manage the images used in this criminal case."
             :actions="[
                 'back' => [
-                    'label' => 'Back to Article',
-                    'href' => route('admin.articles.index'),
+                    'label' => 'Back to Criminal Cases',
+                    'href' => route('admin.criminal-cases.index'),
                     'variant' => 'ghost',
                 ],
                 'uploadImage' => [
                     'label' => 'Upload New Image',
-                    'href' => route('admin.articles.images.upload', $article),
+                    'href' => route('admin.criminal-cases.images.upload', $criminalCase),
                 ]
             ]"
         />
@@ -63,14 +63,14 @@
                                 <x-ui.button
                                     size="xs"
                                     variant="ghost"
-                                    href="{{ route('admin.articles.images.edit', [$article, $image]) }}"    
+                                    href="{{ route('admin.criminal-cases.images.edit', [$criminalCase, $image]) }}"    
                                 >
                                     Edit
                                 </x-ui.button>
 
                                 <form
                                     method="POST"
-                                    action="{{ route('admin.articles.images.destroy', [$article, $image]) }}"
+                                    action="{{ route('admin.criminal-cases.images.destroy', [$criminalCase, $image]) }}"
                                     onsubmit="return confirm('Delete this image?')"
                                 >
                                     @csrf

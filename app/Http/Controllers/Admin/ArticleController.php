@@ -3,21 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CriminalCase;
+use App\Models\Category;
 use App\Models\Article;
 use App\Models\Image;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\Encoders\AvifEncoder;
-use Intervention\Image\Encoders\WebpEncoder;
-use Intervention\Image\Encoders\JpegEncoder;
-use App\Models\Category;
-use App\Models\CriminalCase;
 use App\Services\RandomStringGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Encoders\AvifEncoder;
+use Intervention\Image\Encoders\WebpEncoder;
+use Intervention\Image\Encoders\JpegEncoder;
 
 
 class ArticleController extends Controller
@@ -193,6 +192,38 @@ class ArticleController extends Controller
     }
 
 
+     // -----------------------------------------------------
+    // DESTROY
+    // -----------------------------------------------------
+
+    public function destroy(Article $article)
+    {
+        foreach ($article->images as $image) {
+            if ($image->path && Storage::disk('public')->exists($image->display_path)) {
+                Storage::disk('public')->delete($image->display_path);
+            }
+        }
+
+        $article->images()->delete();
+
+        $article->delete();
+
+        return redirect()
+            ->route('admin.articles.index')
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Article deleted!',
+            ]);
+    }
+
+
+
+
+
+
+
+
+
     // -----------------------------------------------------
     // IMAGES INDEX
     // -----------------------------------------------------
@@ -252,8 +283,7 @@ class ArticleController extends Controller
         }
 
 
-
-
+        // Upload images to article.hex directory
 
         $filename = (string) Str::uuid();
         $path = "articles/{$article->hex}/{$filename}";
@@ -278,8 +308,6 @@ class ArticleController extends Controller
         );
 
 
-
-
         // If this image is becoming featured, clear any existing featured image.
         if (!empty($validated['is_featured'])) {
             $article->images()->update([
@@ -287,14 +315,16 @@ class ArticleController extends Controller
             ]);
         }
 
+
         $article->images()->create([
-    'image_path'   => $path,
-    'caption'      => $validated['caption'],
-    'alt_text'     => $validated['alt_text'],
-    'credit_name'  => $validated['credit_name'],
-    'credit_url'   => $validated['credit_url'],
-    'is_featured'  => $validated['is_featured'] ?? false,
-]);
+            'image_path'   => $path,
+            'caption'      => $validated['caption'],
+            'alt_text'     => $validated['alt_text'],
+            'credit_name'  => $validated['credit_name'],
+            'credit_url'   => $validated['credit_url'],
+            'is_featured'  => $validated['is_featured'] ?? false,
+        ]);
+
 
         return redirect()
             ->route('admin.articles.images', $article)
@@ -428,28 +458,6 @@ class ArticleController extends Controller
     
 
 
-    // -----------------------------------------------------
-    // DESTROY
-    // -----------------------------------------------------
-
-    public function destroy(Article $article)
-    {
-        foreach ($article->images as $image) {
-            if ($image->path && Storage::disk('public')->exists($image->display_path)) {
-                Storage::disk('public')->delete($image->display_path);
-            }
-        }
-
-        $article->images()->delete();
-
-        $article->delete();
-
-        return redirect()
-            ->route('admin.articles.index')
-            ->with('status', [
-                'type' => 'success',
-                'message' => 'Article deleted!',
-            ]);
-    }
+   
 
 }

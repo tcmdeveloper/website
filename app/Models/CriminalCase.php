@@ -13,11 +13,19 @@ class CriminalCase extends Model
 
     protected $fillable = [
         'hex',
-        'user_id',
         'name',
         'slug',
         'description',
+        'meta_title',
+        'meta_description',
+        'views',
+        'user_id',
+        'published_at',
+        'is_published',
     ];
+
+
+
 
     protected static function booted()
     {
@@ -52,6 +60,18 @@ class CriminalCase extends Model
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now());
     }
+
+    // Latest first
+    public function scopeLatestFirst($query)
+    {
+        return $query->orderByDesc('published_at');
+    }
+
+
+
+
+
+
 
 
     /*
@@ -97,4 +117,45 @@ class CriminalCase extends Model
     {
         return $this->is_published && $this->published_at !== null;
     }
+
+
+
+
+    // Images
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function featuredImage()
+    {
+        return $this->morphOne(Image::class, 'imageable')
+            ->where('is_featured', true);
+    }
+
+
+
+
+   /*
+    |--------------------------------------------------------------------------
+    | Accessors
+    |--------------------------------------------------------------------------
+    |
+    | Generate the publicly accessible URL for the stored image.
+    | This allows `$model->image_url` to return a full URL instead
+    | of the raw storage path saved in the database.
+    |
+    */
+    
+    protected function displayImage(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->featuredImage
+                ?? new Image([
+                    'image_path' => 'images/default-article',
+                    'alt_text' => 'Default case image',
+                ]),
+        );
+    }
+
 }

@@ -1,13 +1,15 @@
-{{-- resources/views/articles/edit-image.blade.php --}}
+{{-- resources/views/articles/create-image.blade.php --}}
 
 <x-layouts.dashboard>
 
     <x-ui.card class="max-w-4xl">
 
         <x-ui.header-actions
-            title="{{ $title }}"
-            subtitle="{{ $subtitle }}"
-            :actions="$actions"
+            title="Upload Image"
+            subtitle="Select the image you want to add to this criminal case."
+            :href="route('admin.criminal-cases.images', $criminalCase)"
+            label="Back to images"
+            buttonVariant="ghost"
         />
 
         <x-ui.alert />
@@ -15,16 +17,15 @@
         <form
             id="imageForm"
             method="POST"
-            action="{{ route('admin.articles.images.update', [$article, $image]) }}"
+            action="{{ route('admin.criminal-cases.images.store', $criminalCase) }}"
             x-data="imageUploader(
-                '{{ $image->image_url ?? '' }}',
-                @js($image->is_featured ?? false)
+                '',
+                false
             )"
             @submit.prevent="submit"
             class="space-y-6"
         >
             @csrf
-            @method('PATCH')
 
             <input
                 x-ref="file"
@@ -40,8 +41,6 @@
                 x-model="croppedImage"
             >
 
-            
-            
             <div
                 class="relative flex aspect-video items-center justify-center overflow-hidden rounded border border-zinc-300 bg-zinc-50"
             >
@@ -61,11 +60,13 @@
                             size="sm"
                             variant="primary"
                         >
+                            <x-heroicon-o-photo class="w-4 h-4" />
                             Choose Image
                         </x-ui.button>
                     </div>
                 </template>
 
+                
                 <div
                     x-show="preview"
                     class="absolute bottom-3 right-3 flex items-center gap-2"
@@ -79,7 +80,7 @@
                             variant="primary"
                             size="xs"
                         >
-                            <x-heroicon-s-star class="w-4 h-4" />
+                            <x-heroicon-o-star class="w-4 h-4" />
                             Featured
                         </x-ui.button>
                     </template>
@@ -113,16 +114,24 @@
 
                 </div>
 
+
             </div>
+
+
+
+
+
+
 
             {{-- Caption --}}
 
             <div>
-                <x-ui.input
+                <x-ui.textarea
                     name="caption"
                     type="text"
-                    label="Caption"
-                    :value="old('caption', $image->caption)"
+                    label="Image caption"
+                    :value="old('caption')"
+                    placeholder="Describe the image"
                 />
             </div>
 
@@ -134,13 +143,14 @@
                     name="alt_text"
                     type="text"
                     label="Alt text"
-                    :value="old('alt_text', $image->alt_text)"
+                    :value="old('alt_text')"
+                    placeholder="Description for SEO"
                 />
             </div>
 
 
-           <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-            
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+
                 {{-- Credit name --}}
 
                 <div>
@@ -148,7 +158,8 @@
                         name="credit_name"
                         type="text"
                         label="Credit source"
-                        :value="old('credit_name', $image->credit_name)"
+                        :value="old('credit_name')"
+                        placeholder="Name of source"
                     />
                 </div>
 
@@ -160,21 +171,23 @@
                         name="credit_url"
                         type="text"
                         label="Credit URL"
-                        :value="old('credit_url', $image->credit_url)"
+                        :value="old('credit_url')"
+                        placeholder="URL of source"
                     />
                 </div>
 
             </div>
 
-            <div class="flex gap-2">
+
+            <div>
 
                 <x-ui.button 
                     type="submit"
                     size="sm"
                 >
-                    Update Image
+                    <x-heroicon-o-check-circle class="w-4 h-4" />
+                    Save Image
                 </x-ui.button>
-
 
             </div>
 

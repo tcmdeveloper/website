@@ -137,13 +137,18 @@ Route::controller(AdminCriminalCaseController::class)
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
-        Route::get('/{criminalCase}/edit', 'edit')->name('edit');
-        Route::patch('/{criminalCase}', 'update')->name('update');
-        Route::delete('/{criminalCase}','destroy')->name('destroy');
-        Route::get('/{criminalCase}/inspect', 'inspect')->name('inspect');
-        Route::post('/upload-image', 'uploadImage');
+        Route::get('/{criminalCase:hex}/edit', 'edit')->name('edit');
+        Route::patch('/{criminalCase:hex}', 'update')->name('update');
+        Route::delete('/{criminalCase:hex}','destroy')->name('destroy');
 
-        Route::get('/{criminalCase}', 'show')->name('show');
+        Route::patch('/{criminalCase:hex}/images/{image}/update', 'updateImage')->name('images.update');
+        Route::delete('/{criminalCase:hex}/images/{image}', 'destroyImage')->name('images.destroy');
+        Route::get('/{criminalCase:hex}/images/{image}/edit', 'editImage')->name('images.edit');
+        Route::post('/{criminalCase:hex}/images/store', 'storeImage')->name('images.store');
+        Route::get('/{criminalCase:hex}/images/upload', 'selectImage')->name('images.upload');
+        Route::get('/{criminalCase:hex}/images', 'imagesIndex')->name('images');
+
+        Route::get('/{criminalCase:hex}', 'show')->name('show');
     })
 ;
 
@@ -209,21 +214,22 @@ Route::controller(AdminArticleController::class)
     ->name('admin.articles.')
     ->middleware(['auth', 'verified'])
     ->group(function () {
+
         Route::get('/', 'index')->name('index');
+
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::get('/{article:hex}/edit', 'edit')->name('edit');
         Route::patch('/{article:hex}', 'update')->name('update');
         Route::delete('/{article:hex}', 'destroy')->name('destroy');
 
-        Route::patch('/{article:hex}/image/{image}/update', 'updateImage')->name('images.update');
+        Route::patch('/{article:hex}/images/{image}/update', 'updateImage')->name('images.update');
         Route::delete('/{article:hex}/images/{image}', 'destroyImage')->name('images.destroy');
         Route::get('/{article:hex}/images/{image}/edit', 'editImage')->name('images.edit');
         Route::post('/{article:hex}/images/store', 'storeImage')->name('images.store');
         Route::get('/{article:hex}/images/upload', 'selectImage')->name('images.upload');
         Route::get('/{article:hex}/images', 'imagesIndex')->name('images');
         
-
         Route::get('/{article:hex}', 'show')->name('show');
     })
 ;
