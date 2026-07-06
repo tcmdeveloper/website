@@ -104,6 +104,21 @@ class CriminalCase extends Model
         return $this->hasMany(Document::class)->published();
     }
 
+    public function timelines()
+    {
+        return $this->hasMany(Timeline::class);
+    }
+
+
+
+
+
+
+
+    //
+    // ATTRIBUTE ACCESSORS
+    //
+    
     // Formatted views (25419 -> 25,419)
     protected function formattedViews(): Attribute
     {

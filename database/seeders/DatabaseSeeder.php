@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
             TranscriptSegmentSeeder::class,
             DocumentSeeder::class,
             DocumentPageSeeder::class,
+            TimelineSeeder::class,
+            TimelineEventSeeder::class,
         ]);
     }
 }
