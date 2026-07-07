@@ -80,7 +80,7 @@
                                 'text-stone-700 hover:bg-stone-100' => !request()->routeIs('admin.articles.*'),
                             ])
                         >
-                            <x-heroicon-o-document-text class="w-5 h-5" />
+                            <x-heroicon-o-document class="w-5 h-5" />
                             Articles
                         </a>
 
@@ -97,6 +97,18 @@
                         </a>
 
                         <a
+                            href="{{ route('admin.timelines.index') }}"
+                            @class([
+                                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
+                                'bg-stone-900 text-white' => request()->routeIs('admin.timelines.*'),
+                                'text-stone-700 hover:bg-stone-100' => !request()->routeIs('admin.timelines.*'),
+                            ])
+                        >
+                            <x-heroicon-o-clock class="w-5 h-5" />
+                            Timelines
+                        </a>
+
+                        <a
                             href="{{ route('admin.videos.index') }}"
                             @class([
                                 'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
@@ -104,7 +116,7 @@
                                 'text-stone-700 hover:bg-stone-100' => !request()->routeIs('admin.videos.*'),
                             ])
                         >
-                            <x-heroicon-o-film class="w-5 h-5" />
+                            <x-heroicon-o-play class="w-5 h-5" />
                             Videos
                         </a>
 

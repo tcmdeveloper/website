@@ -5,8 +5,8 @@
     <x-ui.card>
 
         <x-ui.header-actions
-            :title="$title ?? 'True Crime Articles'"
-            :subtitle="$subtitle ?? 'Manage and organize your true crime articles.'"
+            :title="$title ?? 'Create New Article'"
+            :subtitle="$subtitle ?? 'Enter the details for the new article.'"
             :actions="[
                 'back' => [
                     'label' => 'Back to Articles',

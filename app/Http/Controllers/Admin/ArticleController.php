@@ -242,10 +242,10 @@ class ArticleController extends Controller
 
 
     // -----------------------------------------------------
-    // SELECT IMAGE
+    // CREATE IMAGE
     // -----------------------------------------------------
 
-    public function selectImage(Article $article)
+    public function createImage(Article $article)
     {   
         return view('articles.create-image', [
             'article' => $article,

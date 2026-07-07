@@ -22,7 +22,7 @@ use Intervention\Image\ImageManager;
 // -----------------------------------------------------
 
 class CriminalCaseController extends Controller
-{
+{ 
 
     // -----------------------------------------------------
     // INDEX

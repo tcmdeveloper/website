@@ -87,27 +87,31 @@
             </div>
 
 
-            {{-- Credit name --}}
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            
+                {{-- Credit name --}}
 
-            <div>
-                <x-ui.input
-                    name="credit_name"
-                    type="text"
-                    label="Credit source"
-                    :value="old('credit_name', $article->credit_name)"
-                />
-            </div>
+                <div>
+                    <x-ui.input
+                        name="credit_name"
+                        type="text"
+                        label="Credit source"
+                        :value="old('credit_name', $article->credit_name)"
+                    />
+                </div>
 
 
-            {{-- Credit URL --}}
+                {{-- Credit URL --}}
 
-            <div>
-                <x-ui.input
-                    name="credit_url"
-                    type="text"
-                    label="Credit URL"
-                    :value="old('credit_url', $article->credit_url)"
-                />
+                <div>
+                    <x-ui.input
+                        name="credit_url"
+                        type="text"
+                        label="Credit URL"
+                        :value="old('credit_url', $article->credit_url)"
+                    />
+                </div>
+            
             </div>
 
 

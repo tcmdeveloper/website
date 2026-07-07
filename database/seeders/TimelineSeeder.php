@@ -30,9 +30,10 @@ class TimelineSeeder extends Seeder
                 'type' => $item->type,
                 'icon' => $item->icon,
                 'color' => $item->color,
-                'is_default' => $item->is_default,
-                'is_public' => $item->is_public,
                 'sort_order' => $item->sort_order,
+                'is_default' => $item->is_default,
+                'is_published' => $item->is_published,
+                'published_at' => $item->published_at,
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at,
             ]);

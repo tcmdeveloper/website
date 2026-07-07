@@ -54,24 +54,6 @@
     <meta name="twitter:card" content="summary_large_image">
 
 
-    {{-- Google Analytics (GA4) --}}
-    @if(app()->environment('production') && !auth()->check())
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-41956QHQLE"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-41956QHQLE');
-        </script>
-    @endif
-
-
-    {{-- Google AdSense --}}
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5443411235770747"
-     crossorigin="anonymous"></script>
-
-
     {{-- Prevent indexing on dev (optional) --}}
     @if(app()->environment('local'))
         <meta name="robots" content="noindex,nofollow">
@@ -88,6 +70,25 @@
 
     {{-- Page-specific scripts (if you still use them) --}}
     @stack('scripts')
+
+
+    {{-- Google Analytics (GA4) --}}
+    @if(app()->environment('production') && !auth()->check())
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-41956QHQLE"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-41956QHQLE');
+        </script>
+    @endif
+
+
+    {{-- Google AdSense --}}
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5443411235770747"
+     crossorigin="anonymous"></script>
+     
 </head>
 
 <body 

@@ -4,14 +4,14 @@
     'breadcrumbs' => [],  
 ])
 
-<div class="mx-auto w-full py-3">
-
-    <a
-        href="{{ $breadcrumbs['href'] }}"
-        class="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-indigo-600 mb-6"
-    >
-        <x-ui.icon name="arrow-left" class="w-4 h-4" />
-        {{ $breadcrumbs['label'] }}
-    </a>
-
+<div class="mx-auto max-w-5xl mt-10">
+    <div class="">
+        <x-ui.button
+            size="xs"
+            href="{{ $breadcrumbs['href'] }}"
+        >   
+            <x-heroicon-o-arrow-left class="w-3 h-3" />
+            {{ $breadcrumbs['label'] }}
+        </x-ui.button>
+    </div>
 </div>

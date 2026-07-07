@@ -37,15 +37,23 @@ return new class extends Migration
 
             $table->string('icon')->nullable();
             $table->string('color')->nullable();
+            $table->unsignedInteger('sort_order')->default(0);
+
+            // Stats
+            $table->unsignedInteger('views')->default(0);
+
 
             $table->boolean('is_default')->default(false);
-            $table->boolean('is_public')->default(true);
+            $table->boolean('is_published')->default(true);
+            $table->timestamp('published_at')->nullable();
 
-            $table->unsignedInteger('sort_order')->default(0);
+            
 
             $table->timestamps();
 
+            $table->unique(['criminal_case_id', 'name']);
             $table->unique(['criminal_case_id', 'slug']);
+            
         });
     }
 

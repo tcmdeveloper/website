@@ -9,14 +9,27 @@
             strip_tags($criminalCase->description),
             160),
     ]"
-    :breadcrumbs="[
+    {{-- :breadcrumbs="[
         'href' => route('cases.index'),
-        'label' => 'Criminal Cases'
-    ]"
+        'label' => 'Back to Criminal Cases'
+    ]" --}}
 >
 
     <x-ui.container class="max-w-5xl">
 
+        {{--
+            <div class="mx-auto max-w-5xl">
+                <div class="w-full text-center mb-10">
+                    <x-ui.button
+                        size="xs"
+                        href=""
+                    >   
+                        <x-heroicon-o-arrow-left class="w-3 h-3" />
+                        Back to Criminal Cases
+                    </x-ui.button>
+                </div>
+            </div> 
+        --}}
 
         {{-- CASE DOCUMENTS --}}
 

@@ -14,6 +14,9 @@ use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryControll
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\CriminalCaseController as FrontendCriminalCaseController;
 use App\Http\Controllers\Frontend\DocumentController as FrontendDocumentController;
+use App\Http\Controllers\Frontend\TimelineController as FrontendTimelineController;
+use App\Http\Controllers\Admin\TimelineController as AdminTimelineController;
+
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\SearchController as FrontendSearchController;
 use App\Http\Controllers\Frontend\VideoController as FrontendVideoController;
@@ -268,11 +271,55 @@ Route::controller(AdminDocumentController::class)
         Route::delete('/{document}/images/{image}', 'destroyImage')->name('images.destroy');
         Route::get('/{document}/images/{image}/edit', 'editImage')->name('images.edit');
         Route::post('/{document}/images/store', 'storeImage')->name('images.store');
-        Route::get('/{document}/images/upload', 'selectImage')->name('images.upload');
+        Route::get('/{document}/images/create', 'createImage')->name('images.create');
         Route::get('/{document}/images', 'imagesIndex')->name('images');
 
 
         Route::get('/{document}', 'show')->name('show');
+    })
+;
+
+
+// -----------------------------------------------------
+// TIMELINE CONTROLLER (FRONT-END)
+// -----------------------------------------------------
+
+Route::controller(FrontendTimelineController::class)
+    ->prefix('timelines')
+    ->name('timelines.')
+    ->group(function(){
+        Route::get('/', 'index')->name('index');
+        Route::get('/{timeline:slug}', 'show')->name('show');
+    })
+;
+
+
+// -----------------------------------------------------
+// TIMELINE CONTROLLER (ADMIN)
+// -----------------------------------------------------
+
+Route::controller(AdminTimelineController::class)
+    ->prefix('admin/timelines')
+    ->name('admin.timelines.')
+    ->middleware(['auth', 'verified'])
+    ->group(function () {
+
+        Route::get('/', 'index')->name('index');
+
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{timeline:hex}/edit', 'edit')->name('edit');
+        Route::patch('/{timeline:hex}', 'update')->name('update');
+        Route::delete('/{timeline:hex}', 'destroy')->name('destroy');
+
+        Route::patch('/{timeline:hex}/events/{event}/update', 'updateImage')->name('events.update');
+        Route::delete('/{timeline:hex}/events/{event}', 'destroyImage')->name('events.destroy');
+        Route::get('/{timeline:hex}/events/{event}/edit', 'editImage')->name('events.edit');
+        Route::post('/{timeline:hex}/events/store', 'storeImage')->name('events.store');
+        Route::get('/{timeline:hex}/events/create', 'createEvent')->name('events.create');
+        Route::get('/{timeline:hex}/events', 'eventsIndex')->name('events.index');
+        
+        Route::get('/{timeline:hex}', 'show')->name('show');
     })
 ;
 

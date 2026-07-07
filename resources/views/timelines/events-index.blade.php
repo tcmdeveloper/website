@@ -1,21 +1,21 @@
-{{-- resources/views/criminal-cases/images-index.blade.php --}}
+{{-- resources/views/timelines/events-index.blade.php --}}
 
 <x-layouts.dashboard>
 
     <x-ui.card>
 
         <x-ui.header-actions
-            title="Manage Article Images"
-            subtitle="Upload, organize, and manage the images used in this article."
+            title="Manage Timeline Events"
+            subtitle="Upload, organize, and manage events in this timeline."
             :actions="[
                 'back' => [
-                    'label' => 'Back to Articles',
-                    'href' => route('admin.articles.index'),
+                    'label' => 'Back to Timelines',
+                    'href' => route('admin.timelines.index'),
                     'variant' => 'ghost',
                 ],
                 'uploadImage' => [
-                    'label' => 'Upload New Image',
-                    'href' => route('admin.articles.images.create', $article),
+                    'label' => 'Create New Event',
+                    'href' => route('admin.timelines.events.create', $timeline),
                 ]
             ]"
         />
@@ -26,10 +26,11 @@
 
             <thead>
                 <tr class="bg-zinc-50 border-b border-zinc-200 text-left text-zinc-600 font-medium">
-                    <th class="px-6 py-4">Image</th>
-                    <th class="px-6 py-4">Caption</th>
-                    <th class="px-6 py-4">Alt text</th>
-                    <th class="px-6 py-4">Featured</th>
+                    <th class="px-6 py-4">Title</th>
+                    <th class="px-6 py-4">Criminal Case</th>
+                    <th class="px-6 py-4">Date</th>
+                    <th class="px-6 py-4">Time</th>
+                    <th class="px-6 py-4">Type</th>
                     <th class="px-6 py-4">Created at</th>
                     <th class="px-6 py-4"></th>
                 </tr>
@@ -38,24 +39,21 @@
 
             <tbody>
 
-                @forelse ($images as $image)
+                @forelse ($events as $event)
                     
                     <tr class="border-b border-zinc-100">
 
-                        <td class="px-6 py-4 flex gap-4 items-center">
-                            <x-ui.image
-                                :image="$image"
-                                class="w-20"
-                            />
-                        </td>
+                        <td class="px-6 py-4">{{ $event->title }}</td>
 
-                        <td class="px-6 py-4">{{ Str::limit($image->caption, 50) }}</td>
+                        <td class="px-6 py-4"{{ $event->timeline->criminalCase->name }}></td>
 
-                        <td class="px-6 py-4">{{ Str::limit($image->alt_text, 50) }}</td>
+                        <td class="px-6 py-4">{{ $event->occurred_at->format('d M Y') }}</td>
 
-                        <td class="px-6 py-4">{{ $image->is_featured ? 'Featured' : '-' }}</td>
+                        <td class="px-6 py-4">{{ $event->occurred_at->format('H:i') }}</td>
 
-                        <td class="px-6 py-4">{{ $image->created_at->format('d M Y') }}</td>
+                        <td class="px-6 py-4">{{ $event->type }}</td>
+
+                        <td class="px-6 py-4">{{ $event->created_at->format('d M Y') }}</td>
 
                         <td class="px-6 py-4">
                            <div class="flex justify-end gap-2">
@@ -63,15 +61,15 @@
                                 <x-ui.button
                                     size="xs"
                                     variant="ghost"
-                                    href="{{ route('admin.articles.images.edit', [$article, $image]) }}"    
+                                    href="{{ route('admin.timelines.events.edit', [$timeline, $event]) }}"    
                                 >
                                     Edit
                                 </x-ui.button>
 
                                 <form
                                     method="POST"
-                                    action="{{ route('admin.articles.images.destroy', [$article, $image]) }}"
-                                    onsubmit="return confirm('Delete this image?')"
+                                    action="{{ route('admin.timelines.events.destroy', [$timeline, $event]) }}"
+                                    onsubmit="return confirm('Are you sure you want to delete this event? This action cannot be undone.')"
                                 >
                                     @csrf
                                     @method('DELETE')
@@ -94,10 +92,10 @@
                     <tr>
 
                         <td
-                            colspan="5"
+                            colspan="7"
                             class="px-6 py-12 text-center text-zinc-500"
                         >
-                            No articles images.
+                            No timeline events added.
                         </td>
 
                     </tr>
@@ -114,7 +112,7 @@
         {{-- Pagination --}}
 
         <div class="mt-6 flex justify-end">
-            {{ $images->links() }}
+            {{ $events->links() }}
         </div>
 
 

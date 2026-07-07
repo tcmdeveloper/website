@@ -50,8 +50,8 @@ return new class extends Migration
                 ->nullOnDelete();
 
             // Publishing
-            $table->timestamp('published_at')->nullable();
             $table->boolean('is_published')->default(false);
+            $table->timestamp('published_at')->nullable();
 
             $table->timestamps();
 
