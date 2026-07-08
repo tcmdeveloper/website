@@ -158,7 +158,7 @@ class VideoController extends Controller
             ->route('admin.videos.index')
             ->with('status', [
                 'type' => 'success',
-                'message' => 'Video deleted successfully.',
+                'message' => 'Video deleted.',
             ]);
     }
 

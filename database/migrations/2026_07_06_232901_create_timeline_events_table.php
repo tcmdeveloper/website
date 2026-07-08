@@ -57,8 +57,9 @@ return new class extends Migration
             $table->string('source_name')->nullable();
             $table->string('source_url')->nullable();
 
-            $table->boolean('is_public')->default(true);
-
+            $table->boolean('is_published')->default(true);
+            $table->timestamp('published_at')->nullable();
+            
             $table->timestamps();
 
             $table->index([

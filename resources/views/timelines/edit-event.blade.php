@@ -5,11 +5,11 @@
     <x-ui.card class="max-w-4xl">
 
         <x-ui.header-actions
-            title="Create New Event"
-            subtitle="Enter the details for the new event."
+            title="Edit Event"
+            subtitle="Update and manage this event."
             :actions="[
                 'back' => [
-                    'label' => 'Back to Timelines',
+                    'label' => 'Back to Events',
                     'href' => route('admin.timelines.events.index', $timeline),
                     'variant' => 'ghost',
                     'icon' => 'heroicon-o-arrow-left'
@@ -21,11 +21,12 @@
 
         <form 
             method="POST" 
-            action="{{ route('admin.timelines.events.store', $timeline) }}" 
+            action="{{ route('admin.timelines.events.update', [$timeline, $event]) }}" 
             class="space-y-5"
         >
 
             @csrf
+            @method('PATCH')
 
 
             {{-- Timelines --}}
@@ -49,7 +50,7 @@
                     type="text"
                     label="Title"
                     placeholder="Title"
-                    :value="old('title')"
+                    :value="old('title', $event->title)"
                 />
             </div>
             
@@ -63,7 +64,7 @@
                     type="text"
                     label="Type of Event"
                     placeholder="Type of event"
-                    :value="old('type')"
+                    :value="old('type', $event->type)"
                 />
             </div>
 
@@ -77,7 +78,7 @@
                         type="date"
                         name="occurred_at_date"
                         label="Date of Event"
-                        :value="old('occurred_at_date')"
+                        :value="old('occurred_at_date', $event->occurred_at?->format('Y-m-d'))"
                     />
                 </div>
 
@@ -89,7 +90,7 @@
                         type="time"
                         name="occurred_at_time"
                         label="Time of Event"
-                        :value="old('occurred_at_time')"
+                        :value="old('occurred_at_time', $event->occurred_at?->format('H:i'))"
                     />
                 </div>
 
@@ -104,7 +105,7 @@
                     label="Description"
                     rows="3"
                     placeholder="Description"
-                    :value="old('description')"
+                    :value="old('description', $event->description)"
                 />
             </div>
 
@@ -139,7 +140,7 @@
                     type="button"
                     size="sm"
                     variant="secondary"
-                    href="{{ route('admin.timelines.show', $timeline) }}"
+                    href="{{ route('admin.timelines.events.index', $timeline) }}"
                 >
                     Cancel
                 </x-ui.button>

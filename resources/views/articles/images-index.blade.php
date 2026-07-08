@@ -71,7 +71,7 @@
                                 <form
                                     method="POST"
                                     action="{{ route('admin.articles.images.destroy', [$article, $image]) }}"
-                                    onsubmit="return confirm('Delete this image?')"
+                                    onsubmit="return confirm('Are you sure you want to delete this image? This cannot be undone.')"
                                 >
                                     @csrf
                                     @method('DELETE')

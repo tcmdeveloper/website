@@ -31,7 +31,6 @@
                     <th class="px-6 py-4">Date</th>
                     <th class="px-6 py-4">Time</th>
                     <th class="px-6 py-4">Type</th>
-                    <th class="px-6 py-4">Created at</th>
                     <th class="px-6 py-4"></th>
                 </tr>
             </thead>
@@ -45,15 +44,13 @@
 
                         <td class="px-6 py-4">{{ $event->title }}</td>
 
-                        <td class="px-6 py-4"{{ $event->timeline->criminalCase->name }}></td>
+                        <td class="px-6 py-4">{{ $event->timeline->name }}</td>
 
-                        <td class="px-6 py-4">{{ $event->occurred_at->format('d M Y') }}</td>
+                        <td class="px-6 py-4">{{ $event->occurred_at?->format('d M Y') }}</td>
 
-                        <td class="px-6 py-4">{{ $event->occurred_at->format('H:i') }}</td>
+                        <td class="px-6 py-4">{{ $event->occurred_at?->format('H:i') }}</td>
 
-                        <td class="px-6 py-4">{{ $event->type }}</td>
-
-                        <td class="px-6 py-4">{{ $event->created_at->format('d M Y') }}</td>
+                        <td class="px-6 py-4">{{ $event->type ? $event->type : '...' }}</td>
 
                         <td class="px-6 py-4">
                            <div class="flex justify-end gap-2">
@@ -92,7 +89,7 @@
                     <tr>
 
                         <td
-                            colspan="7"
+                            colspan="6"
                             class="px-6 py-12 text-center text-zinc-500"
                         >
                             No timeline events added.

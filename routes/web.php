@@ -312,10 +312,10 @@ Route::controller(AdminTimelineController::class)
         Route::patch('/{timeline:hex}', 'update')->name('update');
         Route::delete('/{timeline:hex}', 'destroy')->name('destroy');
 
-        Route::patch('/{timeline:hex}/events/{event}/update', 'updateImage')->name('events.update');
-        Route::delete('/{timeline:hex}/events/{event}', 'destroyImage')->name('events.destroy');
-        Route::get('/{timeline:hex}/events/{event}/edit', 'editImage')->name('events.edit');
-        Route::post('/{timeline:hex}/events/store', 'storeImage')->name('events.store');
+        Route::patch('/{timeline:hex}/events/{event:hex}/update', 'updateEvent')->name('events.update');
+        Route::delete('/{timeline:hex}/events/{event:hex}', 'destroyEvent')->name('events.destroy');
+        Route::get('/{timeline:hex}/events/{event:hex}/edit', 'editEvent')->name('events.edit');
+        Route::post('/{timeline:hex}/events/store', 'storeEvent')->name('events.store');
         Route::get('/{timeline:hex}/events/create', 'createEvent')->name('events.create');
         Route::get('/{timeline:hex}/events', 'eventsIndex')->name('events.index');
         

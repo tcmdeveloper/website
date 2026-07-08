@@ -37,13 +37,27 @@ class TimelineEvent extends Model
         'color',
         'source_name',
         'source_url',
-        'is_public',
+        'is_publishied',
+        'published_at'
     ];
 
     protected $casts = [
         'occurred_at' => 'datetime',
         'is_public' => 'boolean',
     ];
+
+
+
+    // Reorder existing 'timeline.events' when an event is deleted
+    
+    protected static function booted(): void
+    {
+        static::deleted(function (TimelineEvent $event) {
+            static::where('timeline_id', $event->timeline_id)
+                ->where('sort_order', '>', $event->sort_order)
+                ->decrement('sort_order');
+        });
+    }
 
 
 

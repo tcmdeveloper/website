@@ -6,7 +6,9 @@ use App\Enums\TimelineType;
 use App\Http\Controllers\Controller;
 use App\Models\CriminalCase;
 use App\Models\Timeline;
+use App\Models\TimelineEvent;
 use App\Services\RandomStringGenerator;
+use App\Support\DateTimeCombiner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -197,81 +199,107 @@ class TimelineController extends Controller
     // -----------------------------------------------------
     // STORE EVENT
     // -----------------------------------------------------
-    public function storeImage(Request $request, Timeline $timeline)
+    public function storeEvent(RandomStringGenerator $generator, DateTimeCombiner $dateTime, Request $request, Timeline $timeline)
     {
         $validated = $request->validate([
-            'cropped_image' => ['required', 'string'],
-            'caption' => ['nullable', 'string', 'max:255'],
-            'alt_text' => ['nullable', 'string', 'max:255'],
-            'credit_name' => ['nullable', 'string', 'max:255'],
-            'credit_url' => ['nullable', 'url', 'max:255'],
-            'is_featured' => ['nullable', 'boolean'],
+            'timeline_id' => ['required', 'integer', 'exists:timelines,id'],
+            'title' => ['required', 'string', 'max:150'],
+            'type' => ['nullable', 'string'],
+            'occurred_at_date' => ['nullable', 'date'],
+            'occurred_at_time' => ['nullable', 'date_format:H:i'],
+            'description' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        $image = preg_replace(
-            '#^data:image/\w+;base64,#i',
-            '',
-            $validated['cropped_image']
+        $validated['hex'] = $generator->uniqueHexId();
+        $validated['user_id'] = auth()->id();
+        $validated['occurred_at'] = $dateTime->combine(
+            $validated['occurred_at_date'],
+            $validated['occurred_at_time']
         );
+        $validated['is_published'] = true;
+        $validated['published_at'] = now();
+        // $validated['is_published'] = $validated['is_published'];
+        // $validated['published_at'] = $validated['is_published'] ? now() : null;
 
-        $imageData = base64_decode($image);
-
-        if ($imageData === false) {
-            return back()->with('status', [
-                'type' => 'error',
-                'message' => 'Invalid image data.',
-            ]);
-        }
-
-
-        // Upload images to article.hex directory
-
-        $filename = (string) Str::uuid();
-        $path = "articles/{$article->hex}/{$filename}";
-
-        $manager = ImageManager::usingDriver(Driver::class);
-        $image = $manager->decodeBinary($imageData);
-
-
-        Storage::disk('public')->put(
-            "{$path}.avif",
-            (string) $image->encode(new AvifEncoder(quality: 80))
-        );
-
-        Storage::disk('public')->put(
-            "{$path}.webp",
-            (string) $image->encode(new WebpEncoder(quality: 85))
-        );
-
-        Storage::disk('public')->put(
-            "{$path}.jpg",
-            (string) $image->encode(new JpegEncoder(quality: 90))
-        );
-
-
-        // If this image is becoming featured, clear any existing featured image.
-        if (!empty($validated['is_featured'])) {
-            $article->images()->update([
-                'is_featured' => false,
-            ]);
-        }
-
-
-        $article->images()->create([
-            'image_path'   => $path,
-            'caption'      => $validated['caption'],
-            'alt_text'     => $validated['alt_text'],
-            'credit_name'  => $validated['credit_name'],
-            'credit_url'   => $validated['credit_url'],
-            'is_featured'  => $validated['is_featured'] ?? false,
-        ]);
-
+        TimelineEvent::create($validated);
 
         return redirect()
-            ->route('admin.articles.images', $article)
+            ->route('admin.timelines.events.index', $timeline)
             ->with('status', [
                 'type' => 'success',
-                'message' => 'Image uploaded successfully!',
+                'message' => 'Event saved to timeline.',
+            ]);
+    }
+
+
+    // -----------------------------------------------------
+    // EDIT EVENT
+    // -----------------------------------------------------
+
+    public function editEvent(Timeline $timeline, TimelineEvent $event)
+    {   
+        $timelines = Timeline::orderBy('name')->pluck('name', 'id');
+
+        return view('timelines.edit-event', [
+            'timelines' => $timelines,
+            'timeline' => $timeline,
+            'event' => $event,
+        ]);
+    }
+
+
+    // -----------------------------------------------------
+    // UPDATE ARTICLE IMAGE
+    // -----------------------------------------------------
+
+    public function updateEvent(Request $request, DateTimeCombiner $dateTime, Timeline $timeline, TimelineEvent $event)
+    {
+
+        $validated = $request->validate([
+            'timeline_id' => ['required', 'integer', 'exists:timelines,id'],
+            'title' => ['required', 'string', 'max:150'],
+            'type' => ['nullable', 'string'],
+            'occurred_at_date' => ['nullable', 'date'],
+            'occurred_at_time' => ['nullable', 'date_format:H:i'],
+            'description' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        $validated['occurred_at'] = $dateTime->combine(
+            $validated['occurred_at_date'],
+            $validated['occurred_at_time']
+        );
+        
+
+        // Set published date if first publish
+
+        // if ($event->is_published && ! $event->published_at) {
+        //     $validated['published_at'] = now();
+        // }
+
+        $event->update($validated);
+
+        return redirect()
+            ->route('admin.timelines.events.index', $timeline)
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Event updated.',
+            ]);
+    }
+
+
+    // -----------------------------------------------------
+    // DESTROY EVENT
+    // -----------------------------------------------------
+
+    public function destroyEvent(Timeline $timeline, TimelineEvent $event)
+    {
+        $event->delete();
+
+        return redirect()
+            ->route('admin.timelines.events.index', $timeline)
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Event deleted.',
             ]);
     }
 

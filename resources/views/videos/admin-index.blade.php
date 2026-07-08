@@ -7,8 +7,14 @@
         <x-ui.header-actions
             title="Video downloads"
             subtitle="Manage videos you have downloaded from YouTube."
-            :href="route('admin.videos.create')"
-            label="Download from YouTube"
+            :actions="[
+                'create' => [
+                    'label' => 'Download YouTube Video',
+                    'href' => route('admin.videos.create'),
+                    'variant' => 'primary',
+                    'icon' => 'heroicon-o-play'
+                ]
+            ]"
         />
 
 
