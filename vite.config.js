@@ -7,12 +7,13 @@ export default defineConfig({
     build: {
         sourcemap: true,
     },
-    
+
     plugins: [
         laravel({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
+                'resources/js/timeline.js',
             ],
             refresh: true,
         }),
