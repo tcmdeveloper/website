@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-Bgl2_MnR.css",
+    "file": "assets/app-BzZc9MTq.css",
     "name": "app",
     "names": [
       "app.css"
@@ -16,5 +16,11 @@
     "css": [
       "assets/app-cx_wrqbx.css"
     ]
+  },
+  "resources/js/timeline.js": {
+    "file": "assets/timeline-DfbbEAf4.js",
+    "name": "timeline",
+    "src": "resources/js/timeline.js",
+    "isEntry": true
   }
 }
