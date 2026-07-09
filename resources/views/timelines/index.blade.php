@@ -1,8 +1,8 @@
 {{-- resources/views/timelines/index.blade.php --}}
 
 <x-layouts.app
-    title="Timeline"
-    subtitle="Browse the criminal cases timelines."
+    title="Timelines"
+    subtitle="Browse true crime case timelines."
 >
 
     <x-ui.container class="max-w-5xl">
