@@ -27,10 +27,12 @@ class TimelineEvent extends Model
     protected $fillable = [
         'hex',
         'timeline_id',
+        'parent_event_id',
         'title',
         'description',
         'occurred_at',
         'date_label',
+        'time_label',
         'sort_order',
         'type',
         'icon',

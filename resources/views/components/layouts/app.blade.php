@@ -68,10 +68,6 @@
     @stack('styles')
 
 
-    {{-- Page-specific scripts (if you still use them) --}}
-    @stack('scripts')
-
-
     {{-- Google Analytics (GA4) --}}
     @if(app()->environment('production') && !auth()->check())
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-41956QHQLE"></script>

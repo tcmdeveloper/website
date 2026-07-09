@@ -21,6 +21,11 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
+            $table->foreignId('parent_event_id')
+                ->nullable()
+                ->constrained('timeline_events')
+                ->nullOnDelete();
+            
             // Event
             $table->string('title', 150);
             $table->text('description')->nullable();
@@ -28,12 +33,9 @@ return new class extends Migration
             // Date
             $table->dateTime('occurred_at')->nullable();
 
-            // For approximate dates
+            // For approximate dates/times
             $table->string('date_label')->nullable();
-            // e.g.
-            // "Late August 2018"
-            // "Early Morning"
-            // "Unknown"
+            $table->string('time_label')->nullable();
 
             // Ordering
             $table->unsignedInteger('sort_order')->default(0);

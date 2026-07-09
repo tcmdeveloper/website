@@ -50,12 +50,32 @@ class Timeline extends Model
     /*
     |--------------------------------------------------------------------------
     | Route Binding (IMPORTANT)
-    | This makes URLs use /criminal-cases/{slug}
+    | This makes URLs use /timlines/{slug}
     |--------------------------------------------------------------------------
     */
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+
+
+    // -----------------------------------------------------
+    // SCOPES
+    // -----------------------------------------------------
+
+    public function scopePublished($query)
+    {
+        return $query
+            ->where('is_published', true)
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
+    }
+
+    // Latest first
+    public function scopeLatestFirst($query)
+    {
+        return $query->orderByDesc('published_at');
     }
 
 

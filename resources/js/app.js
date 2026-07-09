@@ -5,6 +5,9 @@ import { marked } from 'marked';
 import profileAvatar from './profile-avatar';
 import imageUploader from './image-uploader';
 
+import ApexCharts from 'apexcharts';
+window.ApexCharts = ApexCharts;
+
 window.Alpine = Alpine;
 window.marked = marked; // IMPORTANT: global sync
 

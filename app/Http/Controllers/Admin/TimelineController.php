@@ -204,9 +204,11 @@ class TimelineController extends Controller
         $validated = $request->validate([
             'timeline_id' => ['required', 'integer', 'exists:timelines,id'],
             'title' => ['required', 'string', 'max:150'],
-            'type' => ['nullable', 'string'],
+            'type' => ['nullable', 'string', 'max:100'],
             'occurred_at_date' => ['nullable', 'date'],
             'occurred_at_time' => ['nullable', 'date_format:H:i'],
+            'time_label' => ['nullable', 'string', 'max:100'],
+            'source_name' => ['nullable', 'string', 'max:100'],
             'description' => ['nullable', 'string', 'max:1000'],
         ]);
 

@@ -96,6 +96,32 @@
             </div>
 
 
+            {{-- Approximate Time --}}
+
+            <div>
+                <x-ui.input
+                    name="time_label"
+                    type="text"
+                    label="Approximate Time"
+                    placeholder="Approximate time"
+                    :value="old('time_label')"
+                />
+            </div>
+
+
+            {{-- Source --}}
+
+            <div>
+                <x-ui.input
+                    name="source_name"
+                    type="text"
+                    label="Source"
+                    placeholder="Source"
+                    :value="old('source_name')"
+                />
+            </div>
+
+
             {{-- Description --}}
 
             <div>

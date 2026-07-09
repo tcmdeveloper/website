@@ -2,12 +2,10 @@
 
 <x-layouts.app
     title="Categories"
-    subtitle="Explore posts organized by topic"
+    subtitle="Explore true crime articles organized by topic."
 >
 
     <x-ui.container class="max-w-5xl">
-
-
 
         {{-- Categories Grid --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -16,7 +14,7 @@
 
                 <a
                     href="{{ route('categories.show', $category->slug) }}"
-                    class="group block rounded-xl border border-zinc-200 p-6 hover:shadow-md hover:border-red-metrix transition bg-white"
+                    class="group block rounded-sm border border-zinc-200 p-6 hover:shadow-md hover:border-red-metrix transition bg-white"
                 >
 
                     {{-- Category name --}}

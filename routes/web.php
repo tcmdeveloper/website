@@ -122,6 +122,9 @@ Route::controller(FrontendCriminalCaseController::class)
     ->name('cases.')
     ->group(function(){
         Route::get('/', 'index')->name('index');
+
+        Route::get('/{criminalCase:slug}/timelines/{timeline:slug}', 'timelinesIndex')->name('timelines');
+
         Route::get('/{criminalCase}', 'show')->name('show');
         
     })

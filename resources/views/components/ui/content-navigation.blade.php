@@ -33,7 +33,7 @@
 
            
 
-            {{-- <li>
+            <li>
                 <a href="{{ route('timelines.index') }}"
                    class="rounded-md px-4 py-2 text-sm font-medium transition-colors
                    {{ request()->routeIs('timelines.*')
@@ -41,7 +41,7 @@
                         : 'text-zinc-800 hover:bg-zinc-800 hover:text-white' }}">
                     Timelines
                 </a>
-            </li> --}}
+            </li>
         </ul>
     </div>
 </nav>
