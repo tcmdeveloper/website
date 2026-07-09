@@ -82,8 +82,27 @@
 
 
     {{-- Google AdSense --}}
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5443411235770747"
-     crossorigin="anonymous"></script>
+    @if(app()->environment('production') && !auth()->check())
+        <script>
+            function loadAds() {
+                const script = document.createElement('script');
+
+                script.src =
+                    'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5443411235770747';
+
+                script.async = true;
+                script.crossOrigin = 'anonymous';
+
+                document.head.appendChild(script);
+            }
+
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(loadAds);
+            } else {
+                window.addEventListener('load', loadAds, { once: true });
+            }
+        </script>
+    @endif
      
 </head>
 
