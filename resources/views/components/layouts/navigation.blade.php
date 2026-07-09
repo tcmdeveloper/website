@@ -17,10 +17,17 @@
     {{-- Left side --}}
     <div class="justify-self-start lg:w-80 md:w-64 w-16">
         <a href="/">
-            <img src="{{ asset('images/true-crime-metrix-logo-xs.png') }}"
+            <img 
+                src="{{ asset('images/true-crime-metrix-logo-xs.png') }}"
+                srcset="
+                    /images/true-crime-metrix-logo-xs.png 64w,
+                    /images/true-crime-metrix-logo-sm.png 128w,
+                    /images/true-crime-metrix-logo.png 256w
+                "
+                sizes="auto"
                 alt="True Crime Metrix"
-                class="h-7 w-auto"
-            >
+                class="h-7 aspect-square"
+            >            
         </a>
     </div>
 
