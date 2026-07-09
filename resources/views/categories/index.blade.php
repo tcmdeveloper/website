@@ -16,11 +16,11 @@
 
                 <a
                     href="{{ route('categories.show', $category->slug) }}"
-                    class="group block rounded-xl border border-zinc-200 p-6 hover:shadow-md hover:border-green-400 transition bg-white"
+                    class="group block rounded-xl border border-zinc-200 p-6 hover:shadow-md hover:border-red-metrix transition bg-white"
                 >
 
                     {{-- Category name --}}
-                    <h2 class="text-lg font-semibold group-hover:text-green-600 transition">
+                    <h2 class="text-lg font-semibold group-hover:text-red-metrix transition">
                         {{ $category->name }}
                     </h2>
 
@@ -38,7 +38,7 @@
                             {{ $category->articles_count }} posts
                         </span>
 
-                        <span class="group-hover:text-green-500 transition">
+                        <span class="group-hover:text-red-metrix transition">
                             View →
                         </span>
 

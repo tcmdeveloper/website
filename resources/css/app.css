@@ -64,10 +64,16 @@
 ------------------------------------ */
 
 @theme {
+
+   /* Fonts */
    --font-body: "Roboto", sans-serif;
    --font-display: "Lemon Milk", sans-serif;
    --font-brand: "Lemon Milk", sans-serif;
    --font-heading: "Roboto Slab", sans-serif;
+
+   /* Colors */
+   --color-red-metrix: #ca0611;
+
 }
 
 

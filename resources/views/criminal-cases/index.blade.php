@@ -9,46 +9,51 @@
 
 
         {{-- Criminal Case Grid --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 gap-6">
 
             @forelse($criminalCases as $case)
 
                 <a
                     href="{{ route('cases.show', $case->slug) }}"
-                    class="group block rounded-xl border border-zinc-200 p-6 hover:shadow-md hover:border-green-400 transition bg-white"
+                    class="group block rounded-xs border border-zinc-200 p-6 hover:shadow-md hover:border-green-400 transition bg-white"
                 >   
 
                     {{-- Featured image --}}
+                    
+                    <div class="flex gap-6">
+                        <x-ui.image
+                            :image="$case->featuredImage"
+                            class="rounded-sm h-28 object-cover mb-4"
+                        />
+                        
+                        <div>
 
-                    <x-ui.image
-                        :image="$case->featuredImage"
-                        class="w-full rounded-sm h-48 object-cover mb-4"
-                    />
-    
+                            {{-- Case name --}}
+                            <h2 class="text-lg font-semibold group-hover:text-green-600 transition">
+                                The {{ $case->name }} Case
+                            </h2>
 
-                    {{-- Case name --}}
-                    <h2 class="text-lg font-semibold group-hover:text-green-600 transition">
-                        The {{ $case->name }} Case
-                    </h2>
+                            {{-- Description --}}
+                            @if($case->description)
+                                <p class="text-sm text-zinc-500 mt-2">
+                                    {{ Str::limit($case->description, 300) }}
+                                </p>
+                            @endif
 
-                    {{-- Description --}}
-                    @if($case->description)
-                        <p class="text-sm text-zinc-500 mt-2">
-                            {{ Str::limit($case->description, 300) }}
-                        </p>
-                    @endif
+                            {{-- Meta --}}
+                            <div class="mt-4 flex items-center justify-between text-sm text-zinc-400">
 
-                    {{-- Meta --}}
-                    <div class="mt-4 flex items-center justify-between text-sm text-zinc-400">
+                                {{-- <span>
+                                    {{ $case->documents_count }} documents
+                                </span> --}}
 
-                        <span>
-                            {{ $case->documents_count }} documents
-                        </span>
+                                <span class="group-hover:text-green-500 transition">
+                                    View →
+                                </span>
 
-                        <span class="group-hover:text-green-500 transition">
-                            View →
-                        </span>
+                            </div>
 
+                        </div>
                     </div>
 
                 </a>

@@ -31,7 +31,7 @@
 
         {{-- PUBLISHED DATE --}}
 
-        <div class="mt-5 text-xs font-light uppercase tracking-widest">
+        <div class="mt-3 text-xs font-light uppercase tracking-widest">
             <span>{{ $article->published_at->format('M d Y') }}</span>
             <span>&middot;</span>
             <span class="inline-flex items-center gap-1 text-xs text-zinc-500">
@@ -42,11 +42,11 @@
 
         {{-- TITLE AND EXCERPT --}}
 
-        <h1 class="text-center mt-2 mb-0">
+        <h1 class="text-center mt-4 mb-2">
             {{ $article->title }}
         </h1>
 
-        <p class="text-center mt-3 mb-3! font-heading text-xl font-light">
+        <p class="text-center mt-3 mb-5 font-heading text-xl font-light">
             {{ $article->excerpt }}
         </p>
 
@@ -98,7 +98,7 @@
 
         {{-- ARTICLE CONTENT --}}
 
-        <article class="prose-content w-full max-w-3xl">
+        <article class="prose-content w-full max-w-4xl">
             {!! $article->contentHtml !!}
         </article>
 

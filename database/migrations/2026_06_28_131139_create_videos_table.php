@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('thumbnail')->nullable();
 
             $table->string('status')->default('pending');
+            $table->text('error_message')->nullable();
 
             $table->string('uploader')->nullable();
             $table->string('uploader_id')->nullable();

@@ -99,6 +99,8 @@
 
     <x-layouts.navigation />
 
+    <x-ui.content-navigation/>
+
     @if(! empty($breadcrumbs))
         <x-ui.breadcrumbs :breadcrumbs="$breadcrumbs" />
     @endif

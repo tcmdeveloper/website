@@ -1,11 +1,11 @@
-{{-- resources/views/articles/admin-index.blade.php --}}
+{{-- resources/views/videos/admin-index.blade.php --}}
 
 <x-layouts.dashboard>
 
     <x-ui.card>
 
         <x-ui.header-actions
-            title="Video downloads"
+            title="Video Manager"
             subtitle="Manage videos you have downloaded from YouTube."
             :actions="[
                 'create' => [
@@ -16,42 +16,22 @@
                 ]
             ]"
         />
-
-
-        {{-- Alert --}}
+       
         <x-ui.alert />
         
 
-        {{-- Table --}}
 
-        <table class="w-full border">
+        <table class="w-full border text-sm">
 
             <thead>
-                <tr class="border-b border-zinc-200 bg-zinc-50 text-left text-sm text-zinc-600">
-
-                    <th class="px-6 py-4 font-medium">
-                        Video ID
-                        
-                    </th>
-
-                    <th class="px-6 py-4 font-medium">
-                        Title
-                    </th>
-
-                    <th class="px-6 py-4 font-medium">
-                        Duration
-                    </th>
-
-                    <th class="px-6 py-4 font-medium">
-                        Status
-                    </th>
-
-                    <th class="px-6 py-4 font-medium">
-                        Created
-                    </th>
-
-                    <th class="px-6 py-4 w-32"></th>
-
+                <tr class="bg-zinc-50 border-b border-zinc-200 text-left text-zinc-600 font-medium">
+                    <th class="px-6 py-4">Thumbnail</th>
+                    <th class="px-6 py-4">Title</th>
+                    <th class="px-6 py-4">Duration</th>
+                    <th class="px-6 py-4">Status</th>
+                    <th class="px-6 py-4">Status</th>
+                    <th class="px-6 py-4">Created</th>
+                    <th class="px-6 py-4"></th>
                 </tr>
             </thead>
 
@@ -66,7 +46,7 @@
                             {{-- {{ $video->youtube_id }} --}}
                             <img
                                 src="{{ $video->thumbnail ? Storage::url($video->thumbnail) : asset('images/default-video-thumbnail.jpg') }}"
-                                class="w-24 aspect-video rounded object-cover"
+                                class="w-20 aspect-video rounded object-cover"
                                 alt="{{ $video->title }}"
                             >
                         </td>
@@ -80,7 +60,15 @@
                         </td>
 
                         <td class="px-6 py-4 text-zinc-500">
-                            {{ $video->status }}
+
+                            <div>{{ ucfirst($video->status) }}</div>
+
+                            @if($video->status === 'failed' && $video->error_message)
+                                <div class="mt-1 text-xs text-red-600">
+                                    {{ $video->error_message }}
+                                </div>
+                            @endif
+                            
                         </td>                        
 
                         <td class="px-6 py-4 text-zinc-500">

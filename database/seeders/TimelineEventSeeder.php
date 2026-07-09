@@ -34,9 +34,10 @@ class TimelineEventSeeder extends Seeder
                 'color' => $item->color,
                 'source_name' => $item->source_name,
                 'source_url' => $item->source_url,
-                'is_public	' => $item->is_public,
+                'is_published' => $item->is_published,
+                'published_at' => $item->published_at,
                 'created_at' => $item->created_at,
-                'updated_at	' => $item->updated_at,
+                'updated_at' => $item->updated_at,
             ]);
         }
 

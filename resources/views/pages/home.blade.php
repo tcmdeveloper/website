@@ -1,8 +1,8 @@
 {{-- resources/views/pages/home.blade.php --}}
 
 <x-layouts.app 
-    title="True Crime Cases, Live Trials &<br>Evidence-Based Snark" 
-    subtitle="Live trial coverage, court documents, and structured case breakdowns<br>from True Crime Metrix."
+    title="Explore True Crime Cases in Detail" 
+    subtitle="Discover comprehensive timelines, people profiles, locations, evidence, and case analysis. Browse well-organized information on notorious and lesser-known true crime investigations in one searchable archive."
 >   
     <x-ui.container class="max-w-5xl">
 

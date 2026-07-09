@@ -25,7 +25,7 @@
 
         {{-- Title --}}
         <a href="{{ $url }}">
-            <h2 class="text-lg font-semibold text-gray-900 leading-snug hover:text-blue-600 transition-colors mb-2">
+            <h2 class="text-lg font-semibold text-gray-900 leading-snug hover:text-red-metrix transition-colors mb-2">
                 {{ $title }}
             </h2>
         </a>
