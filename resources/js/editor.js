@@ -1,27 +1,27 @@
-import Alpine from 'alpinejs';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
-
-
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('markdownEditor', () => ({
         previewMarkdown: '',
 
         init() {
-            const updatePreview = () => {
+            const textarea = this.$refs.content;
+
+            marked.setOptions({
+                gfm: true,
+                breaks: true,
+            });
+
+            const render = () => {
                 this.previewMarkdown = DOMPurify.sanitize(
-                    marked.parse(this.$refs.content.value || '')
+                    marked.parse(textarea.value || '')
                 );
             };
 
-            updatePreview();
+            render();
 
-            this.$refs.content.addEventListener('input', updatePreview);
+            textarea.addEventListener('input', render);
         }
     }));
 });
-
-window.Alpine = Alpine;
-
-Alpine.start();

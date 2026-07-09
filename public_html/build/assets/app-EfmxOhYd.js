@@ -1,2 +1,0 @@
-import{t as e}from"./module.esm-CWk4R-Yb.js";window.Alpine=e,window.marked=marked,e.data(`formHandler`,(e={})=>({firstError:e.firstError||null,agreed:e.agreed||!1,init(){this.$nextTick(()=>{this.focusFirstError()})},focusFirstError(){this.firstError&&this.focusField(this.firstError)},focusField(e){let t=this.$refs[e];if(t&&(t.focus(),t.type!==`password`&&typeof t.setSelectionRange==`function`)){let e=t.value?.length||0;t.setSelectionRange(e,e)}}})),e.start();
-//# sourceMappingURL=app-EfmxOhYd.js.map

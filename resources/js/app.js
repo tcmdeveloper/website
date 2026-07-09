@@ -1,15 +1,12 @@
 import Alpine from 'alpinejs';
 
-import { marked } from 'marked';
+
 window.Alpine = Alpine;
-window.marked = marked; // IMPORTANT: global sync
 
 
 // -------------------------
 // Shared form handler
 // -------------------------
-
-
 Alpine.data('formHandler', (config = {}) => ({
     firstError: config.firstError || null,
     agreed: config.agreed || false,

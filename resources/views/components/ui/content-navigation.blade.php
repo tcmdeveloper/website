@@ -11,7 +11,7 @@
                 </a>
             </li>
 
-            <li>
+            <li class="hidden sm:block">
                 <a href="{{ route('categories.index') }}"
                    class="rounded-md px-4 py-2 text-sm font-medium transition-colors
                    {{ request()->routeIs('categories.*')
