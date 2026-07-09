@@ -68,7 +68,6 @@
     @stack('styles')
 
 
-    {{-- Google Analytics (GA4) --}}
     @if(app()->environment('production') && !auth()->check())
         <script>
             window.dataLayer = window.dataLayer || [];
@@ -77,7 +76,7 @@
                 dataLayer.push(arguments);
             }
 
-            requestIdleCallback(() => {
+            function loadAnalytics() {
                 const script = document.createElement('script');
 
                 script.src =
@@ -92,7 +91,13 @@
                 };
 
                 document.head.appendChild(script);
-            });
+            }
+
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(loadAnalytics);
+            } else {
+                setTimeout(loadAnalytics, 1);
+            }
         </script>
     @endif
 
