@@ -20,10 +20,10 @@
 
                     {{-- Featured image --}}
                     
-                    <div class="flex gap-6">
+                    <div class="flex gap-6 flex-col md:flex-row">
                         <x-ui.image
                             :image="$case->featuredImage"
-                            class="rounded-sm h-28 object-cover mb-4"
+                            class="rounded-sm h-56 md:h-28 object-cover mb-4"
                         />
                         
                         <div>
