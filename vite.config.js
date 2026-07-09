@@ -14,6 +14,7 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/js/timeline.js',
+                'resources/js/editor.js',
             ],
             refresh: true,
         }),

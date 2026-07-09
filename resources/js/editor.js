@@ -1,31 +1,27 @@
-
+import Alpine from 'alpinejs';
 import DOMPurify from 'dompurify';
-
-const el = document.querySelector('#editor');
-const hiddenInput = document.querySelector('#content');
-const preview = document.querySelector('#preview');
-
-if (el && hiddenInput && preview) {
-
-    const editor = new Editor({
-        element: el,
-        extensions: [StarterKit],
-
-        content: hiddenInput.value || '',
-
-        onUpdate: ({ editor }) => {
-            const html = editor.getHTML();
-
-            hiddenInput.value = html;
-
-            preview.innerHTML = DOMPurify.sanitize(html);
-        },
-    });
-
-    window.editor = editor;
-}
+import { marked } from 'marked';
 
 
-document.getElementById('bold-btn')?.addEventListener('click', () => {
-    window.editor?.chain().focus().toggleBold().run();
+
+document.addEventListener('alpine:init', () => {
+    Alpine.data('markdownEditor', () => ({
+        previewMarkdown: '',
+
+        init() {
+            const updatePreview = () => {
+                this.previewMarkdown = DOMPurify.sanitize(
+                    marked.parse(this.$refs.content.value || '')
+                );
+            };
+
+            updatePreview();
+
+            this.$refs.content.addEventListener('input', updatePreview);
+        }
+    }));
 });
+
+window.Alpine = Alpine;
+
+Alpine.start();

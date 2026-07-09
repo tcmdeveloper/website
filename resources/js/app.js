@@ -1,15 +1,8 @@
 import Alpine from 'alpinejs';
-import DOMPurify from 'dompurify';
-import { marked } from 'marked';
 
-import profileAvatar from './profile-avatar';
-import imageUploader from './image-uploader';
 
 window.Alpine = Alpine;
 window.marked = marked; // IMPORTANT: global sync
-
-Alpine.data('profileAvatar', profileAvatar);
-Alpine.data('imageUploader', imageUploader);
 
 
 // -------------------------
@@ -43,46 +36,7 @@ Alpine.data('formHandler', (config = {}) => ({
     }
 }));
 
-// -------------------------
-// Markdown Editor (Alpine)
-// -------------------------
-Alpine.data('markdownEditor', () => ({
-    previewMarkdown: '',
 
-    init() {
-        const textarea = this.$refs.content;
-
-        if (!textarea) {
-            console.error('Markdown textarea not found');
-            return;
-        }
-
-        if (!marked) {
-            console.error('marked not loaded');
-            return;
-        }
-
-        // Configure markdown once
-        marked.setOptions({
-            gfm: true,
-            breaks: true // 👈 THIS is what makes new lines work
-        });
-
-        const render = () => {
-            const md = textarea.value || '';
-
-            const html = marked.parse(md);   // use direct import, NOT window.marked
-
-            this.previewMarkdown = DOMPurify.sanitize(html);
-        };
-
-        // initial render
-        render();
-
-        // live update
-        textarea.addEventListener('input', render);
-    }
-}));
 
 // -------------------------
 // Start Alpine (CRITICAL)

@@ -1,7 +1,8 @@
-
-
-
 {{-- resources/views/admin/profile/show.blade.php --}}
+
+@push('scripts')
+    @vite('resources/js/profile-avatar.js')
+@endpush
 
 <x-layouts.dashboard
     title="Profile"

@@ -1,5 +1,9 @@
 {{-- resources/views/articles/create.blade.php --}}
 
+@push('scripts')
+    @vite('resources/js/editor.js')
+@endpush
+
 <x-layouts.dashboard>
 
     <x-ui.card>
