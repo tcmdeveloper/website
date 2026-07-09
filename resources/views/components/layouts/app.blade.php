@@ -68,36 +68,15 @@
     @stack('styles')
 
 
+    {{-- Google Analytics (GA4) --}}
     @if(app()->environment('production') && !auth()->check())
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-41956QHQLE"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
 
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-
-            function loadAnalytics() {
-                const script = document.createElement('script');
-
-                script.src =
-                    'https://www.googletagmanager.com/gtag/js?id=G-41956QHQLE';
-
-                script.async = true;
-
-                script.onload = () => {
-                    gtag('js', new Date());
-
-                    gtag('config', 'G-41956QHQLE');
-                };
-
-                document.head.appendChild(script);
-            }
-
-            if ('requestIdleCallback' in window) {
-                requestIdleCallback(loadAnalytics);
-            } else {
-                setTimeout(loadAnalytics, 1);
-            }
+            gtag('config', 'G-41956QHQLE');
         </script>
     @endif
 
