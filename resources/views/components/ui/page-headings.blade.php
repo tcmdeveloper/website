@@ -7,14 +7,36 @@
 
         {{-- HOMEPAGE BANNER--}}
 
-        <div
-            class="mb-10 relative overflow-hidden border-b border-gray-300"
-        >
+        <div class="mb-10 relative overflow-hidden border-b border-gray-300">
+
             <!-- Background image -->
-            <div
-                class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style="background-image: url('{{ asset('images/hero-default.jpg') }}');"
-            ></div>
+            <picture>
+
+                {{-- Best compression / newest browsers --}}
+                <source
+                    srcset="{{ asset('images/hero-default.avif') }}"
+                    type="image/avif"
+                >
+
+                {{-- Fallback for browsers without AVIF support --}}
+                <source
+                    srcset="{{ asset('images/hero-default.webp') }}"
+                    type="image/webp"
+                >
+
+                {{-- Final fallback --}}
+                <img
+                    src="{{ asset('images/hero-default.jpg') }}"
+                    width="1920"
+                    height="600"
+                    alt=""
+                    class="absolute inset-0 h-full w-full object-cover"
+                    loading="eager"
+                    fetchpriority="high"
+                    decoding="async"
+                >
+
+            </picture>
 
             <!-- Black overlay -->
             <div class="absolute inset-0 bg-black/80"></div>
@@ -35,20 +57,15 @@
                 @endif
 
                 <x-ui.button
-                    href="{{route('cases.index')}}"
+                    href="{{ route('cases.index') }}"
                     size="xs"
                     variant="primary"
                 >
                     Case Files
                 </x-ui.button>
-                {{-- <x-ui.button
-                    href="{{route('cases.index')}}"
-                    size="xs"
-                    variant="ghost"
-                >
-                    Support Metrix
-                </x-ui.button> --}}
+
             </div>
+
         </div>
    
     @else
