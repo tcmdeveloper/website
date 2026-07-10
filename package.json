@@ -18,6 +18,8 @@
     },
     "dependencies": {
         "@fancyapps/ui": "^6.1.14",
+        "@fontsource/open-sans": "^5.2.7",
+        "@fontsource/roboto-slab": "^5.2.8",
         "@fontsource/source-serif-4": "^5.2.9",
         "@tiptap/extension-image": "^3.25.0",
         "@tiptap/extension-link": "^3.25.0",
