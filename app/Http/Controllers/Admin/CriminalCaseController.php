@@ -37,7 +37,7 @@ class CriminalCaseController extends Controller
         // Put filters here if required.
         //
 
-        $criminalCases = $criminalCases->latest()->paginate();
+        $criminalCases = $criminalCases->latest()->withCount('articles')->paginate();
         
         return view('criminal-cases.admin-index', [
             'criminalCases' => $criminalCases

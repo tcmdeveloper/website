@@ -18,10 +18,10 @@
     <div class="justify-self-start lg:w-80 md:w-64 w-16">
         <a href="/">
             <img
-    src="{{ asset('images/true-crime-metrix-logo-xs.png') }}"
-    alt="True Crime Metrix"
-    class="h-7 w-7"
->
+        src="{{ asset('images/true-crime-metrix-logo-xs.png') }}"
+        alt="True Crime Metrix"
+        class="h-7 w-7"
+    >
         </a>
     </div>
 

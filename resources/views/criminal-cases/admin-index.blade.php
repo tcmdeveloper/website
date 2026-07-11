@@ -68,11 +68,11 @@
                         </td>
 
                         <td class="px-6 py-4">
-                            {{ number_format($criminalCase->article_count) }}
+                            {{ number_format($criminalCase->articles_count) }}
                         </td>
 
                         <td class="px-6 py-4">
-                            {{ number_format($criminalCase->document_count) }}
+                            {{ number_format($criminalCase->documents_count) }}
                         </td>
 
                         <td class="px-6 py-4">

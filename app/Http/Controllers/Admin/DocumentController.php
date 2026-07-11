@@ -24,7 +24,7 @@ class DocumentController extends Controller
 
     public function index()
     {
-        $documents = Document::orderBy('name')->paginate(10);
+        $documents = Document::orderBy('name')->withCount('documentPages')->paginate(10);
         
         return view('documents.admin-index', [
             'documents' => $documents
@@ -54,7 +54,7 @@ class DocumentController extends Controller
             'criminal_case_id' => ['required', 'integer', 'exists:criminal_cases,id'],
             'pdf' => ['required', 'file', 'mimes:pdf', 'max:102400'], // 100 MB
             'name' => ['required', 'string', 'max:100', 'unique:documents,name'],
-            'description' => ['required', 'string', 'max:300'],
+            'description' => ['required', 'string', 'max:500'],
             'is_published' => ['nullable', 'boolean'],
         ]);
         

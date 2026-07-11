@@ -113,8 +113,9 @@
                     </div>
 
                     <x-ui.image
-                        :image="$criminalCase->featuredImage"
-                        class="rounded-sm w-full object-cover mb-4"
+                        :image="$criminalCase->display_image"
+                        class="w-full sm:w-[267px] h-48 object-cover rounded-tl-sm rounded-tr-sm rounded-bl-none rounded-br-none"
+                        sizes="(min-width: 640px) 267px, 100vw"
                     />
 
                 </div>

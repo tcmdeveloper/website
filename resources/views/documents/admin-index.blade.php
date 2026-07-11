@@ -64,7 +64,7 @@
                         </td>
 
                         <td class="px-6 py-4">
-                           0
+                           {{ number_format($document->document_pages_count) }}
                         </td>
 
                         <td class="px-6 py-4 text-zinc-500">

@@ -10,6 +10,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ProcessDocument implements ShouldQueue
 {
@@ -27,6 +29,18 @@ class ProcessDocument implements ShouldQueue
         $document = Document::findOrFail($this->documentId);
 
         $inputPath = Storage::disk('public')->path($document->pdf_path);
+
+
+        $manager = ImageManager::usingDriver(Driver::class);
+
+        $watermarkPath = storage_path(
+            'app/public/watermarks/metrix-document-watermark.png'
+        );
+
+
+
+
+
 
         if (!file_exists($inputPath)) {
             throw new \Exception("PDF not found at: {$inputPath}");
@@ -72,6 +86,26 @@ class ProcessDocument implements ShouldQueue
 sort($files);
 
 foreach ($files as $index => $filePath) {
+
+    $image = $manager->read($filePath);
+
+    $watermark = $manager->read($watermarkPath);
+
+    // Optional: resize watermark to 25% of page width
+    $watermark->scale(
+        width: (int) ($image->width() * 0.25)
+    );
+
+    // Place watermark bottom-right with padding
+    $image->place(
+        $watermark,
+        'bottom-right',
+        24,
+        24
+    );
+
+    $image->save($filePath);
+
     $relativePath = str_replace(
         Storage::disk('public')->path('/document-pages'),
         '',
