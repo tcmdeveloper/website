@@ -1,6 +1,11 @@
 {{-- resources/views/articles/create-image.blade.php --}}
 
 
+
+@push('scripts')
+    @vite('resources/js/image-uploader.js')
+@endpush
+
 <x-layouts.dashboard>
 
     <x-ui.card class="max-w-4xl">

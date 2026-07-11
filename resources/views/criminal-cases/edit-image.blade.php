@@ -1,5 +1,8 @@
 {{-- resources/views/criminal-cases/edit-image.blade.php --}}
 
+@push('scripts')
+    @vite('resources/js/image-uploader.js')
+@endpush
 
 <form
     id="optimizeForm"

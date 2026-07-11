@@ -1,5 +1,8 @@
 {{-- resources/views/articles/edit-image.blade.php --}}
 
+@push('scripts')
+    @vite('resources/js/image-uploader.js')
+@endpush
 
 <x-layouts.dashboard>
 

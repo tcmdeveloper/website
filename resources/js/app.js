@@ -1,5 +1,4 @@
 import Alpine from 'alpinejs';
-import imageUploader from './image-uploader';
 
 
 window.Alpine = Alpine;

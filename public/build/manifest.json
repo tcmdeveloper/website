@@ -721,13 +721,10 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-B9xSd97p.js",
+    "file": "assets/app-BLIkxCeT.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true,
-    "css": [
-      "assets/app-cx_wrqbx.css"
-    ]
+    "isEntry": true
   },
   "resources/js/editor.js": {
     "file": "assets/editor-D7UUjeUd.js",
