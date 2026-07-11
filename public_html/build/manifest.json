@@ -451,10 +451,13 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-BLIkxCeT.js",
+    "file": "assets/app-B9xSd97p.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true
+    "isEntry": true,
+    "css": [
+      "assets/app-cx_wrqbx.css"
+    ]
   },
   "resources/js/editor.js": {
     "file": "assets/editor-D7UUjeUd.js",
