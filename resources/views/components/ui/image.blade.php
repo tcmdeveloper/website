@@ -83,12 +83,3 @@
 
 @endif
 
-
-
-<script>
-const picture = document.querySelector('picture');
-
-console.log(picture.querySelector('source[type="image/avif"]').srcset);
-console.log(picture.querySelector('source[type="image/avif"]').sizes);
-
-</script>
