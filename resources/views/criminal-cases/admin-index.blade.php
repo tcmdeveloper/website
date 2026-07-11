@@ -54,18 +54,20 @@
                         <td class="px-6 py-4">
 
                             @if($criminalCase->isPublished())
-                                <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-800">
-                                    Public
-                                </span>
+                                <x-ui.pip
+                                    label="Public"
+                                    variant="success"
+                                />
                             @else
-                                <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">
-                                    Private
-                                </span>
+                                <x-ui.pip
+                                    label="Private"
+                                    variant="ghost"
+                                />
                             @endif
 
                         </td>
 
-                        <td class="px-6 py-4 text-zinc-500">
+                        <td class="px-6 py-4">
                             {{ number_format($criminalCase->article_count) }}
                         </td>
 
@@ -77,7 +79,7 @@
                            {{ number_format($criminalCase->formatted_views) }}
                         </td>
 
-                        <td class="px-6 py-4 text-zinc-500">
+                        <td class="px-6 py-4">
                             {{ $criminalCase->created_at->format('M j, Y') }}
                         </td>
 
@@ -96,7 +98,7 @@
                                 <x-ui.button
                                     size="xs"
                                     variant="ghost"
-                                    href="{{ route('admin.criminal-cases.images', $criminalCase) }}"
+                                    href="{{ route('admin.criminal-cases.images.index', $criminalCase) }}"
                                 >
                                     Images
                                 </x-ui.button>

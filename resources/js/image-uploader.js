@@ -1,4 +1,5 @@
 import Cropper from 'cropperjs';
+import 'cropperjs/dist/cropper.css';
 
 export default (initialPreview = '', initialFeatured = false) => ({
     cropper: null,
@@ -17,11 +18,9 @@ export default (initialPreview = '', initialFeatured = false) => ({
 
         reader.onload = e => {
 
-            this.preview = true;
+            this.preview = e.target.result;
 
             this.$nextTick(() => {
-
-                this.$refs.preview.src = e.target.result;
 
                 if (this.cropper) {
                     this.cropper.destroy();
@@ -39,7 +38,6 @@ export default (initialPreview = '', initialFeatured = false) => ({
         };
 
         reader.readAsDataURL(file);
-
     },
 
     submit() {
@@ -71,6 +69,7 @@ export default (initialPreview = '', initialFeatured = false) => ({
             reader.readAsDataURL(blob);
 
         }, 'image/jpeg', 0.9);
-
     }
+
 });
+

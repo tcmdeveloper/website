@@ -1,10 +1,17 @@
 {{-- resources/views/articles/edit-image.blade.php --}}
 
-@push('scripts')
-    @vite('resources/js/image-uploader.js')
-@endpush
 
 <x-layouts.dashboard>
+
+
+    <form
+    id="optimizeForm"
+    method="POST"
+    action="{{ route('admin.articles.images.optimize', [$article, $image]) }}"
+>
+    @csrf
+</form>
+
 
     <x-ui.card class="max-w-4xl">
 
@@ -47,7 +54,7 @@
             
             
             <div
-                class="relative flex aspect-video items-center justify-center overflow-hidden rounded border border-zinc-300 bg-zinc-50"
+                class="relative flex h-96 items-center justify-center overflow-hidden rounded border border-zinc-300 bg-zinc-50"
             >
 
                 <img
@@ -75,6 +82,19 @@
                     class="absolute bottom-3 right-3 flex items-center gap-2"
                 >
                     
+                    {{--  Optimize button --}}
+                    @unless($image->has_multiformat)
+                        <x-ui.button
+                            type="submit"
+                            form="optimizeForm"
+                            variant="success"
+                            size="xs"
+                        ><x-heroicon-s-star class="w-4 h-4" />
+                            Optimize
+                        </x-ui.button>
+                    @endunless
+
+
                     {{--  'Make Featured' button --}}
                     <template x-if="featured">
                         <x-ui.button

@@ -1,7 +1,10 @@
 import Alpine from 'alpinejs';
+import imageUploader from './image-uploader';
 
 
 window.Alpine = Alpine;
+
+Alpine.data('imageUploader', imageUploader);
 
 
 // -------------------------

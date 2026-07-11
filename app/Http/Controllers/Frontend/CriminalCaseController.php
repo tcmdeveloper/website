@@ -55,7 +55,7 @@ class CriminalCaseController extends Controller
 
     public function timelinesIndex(CriminalCase $criminalCase, Timeline $timeline)
     {
-        $timeline->increment('views');
+        $criminalCase->increment('views');
         $start = $timeline->events->min('occurred_at');
         $end = $timeline->events->max('occurred_at');
 

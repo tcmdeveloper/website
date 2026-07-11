@@ -71,8 +71,11 @@
 
         <x-ui.image
             :image="$article->display_image"
-            class="aspect-video w-full rounded"
+            class="w-full sm:w-[800px] object-cover rounded-tl-sm rounded-tr-sm rounded-bl-none rounded-br-none"
+            sizes="(min-width: 640px) 800px, 100vw"
         />
+
+      
 
 
         @if ($featuredImage && $featuredImage->credit_name)
@@ -98,7 +101,7 @@
 
         {{-- ARTICLE CONTENT --}}
 
-        <article class="prose-content w-full max-w-4xl">
+        <article class="prose-content w-full max-w-4xl px-4">
             {!! $article->contentHtml !!}
         </article>
 

@@ -123,7 +123,7 @@
                                 <x-ui.button
                                     size="xs"
                                     variant="ghost"
-                                    href="{{ route('admin.articles.images', $article) }}"
+                                    href="{{ route('admin.articles.images.index', $article) }}"
                                 >
                                     Images
                                 </x-ui.button>

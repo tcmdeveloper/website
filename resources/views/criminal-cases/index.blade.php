@@ -20,13 +20,18 @@
 
                     {{-- Featured image --}}
                     
-                    <div class="flex gap-6 flex-col md:flex-row">
-                        <x-ui.image
-                            :image="$case->featuredImage"
-                            class="rounded-sm h-56 md:h-28 object-cover mb-4"
-                        />
+                    <div class="grid grid-cols-12 gap-6">
                         
-                        <div>
+                        <div class="col-span-3">
+
+                            <x-ui.image
+                                :image="$case->display_image"
+                                class="w-full sm:w-[219px] object-cover rounded-tl-sm rounded-tr-sm rounded-bl-none rounded-br-none"
+                                sizes="(min-width: 640px) 219px, 100vw"
+                            />
+                        </div>
+                        
+                        <div class="col-span-9">
 
                             {{-- Case name --}}
                             <h2 class="text-lg font-semibold group-hover:text-red-metrix transition">

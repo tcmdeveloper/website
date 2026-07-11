@@ -16,8 +16,9 @@
     <a href="{{ $url }}" class="block">
         <x-ui.image
             :image="$featuredImage"
-            class="w-full rounded-sm h-48 object-cover"
-         />
+            class="w-full sm:w-[480px] h-48 object-cover rounded-tl-sm rounded-tr-sm rounded-bl-none rounded-br-none"
+            sizes="(min-width: 640px) 480px, 100vw"
+        />
     </a>
 
     {{-- Content --}}

@@ -1,8 +1,5 @@
 {{-- resources/views/articles/create-image.blade.php --}}
 
-@push('scripts')
-    @vite('resources/js/image-uploader.js')
-@endpush
 
 <x-layouts.dashboard>
 
@@ -11,9 +8,13 @@
         <x-ui.header-actions
             title="Upload a new image"
             subtitle="Select the image you want to add to this article."
-            :href="route('admin.articles.images', $article)"
-            label="Back to images"
-            buttonVariant="ghost"
+            :actions="[
+                'back' => [
+                    'label' => 'Back to Images',
+                    'href' => route('admin.articles.images.index', [$article]),
+                    'variant' => 'ghost',
+                ],
+            ]"
         />
 
         <x-ui.alert />
@@ -22,7 +23,7 @@
             id="imageForm"
             method="POST"
             action="{{ route('admin.articles.images.store', $article) }}"
-            x-data="imageUploader"
+            x-data="imageUploader()"
             @submit.prevent="submit"
             class="space-y-6"
         >
@@ -43,7 +44,7 @@
             >
 
             <div
-                class="flex aspect-video items-center justify-center rounded border border-zinc-300 bg-zinc-50"
+                class="relative flex h-96 items-center justify-center overflow-hidden rounded border border-zinc-300 bg-zinc-50"
             >
 
                 <template x-if="!preview">
@@ -60,9 +61,57 @@
 
                 <img
                     x-show="preview"
+                    :src="preview"
                     x-ref="preview"
-                    class="max-h-full max-w-full"
+                    class="max-h-full max-w-full object-contain"
                 >
+
+                <div
+                    x-show="preview"
+                    class="absolute bottom-3 right-3 flex items-center gap-2"
+                >
+                    
+                    {{--  'Make Featured' button --}}
+                    <template x-if="featured">
+                        <x-ui.button
+                            type="button"
+                            @click="featured = false"
+                            variant="primary"
+                            size="xs"
+                        >
+                            <x-heroicon-o-star class="w-4 h-4" />
+                            Featured
+                        </x-ui.button>
+                    </template>
+
+                    <template x-if="!featured">
+                        <x-ui.button
+                            type="button"
+                            @click="featured = true"
+                            variant="ghost"
+                            size="xs"
+                        >
+                            <x-heroicon-o-star class="w-4 h-4" />
+                            Make Featured
+                        </x-ui.button>
+                    </template>
+
+                    <input type="hidden" name="is_featured" :value="featured ? 1 : 0">
+
+
+                    {{-- 'Replace Image' button --}}
+                    <x-ui.button
+                        type="button"
+                        @click="$refs.file.click()"
+                        size="xs"
+                        variant="ghost"
+                    >
+                        <x-heroicon-o-photo class="w-4 h-4" />
+                        Replace Image
+                    </x-ui.button>
+
+
+                </div>
 
             </div>
 

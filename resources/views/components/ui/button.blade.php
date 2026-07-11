@@ -69,8 +69,8 @@
             mt-1
             gap-2
             bg-gradient-to-r
-            from-indigo-600 to-blue-500
-            border-indigo-500
+            from-amber-600 to-yellow-500
+            border-amber-500
             text-white
             focus:ring-indigo-600
         ',

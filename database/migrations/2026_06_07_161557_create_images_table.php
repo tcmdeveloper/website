@@ -29,6 +29,7 @@ return new class extends Migration
 
             // Display
             $table->boolean('is_featured')->default(false);
+            $table->boolean('has_multiformat')->default(false);
             $table->unsignedInteger('sort_order')->default(0);
 
             // Uploaded by

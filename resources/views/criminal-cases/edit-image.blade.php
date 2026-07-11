@@ -1,8 +1,14 @@
 {{-- resources/views/criminal-cases/edit-image.blade.php --}}
 
-@push('scripts')
-    @vite('resources/js/image-uploader.js')
-@endpush
+
+<form
+    id="optimizeForm"
+    method="POST"
+    action="{{ route('admin.criminal-cases.images.optimize', [$criminalCase, $image]) }}"
+>
+    @csrf
+</form>
+
 
 <x-layouts.dashboard>
 
@@ -11,7 +17,13 @@
         <x-ui.header-actions
             title="{{ $title }}"
             subtitle="{{ $subtitle }}"
-            :actions="$actions"
+            :actions="[
+                'back' => [
+                    'label' => 'Back to Images',
+                    'href' => route('admin.criminal-cases.images.index', [$criminalCase]),
+                    'variant' => 'ghost',
+                ],
+            ]"
         />
 
         <x-ui.alert />
@@ -47,7 +59,7 @@
             
             
             <div
-                class="relative flex aspect-video items-center justify-center overflow-hidden rounded border border-zinc-300 bg-zinc-50"
+                class="relative flex h-96 items-center justify-center overflow-hidden rounded border border-zinc-300 bg-zinc-50"
             >
 
                 <img
@@ -74,6 +86,20 @@
                     x-show="preview"
                     class="absolute bottom-3 right-3 flex items-center gap-2"
                 >
+
+
+                    {{--  Optimize button --}}
+                    @unless($image->has_multiformat)
+                        <x-ui.button
+                            type="submit"
+                            form="optimizeForm"
+                            variant="success"
+                            size="xs"
+                        ><x-heroicon-s-star class="w-4 h-4" />
+                            Optimize
+                        </x-ui.button>
+                    @endunless
+                    
                     
                     {{--  'Make Featured' button --}}
                     <template x-if="featured">
@@ -83,7 +109,7 @@
                             variant="primary"
                             size="xs"
                         >
-                            <x-heroicon-s-star class="w-4 h-4" />
+                            <x-heroicon-o-check-circle class="w-4 h-4" />
                             Featured
                         </x-ui.button>
                     </template>
@@ -178,6 +204,15 @@
                     size="sm"
                 >
                     Update Image
+                </x-ui.button>
+
+                <x-ui.button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    href="{{ route('admin.criminal-cases.images.index', [$criminalCase]) }}"
+                >
+                    Cancel
                 </x-ui.button>
 
 

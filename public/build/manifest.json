@@ -568,7 +568,7 @@
     "src": "node_modules/@fontsource/roboto-slab/files/roboto-slab-vietnamese-700-normal.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-BQ2p49Mv.css",
+    "file": "assets/app-XTW8ysvY.css",
     "name": "app",
     "names": [
       "app.css"
@@ -721,10 +721,13 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-Catt9stz.js",
+    "file": "assets/app-B9xSd97p.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true
+    "isEntry": true,
+    "css": [
+      "assets/app-cx_wrqbx.css"
+    ]
   },
   "resources/js/editor.js": {
     "file": "assets/editor-D7UUjeUd.js",

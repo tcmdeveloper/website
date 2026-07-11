@@ -3,20 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\CriminalCase;
-use App\Models\Category;
 use App\Models\Article;
+use App\Models\Category;
+use App\Models\CriminalCase;
 use App\Models\Image;
+use App\Services\ImageOptimizer;
 use App\Services\RandomStringGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\Encoders\AvifEncoder;
-use Intervention\Image\Encoders\WebpEncoder;
 use Intervention\Image\Encoders\JpegEncoder;
+use Intervention\Image\Encoders\WebpEncoder;
+use Intervention\Image\ImageManager;
 
 
 class ArticleController extends Controller
@@ -105,7 +106,7 @@ class ArticleController extends Controller
         $data = $request->validate([
             'title' => ['required', 'string', 'min:5', 'max:120', 'regex:/^[\pL\pN\s\-\:\,\.\'\"\!\?]+$/u'],
             'slug' => ['nullable', 'string', 'max:150', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', 'unique:articles,slug'],
-            'excerpt' => ['nullable', 'string', 'min:50', 'max:300'],
+            'excerpt' => ['nullable', 'string', 'min:50', 'max:500'],
             'content' => ['nullable', 'string'],
             'cropped_image' => ['nullable', 'string'],
             'criminal_case_id' => ['nullable', 'integer', 'exists:criminal_cases,id'],
@@ -212,7 +213,7 @@ class ArticleController extends Controller
             ->route('admin.articles.index')
             ->with('status', [
                 'type' => 'success',
-                'message' => 'Article deleted!',
+                'message' => 'Article deleted.',
             ]);
     }
 
@@ -256,8 +257,10 @@ class ArticleController extends Controller
     // -----------------------------------------------------
     // STORE ARTICLE IMAGE
     // -----------------------------------------------------
-    public function storeImage(Request $request, Article $article)
+
+    public function storeImage(Request $request, Article $article, ImageOptimizer $optimizer)
     {
+
         $validated = $request->validate([
             'cropped_image' => ['required', 'string'],
             'caption' => ['nullable', 'string', 'max:255'],
@@ -282,56 +285,79 @@ class ArticleController extends Controller
             ]);
         }
 
-
-        // Upload images to article.hex directory
-
         $filename = (string) Str::uuid();
         $path = "articles/{$article->hex}/{$filename}";
 
         $manager = ImageManager::usingDriver(Driver::class);
-        $image = $manager->decodeBinary($imageData);
-
-
-        Storage::disk('public')->put(
-            "{$path}.avif",
-            (string) $image->encode(new AvifEncoder(quality: 80))
-        );
-
-        Storage::disk('public')->put(
-            "{$path}.webp",
-            (string) $image->encode(new WebpEncoder(quality: 85))
-        );
+        $decodedImage = $manager->decodeBinary($imageData);
 
         Storage::disk('public')->put(
             "{$path}.jpg",
-            (string) $image->encode(new JpegEncoder(quality: 90))
+            (string) $decodedImage->encode(
+                new JpegEncoder(quality: 90)
+            )
         );
 
-
-        // If this image is becoming featured, clear any existing featured image.
-        if (!empty($validated['is_featured'])) {
+        if (! empty($validated['is_featured'])) {
             $article->images()->update([
                 'is_featured' => false,
             ]);
         }
 
-
-        $article->images()->create([
-            'image_path'   => $path,
-            'caption'      => $validated['caption'],
-            'alt_text'     => $validated['alt_text'],
-            'credit_name'  => $validated['credit_name'],
-            'credit_url'   => $validated['credit_url'],
-            'is_featured'  => $validated['is_featured'] ?? false,
+        $image = $article->images()->create([
+            'image_path' => $path,
+            'caption' => $validated['caption'],
+            'alt_text' => $validated['alt_text'],
+            'credit_name' => $validated['credit_name'],
+            'credit_url' => $validated['credit_url'],
+            'is_featured' => $validated['is_featured'] ?? false,
         ]);
 
+        try {
+            $optimizer->optimizeImage($image);
+        } catch (\Throwable $e) {
+            report($e);
+        }
 
         return redirect()
-            ->route('admin.articles.images', $article)
+            ->route('admin.articles.images.index', $article)
             ->with('status', [
                 'type' => 'success',
-                'message' => 'Image uploaded successfully!',
+                'message' => 'Image uploaded.',
             ]);
+    }
+
+
+    // -----------------------------------------------------
+    // OPTIMIZE IMAGE
+    // -----------------------------------------------------
+
+    public function optimizeImage(Article $article, Image $image)
+    {
+        try {
+
+            app(ImageOptimizer::class)->optimize(
+                $image->image_path
+            );
+
+            $image->update([
+                'has_multiformat' => true,
+            ]);
+
+            return back()->with('status', [
+                'type' => 'success',
+                'message' => 'Image optimized successfully.',
+            ]);
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            return back()->with('status', [
+                'type' => 'error',
+                'message' => 'Failed to optimize image.',
+            ]);
+        }
     }
 
     
@@ -346,8 +372,8 @@ class ArticleController extends Controller
         $subtitle = 'Replace the image or update its details and metadata.';
         $actions = [
             'back' => [
-                'label' => 'Back to Articles',
-                'href' => route('admin.articles.index'),
+                'label' => 'Back to Images',
+                'href' => route('admin.articles.images.index', $article),
                 'variant' => 'ghost',
             ]
         ];
@@ -442,17 +468,40 @@ class ArticleController extends Controller
             ->whereKey($image->id)
             ->firstOrFail();
 
-        if ($image->path && Storage::disk('public')->exists($image->display_path)) {
-            Storage::disk('public')->delete($image->display_path);
+        $sizes = [
+            160,
+            320,
+            480,
+            640,
+            800,
+            1200,
+        ];
+
+        $files = [
+            "{$image->image_path}.jpg",
+        ];
+
+        foreach ($sizes as $size) {
+            $files[] = "{$image->image_path}-{$size}.webp";
+            $files[] = "{$image->image_path}-{$size}.avif";
         }
+
+        Storage::disk('public')->delete($files);
 
         $image->delete();
 
+        // Remove the article image directory if it is now empty.
+        $directory = dirname($image->image_path);
+
+        if (empty(Storage::disk('public')->files($directory))) {
+            Storage::disk('public')->deleteDirectory($directory);
+        }
+
         return redirect()
-            ->route('admin.articles.images', $article)
+            ->route('admin.articles.images.index', $article)
             ->with('status', [
                 'type' => 'success',
-                'message' => 'Image deleted successfully!',
+                'message' => 'Image deleted.',
             ]);
     }
     

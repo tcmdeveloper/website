@@ -27,6 +27,7 @@ class Image extends Model
         'credit_name',
         'credit_url',
         'is_featured',
+        'has_multiformat',
         'sort_order',
         'user_id',
     ];
@@ -76,30 +77,45 @@ class Image extends Model
     |--------------------------------------------------------------------------
     */
 
-protected function imageUrl(): Attribute
+    public function getImageUrlAttribute(): string
+    {
+        if ($this->has_multiformat) {
+            return Storage::url("{$this->image_path}.jpg");
+        }
+
+        return Storage::url("{$this->image_path}.jpg");
+    }
+
+
+    public function url(?int $width = null, string $extension = 'jpg'): string
+    {
+        $path = $this->image_path;
+
+        if ($width !== null) {
+            $path .= "-{$width}";
+        }
+
+        return Storage::url(
+            "{$path}.{$extension}"
+        );
+    }
+
+
+
+    
+
+public function hasAvailableFormats(): bool
 {
-    return Attribute::make(
-        get: function () {
-            foreach (['avif', 'webp', 'jpg'] as $extension) {
-                $path = "{$this->image_path}.{$extension}";
+    if (! $this->has_multiformat) {
+        return false;
+    }
 
-                if (Storage::disk('public')->exists($path)) {
-                    return Storage::url($path);
-                }
-            }
+    $disk = Storage::disk('public');
 
-            foreach (['avif', 'webp', 'jpg'] as $extension) {
-                $path = public_path("{$this->image_path}.{$extension}");
-
-                if (file_exists($path)) {
-                    return asset("{$this->image_path}.{$extension}");
-                }
-            }
-
-            return '';
-        },
-    );
+    return $disk->exists("{$this->image_path}-160.avif")
+        || $disk->exists("{$this->image_path}-160.webp");
 }
+    
 
     
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CriminalCase extends Model
@@ -137,15 +138,16 @@ class CriminalCase extends Model
 
 
     // Images
-    public function images()
-    {
-        return $this->morphMany(Image::class, 'imageable');
-    }
-
     public function featuredImage()
     {
         return $this->morphOne(Image::class, 'imageable')
             ->where('is_featured', true);
+    }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable')
+            ->orderBy('sort_order');
     }
 
 
@@ -162,15 +164,60 @@ class CriminalCase extends Model
     |
     */
     
+
+
     protected function displayImage(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->featuredImage
-                ?? new Image([
-                    'image_path' => 'images/default-article',
-                    'alt_text' => 'Default case image',
-                ]),
-        );
+{
+    return Attribute::make(
+        get: function () {
+
+            $image = $this->featuredImage;
+
+            if ($image && $image->exists()) {
+                return $image;
+            }
+
+            $image = $this->images()
+                ->orderBy('sort_order')
+                ->first();
+
+            if ($image && $image->exists()) {
+                return $image;
+            }
+
+            return new Image([
+                'image_path' => 'images/default-article',
+                'alt_text' => 'Default article image',
+            ]);
+        },
+    );
+}
+
+
+
+
+        public function getImageUrlAttribute(): string
+{
+    if ($this->has_multiformat) {
+        return $this->url(1200, 'avif');
     }
+
+    return Storage::url("{$this->image_path}.jpg");
+}
+
+
+    public function url(?int $width = null, string $extension = 'jpg'): string
+{
+    $path = $this->image_path;
+
+    if ($width !== null) {
+        $path .= "-{$width}";
+    }
+
+    return Storage::url(
+        "{$path}.{$extension}"
+    );
+}
+
 
 }

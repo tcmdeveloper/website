@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CriminalCase;
 use App\Models\Image;
+use App\Services\ImageOptimizer;
 use App\Services\RandomStringGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -62,7 +63,7 @@ class CriminalCaseController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100', 'unique:criminal_cases,name'],
-            'description' => ['required', 'string', 'max:300'],
+            'description' => ['required', 'string', 'max:500'],
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -77,8 +78,8 @@ class CriminalCaseController extends Controller
         CriminalCase::create($validated);
 
         return redirect( route('admin.criminal-cases.index') )->with('status', [
-            'type' => 'status',
-            'message' => 'New case added.'
+            'type' => 'success',
+            'message' => 'Criminal Case added.'
         ]);
 
     }
@@ -105,7 +106,7 @@ class CriminalCaseController extends Controller
         
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100', Rule::unique('criminal_cases', 'name')->ignore($criminalCase->id)],
-            'description' => ['required', 'string', 'max:300'],
+            'description' => ['required', 'string', 'max:500'],
             'is_published' => ['required', 'boolean']
         ]);
 
@@ -129,7 +130,7 @@ class CriminalCaseController extends Controller
             ->route('admin.criminal-cases.index')
             ->with('status', [
                 'type' => 'success',
-                'message' => 'Criminal case updated.',
+                'message' => 'Criminal Case updated.',
             ]);
             
     }
@@ -196,10 +197,10 @@ class CriminalCaseController extends Controller
 
 
     // -----------------------------------------------------
-    // SELECT IMAGE
+    // CREATE IMAGE
     // -----------------------------------------------------
 
-    public function selectImage(CriminalCase $criminalCase)
+    public function createImage(CriminalCase $criminalCase)
     {   
         return view('criminal-cases.create-image', [
             'criminalCase' => $criminalCase,
@@ -211,7 +212,7 @@ class CriminalCaseController extends Controller
     // STORE ARTICLE IMAGE
     // -----------------------------------------------------
     
-    public function storeImage(Request $request, CriminalCase $criminalCase)
+    public function storeImage(Request $request, CriminalCase $criminalCase, ImageOptimizer $optimizer)
     {
         $validated = $request->validate([
             'cropped_image' => ['required', 'string'],
@@ -237,56 +238,66 @@ class CriminalCaseController extends Controller
             ]);
         }
 
-
-        // Upload images to article.hex directory
-
         $filename = (string) Str::uuid();
-        $path = "articles/{$criminalCase->hex}/{$filename}";
+        $path = "criminal-cases/{$criminalCase->hex}/{$filename}";
 
         $manager = ImageManager::usingDriver(Driver::class);
-        $image = $manager->decodeBinary($imageData);
-
-
-        Storage::disk('public')->put(
-            "{$path}.avif",
-            (string) $image->encode(new AvifEncoder(quality: 80))
-        );
-
-        Storage::disk('public')->put(
-            "{$path}.webp",
-            (string) $image->encode(new WebpEncoder(quality: 85))
-        );
+        $decodedImage = $manager->decodeBinary($imageData);
 
         Storage::disk('public')->put(
             "{$path}.jpg",
-            (string) $image->encode(new JpegEncoder(quality: 90))
+            (string) $decodedImage->encode(
+                new JpegEncoder(quality: 90)
+            )
         );
 
-
-        // If this image is becoming featured, clear any existing featured image.
-        if (!empty($validated['is_featured'])) {
+        if (! empty($validated['is_featured'])) {
             $criminalCase->images()->update([
                 'is_featured' => false,
             ]);
         }
 
-
-        $criminalCase->images()->create([
-            'image_path'   => $path,
-            'caption'      => $validated['caption'],
-            'alt_text'     => $validated['alt_text'],
-            'credit_name'  => $validated['credit_name'],
-            'credit_url'   => $validated['credit_url'],
-            'is_featured'  => $validated['is_featured'] ?? false,
+        $image = $criminalCase->images()->create([
+            'image_path' => $path,
+            'caption' => $validated['caption'],
+            'alt_text' => $validated['alt_text'],
+            'credit_name' => $validated['credit_name'],
+            'credit_url' => $validated['credit_url'],
+            'is_featured' => $validated['is_featured'] ?? false,
         ]);
 
+        try {
+            $optimizer->optimizeImage($image);
+        } catch (\Throwable $e) {
+            report($e);
+        }
 
         return redirect()
-            ->route('admin.criminal-cases.images', $criminalCase)
+            ->route('admin.criminal-cases.images.index', $criminalCase)
             ->with('status', [
                 'type' => 'success',
-                'message' => 'Image uploaded successfully.',
+                'message' => 'Image uploaded.',
             ]);
+    }
+
+
+    public function optimizeImage(CriminalCase $criminalCase, Image $image)
+    {
+        try {
+            app(ImageOptimizer::class)->optimizeImage($image);
+
+            return back()->with('status', [
+                'type' => 'success',
+                'message' => 'Image optimized.',
+            ]);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('status', [
+                'type' => 'error',
+                'message' => 'Failed to optimize image.',
+            ]);
+        }
     }
 
     
@@ -382,10 +393,10 @@ class CriminalCaseController extends Controller
         $image->save();
 
         return redirect()
-            ->route('admin.criminal-cases.images', $criminalCase)
+            ->route('admin.criminal-cases.images.index', $criminalCase)
             ->with('status', [
                 'type' => 'success',
-                'message' => 'Image updated successfully.',
+                'message' => 'Image updated.',
             ]);
     }
 
@@ -397,17 +408,40 @@ class CriminalCaseController extends Controller
             ->whereKey($image->id)
             ->firstOrFail();
 
-        if ($image->path && Storage::disk('public')->exists($image->display_path)) {
-            Storage::disk('public')->delete($image->display_path);
+        $sizes = [
+            160,
+            320,
+            480,
+            640,
+            800,
+            1200,
+        ];
+
+        $files = [
+            "{$image->image_path}.jpg",
+        ];
+
+        foreach ($sizes as $size) {
+            $files[] = "{$image->image_path}-{$size}.webp";
+            $files[] = "{$image->image_path}-{$size}.avif";
         }
+
+        Storage::disk('public')->delete($files);
 
         $image->delete();
 
+        // Remove the article image directory if it is now empty.
+        $directory = dirname($image->image_path);
+
+        if (empty(Storage::disk('public')->files($directory))) {
+            Storage::disk('public')->deleteDirectory($directory);
+        }
+
         return redirect()
-            ->route('admin.criminal-cases.images', $criminalCase)
+            ->route('admin.criminal-cases.images.index', $criminalCase)
             ->with('status', [
                 'type' => 'success',
-                'message' => 'Image deleted successfully.',
+                'message' => 'Image deleted.',
             ]);
     }
     

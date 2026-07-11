@@ -28,6 +28,7 @@ class ImageSeeder extends Seeder
                 'credit_name' => $item->credit_name,
                 'credit_url' => $item->credit_url,
                 'is_featured' => $item->is_featured,
+                'has_multiformat' => $item->has_multiformat,
                 'sort_order' => $item->sort_order,
                 'user_id' => $item->user_id,
                 'created_at' => $item->created_at,

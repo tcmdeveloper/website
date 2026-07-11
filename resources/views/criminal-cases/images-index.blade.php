@@ -15,7 +15,7 @@
                 ],
                 'uploadImage' => [
                     'label' => 'Upload New Image',
-                    'href' => route('admin.criminal-cases.images.upload', $criminalCase),
+                    'href' => route('admin.criminal-cases.images.create', $criminalCase),
                 ]
             ]"
         />
@@ -30,6 +30,7 @@
                     <th class="px-6 py-4">Caption</th>
                     <th class="px-6 py-4">Alt text</th>
                     <th class="px-6 py-4">Featured</th>
+                    <th class="px-6 py-4">Multi-Format</th>
                     <th class="px-6 py-4">Created at</th>
                     <th class="px-6 py-4"></th>
                 </tr>
@@ -46,6 +47,7 @@
                             <x-ui.image
                                 :image="$image"
                                 class="w-20"
+                                sizes="80px"
                             />
                         </td>
 
@@ -54,6 +56,14 @@
                         <td class="px-6 py-4">{{ Str::limit($image->alt_text, 50) }}</td>
 
                         <td class="px-6 py-4">{{ $image->is_featured ? 'Featured' : '-' }}</td>
+
+                        <td class="px-6 py-4">
+                            @if ($image->has_multiformat)
+                                <span class="text-green-600">✓ Optimized</span>
+                            @else
+                                {{-- <span class="text-amber-600">⚠ Needs optimization</span> --}}
+                            @endif
+                        </td>
 
                         <td class="px-6 py-4">{{ $image->created_at->format('d M Y') }}</td>
 
@@ -94,7 +104,7 @@
                     <tr>
 
                         <td
-                            colspan="5"
+                            colspan="6"
                             class="px-6 py-12 text-center text-zinc-500"
                         >
                             No articles images.

@@ -11,9 +11,13 @@
         <x-ui.header-actions
             title="Upload Image"
             subtitle="Select the image you want to add to this criminal case."
-            :href="route('admin.criminal-cases.images', $criminalCase)"
-            label="Back to images"
-            buttonVariant="ghost"
+            :actions="[
+                'back' => [
+                    'label' => 'Back to Images',
+                    'href' => route('admin.criminal-cases.images.index', $criminalCase),
+                    'variant' => 'ghost',
+                ],
+            ]"
         />
 
         <x-ui.alert />
@@ -46,7 +50,7 @@
             >
 
             <div
-                class="relative flex aspect-video items-center justify-center overflow-hidden rounded border border-zinc-300 bg-zinc-50"
+                class="relative flex h-96 items-center justify-center overflow-hidden rounded border border-zinc-300 bg-zinc-50"
             >
 
                 <img

@@ -14,17 +14,24 @@ class TimelineEventSeeder extends Seeder
     {
         // SEED FROM IMPORT DATABASE
 
-        $model = new TimelineEvent();
-        
-        $items = $model::on('mysql_import')->get();
+        $items = TimelineEvent::on('mysql_import')->get();
 
-        foreach($items as $item){
+        /*
+        |--------------------------------------------------------------------------
+        | Pass 1: Create all events without parents
+        |--------------------------------------------------------------------------
+        */
 
-            $model::create([
+        foreach ($items as $item) {
+
+            TimelineEvent::create([
                 'id' => $item->id,
                 'hex' => $item->hex,
                 'timeline_id' => $item->timeline_id,
-                'parent_event_id' => $item->parent_event_id,
+
+                // Ignore parent for now
+                'parent_event_id' => null,
+
                 'title' => $item->title,
                 'description' => $item->description,
                 'occurred_at' => $item->occurred_at,
@@ -43,7 +50,22 @@ class TimelineEventSeeder extends Seeder
             ]);
         }
 
-    	
+        /*
+        |--------------------------------------------------------------------------
+        | Pass 2: Attach parents
+        |--------------------------------------------------------------------------
+        */
 
+        foreach ($items as $item) {
+
+            if (! $item->parent_event_id) {
+                continue;
+            }
+
+            TimelineEvent::where('id', $item->id)
+                ->update([
+                    'parent_event_id' => $item->parent_event_id,
+                ]);
+        }
     }
 }

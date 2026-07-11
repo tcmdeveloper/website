@@ -90,15 +90,16 @@ class Article extends Model
 
 
     // Images
-    public function images()
-    {
-        return $this->morphMany(Image::class, 'imageable');
-    }
-
     public function featuredImage()
     {
         return $this->morphOne(Image::class, 'imageable')
             ->where('is_featured', true);
+    }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable')
+            ->orderBy('sort_order');
     }
     /*
     |--------------------------------------------------------------------------
@@ -116,7 +117,12 @@ class Article extends Model
     protected function displayImage(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->featuredImage
+            get: fn () => collect([
+                $this->featuredImage,
+                $this->images()->first(),
+            ])
+                ->filter()
+                ->first(fn (Image $image) => $image->exists())
                 ?? new Image([
                     'image_path' => 'images/default-article',
                     'alt_text' => 'Default article image',
