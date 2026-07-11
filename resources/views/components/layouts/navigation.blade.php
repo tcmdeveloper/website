@@ -18,16 +18,10 @@
     <div class="justify-self-start lg:w-80 md:w-64 w-16">
         <a href="/">
             <img
-                src="{{ asset('images/true-crime-metrix-logo-xs.png') }}"
-                srcset="
-                    {{ asset('images/true-crime-metrix-logo-xs.png') }} 64w,
-                    {{ asset('images/true-crime-metrix-logo-sm.png') }} 128w,
-                    {{ asset('images/true-crime-metrix-logo.png') }} 256w
-                "
-                sizes="auto"
-                alt="True Crime Metrix"
-                class="h-7 w-7"
-            >
+    src="{{ asset('images/true-crime-metrix-logo-xs.png') }}"
+    alt="True Crime Metrix"
+    class="h-7 w-7"
+>
         </a>
     </div>
 
