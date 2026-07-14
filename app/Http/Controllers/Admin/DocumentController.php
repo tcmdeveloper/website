@@ -8,6 +8,8 @@ use App\Models\CriminalCase;
 use App\Models\Document;
 use App\Services\RandomStringGenerator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
@@ -59,10 +61,11 @@ class DocumentController extends Controller
         ]);
         
         // Assign auto vars
-        $validated['hex'] = $generator->uniqueHexId();
+        $hex = $generator->uniqueHexId();
+        $validated['hex'] = $hex;
         $validated['slug'] = Str::slug($validated['name']);
-        $validated['pdf_path'] = $request->file('pdf')->store('documents', 'public');
-        $validated['user_id'] = auth()->id();
+        $validated['pdf_path'] = $request->file('pdf')->store('documents/' . $hex, 'public');
+        $validated['user_id'] = Auth::id();
 
         
         // Ensure the generated slug is unique
@@ -104,12 +107,16 @@ class DocumentController extends Controller
 
     public function destroy(Document $document)
     {
-        $document->articles()->update([
-            'document_id' => null
-        ]);
+        Storage::disk('public')->deleteDirectory(
+            "documents/{$document->hex}"
+        );
+
+        Storage::disk('public')->deleteDirectory(
+            "document-pages/{$document->hex}"
+        );
 
         $document->delete();
-        
+
         return redirect()
             ->route('admin.documents.index')
             ->with('status', [

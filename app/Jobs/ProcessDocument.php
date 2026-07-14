@@ -4,14 +4,14 @@ namespace App\Jobs;
 
 use App\Models\Document;
 use App\Models\DocumentPage;
+use App\Services\ImageOptimizer;
 use App\Services\RandomStringGenerator;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 
 class ProcessDocument implements ShouldQueue
 {
@@ -21,108 +21,142 @@ class ProcessDocument implements ShouldQueue
         public int $documentId
     ) {}
 
-    public function handle(): void
+    public function handle(ImageOptimizer $optimizer): void
     {
-
         $generator = app(RandomStringGenerator::class);
-
         $document = Document::findOrFail($this->documentId);
+        $inputPath = Storage::disk('public')->path(
+            $document->pdf_path
+        );
 
-        $inputPath = Storage::disk('public')->path($document->pdf_path);
 
+        if (! file_exists($inputPath)) {
+            throw new \Exception(
+                "PDF not found at: {$inputPath}"
+            );
+        }
 
-        $manager = ImageManager::usingDriver(Driver::class);
 
         $watermarkPath = storage_path(
             'app/public/watermarks/metrix-document-watermark.png'
         );
 
 
-
-
-
-
-        if (!file_exists($inputPath)) {
-            throw new \Exception("PDF not found at: {$inputPath}");
+        if (! file_exists($watermarkPath)) {
+            throw new \Exception(
+                "Watermark not found at: {$watermarkPath}"
+            );
         }
+
 
         $outputDir = Storage::disk('public')->path(
             "document-pages/{$document->hex}"
         );
 
-        if (!is_dir($outputDir)) {
+
+        if (! is_dir($outputDir)) {
             mkdir($outputDir, 0755, true);
         }
 
-        // Clear old pages if re-processing
-        DocumentPage::where('document_id', $document->id)->delete();
 
-        // Mark as processing
+        // Delete existing page records
+        DocumentPage::where(
+            'document_id',
+            $document->id
+        )->delete();
+
+
         $document->update([
             'status' => 'processing',
         ]);
 
 
-
-        // Build command
+        // Convert PDF → PNG
         $input = escapeshellarg($inputPath);
-        $output = escapeshellarg($outputDir . '/page');
 
-        $cmd = "/opt/homebrew/bin/pdftoppm -png -r 200 {$input} {$output}";
+        $output = escapeshellarg(
+            $outputDir . '/page'
+        );
 
-        exec($cmd . ' 2>&1', $outputLines, $exitCode);
-
-        // dd([
-        //     'cmd' => $cmd,
-        //     'exitCode' => $exitCode,
-        //     'output' => $outputLines,
-        // ]);
-
+        $cmd = "/opt/homebrew/bin/pdftoppm "
+            . "-jpeg "
+            . "-r 200 "
+            . "{$input} "
+            . "{$output}";
 
 
-        // Get generated files
-        $files = glob($outputDir . '/page-*.png');
+        exec(
+            $cmd . ' 2>&1',
+            $outputLines,
+            $exitCode
+        );
 
-sort($files);
+        if ($exitCode !== 0) {
+            throw new \Exception(
+                implode("\n", $outputLines)
+            );
+        }
 
-foreach ($files as $index => $filePath) {
+        $files = glob(
+            $outputDir . '/page-*.jpg'
+        );
 
-    $image = $manager->read($filePath);
+        sort($files);
 
-    $watermark = $manager->read($watermarkPath);
+        $manager = new ImageManager(
+            new Driver()
+        );
 
-    // Optional: resize watermark to 25% of page width
-    $watermark->scale(
-        width: (int) ($image->width() * 0.25)
-    );
 
-    // Place watermark bottom-right with padding
-    $image->place(
-        $watermark,
-        'bottom-right',
-        24,
-        24
-    );
 
-    $image->save($filePath);
+        $watermark = $manager->decodePath($watermarkPath);
 
-    $relativePath = str_replace(
-        Storage::disk('public')->path('/document-pages'),
-        '',
-        $filePath
-    );
 
-    $imageSize = getimagesize($filePath);
+        foreach ($files as $index => $filePath) {
 
-    DocumentPage::create([
-        'hex' => $generator->uniqueHexId(),
-        'document_id' => $document->id,
-        'page_number' => $index + 1,
-        'image_path' => 'document-pages' . $relativePath,
-        'width' => $imageSize[0] ?? null,
-        'height' => $imageSize[1] ?? null,
-    ]);
-}
+            $image = $manager->decodePath($filePath);
+
+            $pageWatermark = clone $watermark;
+
+            $pageWatermark->cover(
+                $image->width(),
+                $image->height()
+            );
+
+            $image->insert(
+                $pageWatermark,
+                0,
+                0
+            );
+
+            $image->save($filePath);
+
+            $relativePath = preg_replace(
+                '/\.[^.]+$/',
+                '',
+                str_replace(
+                    Storage::disk('public')->path('/document-pages'),
+                    '',
+                    $filePath
+                )
+            );
+
+            $imageSize = getimagesize(
+                $filePath
+            );
+
+            $page = DocumentPage::create([
+                'hex' => $generator->uniqueHexId(),
+                'document_id' => $document->id,
+                'page_number' => $index + 1,
+                'image_path' => 'document-pages' . $relativePath,
+                'width' => $imageSize[0] ?? null,
+                'height' => $imageSize[1] ?? null,
+            ]);
+
+            $optimizer->optimizeModel($page);
+
+        }
 
         $document->update([
             'pages' => count($files),

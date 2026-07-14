@@ -268,19 +268,19 @@ Route::controller(AdminDocumentController::class)
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
-        Route::get('/{document}/edit', 'edit')->name('edit');
-        Route::patch('/{document}', 'update')->name('update');
-        Route::delete('/{document}', 'destroy')->name('destroy');
+        Route::get('/{document:hex}/edit', 'edit')->name('edit');
+        Route::patch('/{document:hex}', 'update')->name('update');
+        Route::delete('/{document:hex}', 'destroy')->name('destroy');
 
-        Route::patch('/{document}/image/{image}/update', 'updateImage')->name('images.update');
-        Route::delete('/{document}/images/{image}', 'destroyImage')->name('images.destroy');
-        Route::get('/{document}/images/{image}/edit', 'editImage')->name('images.edit');
-        Route::post('/{document}/images/store', 'storeImage')->name('images.store');
-        Route::get('/{document}/images/create', 'createImage')->name('images.create');
-        Route::get('/{document}/images', 'imagesIndex')->name('images');
+        Route::patch('/{document:hex}/image/{image}/update', 'updateImage')->name('images.update');
+        Route::delete('/{document:hex}/images/{image}', 'destroyImage')->name('images.destroy');
+        Route::get('/{document:hex}/images/{image}/edit', 'editImage')->name('images.edit');
+        Route::post('/{document:hex}/images/store', 'storeImage')->name('images.store');
+        Route::get('/{document:hex}/images/create', 'createImage')->name('images.create');
+        Route::get('/{document:hex}/images', 'imagesIndex')->name('images');
 
 
-        Route::get('/{document}', 'show')->name('show');
+        Route::get('/{document:slug}', 'show')->name('show');
     })
 ;
 

@@ -1,4 +1,28 @@
-{{-- resources/views/categories/admin-index.blade.php --}}
+{{-- resources/views/documents/admin-index.blade.php --}}
+
+{{-- ACTION BUTTONS --}}
+
+@php
+    $actions = [
+        'create' => [
+            'label' => 'Upload New Document',
+            // 'icon' => 'heroicon-o-arrow-up-tray',
+            'href' => route('admin.documents.create', request()->only('case')),
+            'variant' => 'primary',
+        ]
+    ];
+
+    // Add back button if results are filtered
+    if (request()->filled('case')) {
+        $actions = array_merge([
+            'back' => [
+                'label' => 'Back to Documents',
+                'href' => route('admin.documents.index'),
+                'variant' => 'ghost',
+            ],
+        ], $actions);
+    }
+@endphp
 
 <x-layouts.dashboard>
 
@@ -7,10 +31,9 @@
         <x-ui.header-actions
             title="Documents"
             subtitle="Manage the documents for this criminal case."
-            :href="route('admin.documents.create')"
-            label="Upload document"
+            :actions="$actions"
         />
-
+        
 
         {{-- Alert --}}
         <x-ui.alert />
@@ -18,30 +41,15 @@
 
         {{-- Table --}}
 
-        <table class="w-full border">
+        <table class="w-full border text-sm">
 
             <thead>
-                <tr class="border-b border-zinc-200 bg-zinc-50 text-left text-sm text-zinc-600">
-
-                    <th class="px-6 py-4 font-medium">
-                        Name
-                        
-                    </th>
-
-                    <th class="px-6 py-4 font-medium">
-                        Slug
-                    </th>
-
-                    <th class="px-6 py-4 font-medium">
-                        Pages
-                    </th>
-
-                    <th class="px-6 py-4 font-medium">
-                        Created
-                    </th>
-
-                    <th class="px-6 py-4 w-32"></th>
-
+                <tr class="bg-zinc-50 border-b border-zinc-200 text-left text-zinc-600 font-medium">
+                    <th class="px-6 py-4">Name</th>
+                    <th class="px-6 py-4">Slug</th>
+                    <th class="px-6 py-4">Pages</th>
+                    <th class="px-6 py-4">Created</th>
+                    <th class="px-6 py-4"></th>
                 </tr>
             </thead>
 
@@ -49,17 +57,13 @@
 
                 @forelse($documents as $document)
 
-                    <tr class="border-b border-zinc-100">
+                    <tr class="border-b border-zinc-100 text-zinc-500">
 
-                        <td class="px-6 py-4 text-zinc-500 font-medium">
-                            <div class="flex items-stretch">
-                                <span>
-                                    {{ $document->name }}
-                                </span>
-                            </div>
+                        <td class="px-6 py-4">
+                            {{ $document->name }}
                         </td>
 
-                        <td class="px-6 py-4 text-zinc-500">
+                        <td class="px-6 py-4">
                             {{ $document->slug }}
                         </td>
 
@@ -67,7 +71,7 @@
                            {{ number_format($document->document_pages_count) }}
                         </td>
 
-                        <td class="px-6 py-4 text-zinc-500">
+                        <td class="px-6 py-4">
                             {{ $document->created_at->format('M j, Y') }}
                         </td>
 

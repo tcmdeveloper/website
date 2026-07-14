@@ -27,7 +27,6 @@ class Image extends Model
         'credit_name',
         'credit_url',
         'is_featured',
-        'has_multiformat',
         'sort_order',
         'user_id',
     ];
@@ -79,9 +78,6 @@ class Image extends Model
 
     public function getImageUrlAttribute(): string
     {
-        if ($this->has_multiformat) {
-            return Storage::url("{$this->image_path}.jpg");
-        }
 
         return Storage::url("{$this->image_path}.jpg");
     }
@@ -100,22 +96,19 @@ class Image extends Model
         );
     }
 
-
-
     
 
-public function hasAvailableFormats(): bool
+    public function responsiveSizes(): array
 {
-    if (! $this->has_multiformat) {
-        return false;
-    }
-
-    $disk = Storage::disk('public');
-
-    return $disk->exists("{$this->image_path}-160.avif")
-        || $disk->exists("{$this->image_path}-160.webp");
+    return [
+        160,
+        320,
+        480,
+        640,
+        800,
+        1200,
+    ];
 }
-    
 
     
 }

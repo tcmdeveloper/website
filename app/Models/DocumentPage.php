@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class DocumentPage extends Model
 {
     use HasFactory;
+
+    public const SIZES = [80, 320, 640];
+
 
     protected $fillable = [
         'hex',
@@ -76,7 +81,42 @@ class DocumentPage extends Model
 
 
 
+
+
+
+public function responsiveSizes(): array
+{
+    return [
+        80,
+        320,
+        640,
+    ];
+}
+
+
     
+
+
+    public function getUrlAttribute(): string
+    {
+        return $this->url();
+    }
+
+    public function url(
+        ?int $width = 640,
+        string $extension = 'avif'
+    ): string {
+        $path = $this->image_path;
+
+        if ($width !== null) {
+            $path .= "-{$width}";
+        }
+
+        return Storage::url(
+            "{$path}.{$extension}"
+        );
+    }
+
     
 }
 

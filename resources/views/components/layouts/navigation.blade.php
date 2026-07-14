@@ -128,15 +128,19 @@
         {{-- Menu items --}}
         <div class="w-full p-8 mt-32 flex flex-col items-center space-y-5 text-5xl md:text-6xl font-heading font-bold">
             <a href="{{ route('cases.index') }}" class="whitespace-nowrap text-zinc-100 hover:text-yellow-300">
-                Cases
+                Cases Files
+            </a>
+
+            <a href="{{ route('categories.index') }}" class="whitespace-nowrap text-zinc-100 hover:text-yellow-300">
+                Categories
             </a>
 
             <a href="{{ route('articles.index') }}" class="whitespace-nowrap text-zinc-100 hover:text-yellow-300">
                 Articles
             </a>
 
-            <a href="{{ route('categories.index') }}" class="whitespace-nowrap text-zinc-100 hover:text-yellow-300">
-                Categories
+            <a href="{{ route('articles.index') }}" class="whitespace-nowrap text-zinc-100 hover:text-yellow-300">
+                Timelines
             </a>
 
             <a href="{{ route('contact.show') }}" class="whitespace-nowrap text-zinc-100 hover:text-yellow-300">

@@ -70,7 +70,7 @@
         {{-- FEATURED ARTICLE IMAGE --}}
 
         <x-ui.image
-            :image="$article->display_image"
+            :image="$article->featuredImage"
             class="w-full sm:w-[800px] object-cover rounded-tl-sm rounded-tr-sm rounded-bl-none rounded-br-none"
             sizes="(min-width: 640px) 800px, 100vw"
         />

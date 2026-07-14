@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\DocumentPage;
 use App\Models\Image;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\Encoders\AvifEncoder;
@@ -12,9 +14,46 @@ use Intervention\Image\ImageManager;
 
 class ImageOptimizer
 {
-    public function optimize(string $path): void
+
+
+
+protected function getSizesForModel(Model $model): array
+{
+    if ($model instanceof DocumentPage) {
+        return [
+            80,
+            320,
+            640,
+        ];
+    }
+
+    if ($model instanceof Image) {
+        return [
+            160,
+            320,
+            480,
+            640,
+            800,
+            1200,
+        ];
+    }
+
+    return [
+        160,
+        320,
+        480,
+        640,
+        800,
+        1200,
+    ];
+}
+
+
+
+
+    public function optimize(string $path, ?array $sizes = null): void
     {
-        $sizes = [
+        $sizes ??= [
             160,
             320,
             480,
@@ -23,59 +62,128 @@ class ImageOptimizer
             1200,
         ];
 
-        $manager = ImageManager::usingDriver(Driver::class);
+        $manager = ImageManager::usingDriver(
+            Driver::class
+        );
 
-        $source = Storage::disk('public')->path("{$path}.jpg");
+        // Determine whether the path already has an extension.
+        // Examples:
+        //
+        // articles/foo/bar
+        // document-pages/abc/page-01.png
 
-        $imageData = file_get_contents($source);
+        $extension = pathinfo(
+            $path,
+            PATHINFO_EXTENSION
+        );
 
-        $original = $manager->decodeBinary($imageData);
+        $sourcePath = null;
+
+        foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
+            $candidate = "{$path}.{$ext}";
+
+            if (Storage::disk('public')->exists($candidate)) {
+                $sourcePath = $candidate;
+                break;
+            }
+        }
+
+        if (! $sourcePath) {
+            throw new \Exception(
+                "Source image not found for {$path}"
+            );
+        }
+
+        // Remove the extension for generated files.
+        //
+        // document-pages/foo/page-01.png
+        // becomes:
+        //
+        // document-pages/foo/page-01
+
+        $basePath = $extension
+            ? preg_replace(
+                '/\.[^.]+$/',
+                '',
+                $path
+            )
+            : $path;
+
+        $source = Storage::disk('public')->path(
+            $sourcePath
+        );
+
+        if (! file_exists($source)) {
+            throw new \Exception(
+                "Source image not found: {$source}"
+            );
+        }
+
+        $imageData = file_get_contents(
+            $source
+        );
+
+        $original = $manager->decodeBinary(
+            $imageData
+        );
+
 
         foreach ($sizes as $width) {
 
             $image = clone $original;
 
-            $image->scale(width: $width);
+            $image->scale(
+                width: $width
+            );
 
             Storage::disk('public')->put(
-                "{$path}-{$width}.webp",
+                "{$basePath}-{$width}.webp",
                 (string) $image->encode(
-                    new WebpEncoder(quality: 85)
+                    new WebpEncoder(
+                        quality: 85
+                    )
                 )
             );
 
             Storage::disk('public')->put(
-                "{$path}-{$width}.avif",
+                "{$basePath}-{$width}.avif",
                 (string) $image->encode(
-                    new AvifEncoder(quality: 80)
+                    new AvifEncoder(
+                        quality: 80
+                    )
                 )
             );
         }
 
-        // Single JPEG fallback
+        // Delete original images only if they were
+        // extensionless uploads (your Image model).
+        //
+        // We do NOT want to delete:
+        //
+        // document-pages/foo/page-01.png
 
-        $fallback = clone $original;
-
-        $fallback->scale(width: 1200);
-
-        Storage::disk('public')->put(
-            "{$path}.jpg",
-            (string) $fallback->encode(
-                new JpegEncoder(quality: 90)
-            )
-        );
+        if (! $extension) {
+            Storage::disk('public')->delete([
+                "{$path}.webp",
+                "{$path}.avif",
+            ]);
+        }
     }
 
-
-    // OPTIMIZE AND MARK
-    
     public function optimizeImage(Image $image): void
     {
-        $this->optimize($image->image_path);
+        $this->optimize(
+            $image->image_path
+        );
 
-        $image->update([
-            'has_multiformat' => true,
-        ]);
     }
 
+    public function optimizeModel(Model $model): void
+    {
+        $this->optimize(
+            $model->image_path,
+            $this->getSizesForModel($model)
+        );
+        
+    }
 }

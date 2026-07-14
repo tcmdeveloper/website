@@ -10,13 +10,12 @@ use App\Models\Image;
 use App\Services\ImageOptimizer;
 use App\Services\RandomStringGenerator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\Encoders\AvifEncoder;
 use Intervention\Image\Encoders\JpegEncoder;
-use Intervention\Image\Encoders\WebpEncoder;
 use Intervention\Image\ImageManager;
 
 
@@ -126,7 +125,7 @@ class ArticleController extends Controller
             'category_id' => $data['category_id'] ?? null,
             'meta_title' => $data['meta_title'] ?? null,
             'meta_description' => $data['meta_description'] ?? null,
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'is_published' => $request->boolean('is_published'),
             'published_at' => $request->boolean('is_published') ? now() : null,
         ]);
@@ -314,7 +313,7 @@ class ArticleController extends Controller
         ]);
 
         try {
-            $optimizer->optimizeImage($image);
+            $optimizer->optimizeModel($image);
         } catch (\Throwable $e) {
             report($e);
         }
@@ -340,9 +339,6 @@ class ArticleController extends Controller
                 $image->image_path
             );
 
-            $image->update([
-                'has_multiformat' => true,
-            ]);
 
             return back()->with('status', [
                 'type' => 'success',

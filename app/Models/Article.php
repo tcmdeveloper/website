@@ -13,6 +13,7 @@ class Article extends Model
 {
     use HasFactory;
 
+
     public const PER_PAGE = 12;
 
     /*
@@ -114,23 +115,41 @@ class Article extends Model
 
 
 
-    protected function displayImage(): Attribute
+
+    public function responsiveSizes(): array
     {
-        return Attribute::make(
-            get: fn () => collect([
-                $this->featuredImage,
-                $this->images()->first(),
-            ])
-                ->filter()
-                ->first(fn (Image $image) => $image->exists())
-                ?? new Image([
-                    'image_path' => 'images/default-article',
-                    'alt_text' => 'Default article image',
-                ]),
-        );
+        return [
+            160,
+            320,
+            480,
+            640,
+            800,
+            1200,
+        ];
     }
 
 
+    public function getUrlAttribute(): string
+    {
+        return $this->url();
+    }
+
+    public function url(
+        ?int $width = 640,
+        string $extension = 'avif'
+    ): string {
+        $path = $this->image_path;
+
+        if ($width !== null) {
+            $path .= "-{$width}";
+        }
+
+        return Storage::url(
+            "{$path}.{$extension}"
+        );
+    }
+
+    
 
 
 

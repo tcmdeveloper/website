@@ -1,5 +1,5 @@
 @props([
-    'image',
+    'image' => null,
     'alt' => null,
     'loading' => 'lazy',
     'fetchpriority' => 'auto',
@@ -7,71 +7,46 @@
     'sizes' => '100vw',
 ])
 
+@php
+    $responsiveSizes = $image->responsiveSizes();
 
+    $avifSrcset = collect($responsiveSizes)
+        ->map(
+            fn (int $width) =>
+                "{$image->url($width, 'avif')} {$width}w"
+        )
+        ->implode(', ');
 
+    $webpSrcset = collect($responsiveSizes)
+        ->map(
+            fn (int $width) =>
+                "{$image->url($width, 'webp')} {$width}w"
+        )
+        ->implode(', ');
+@endphp
 
-@if ($image->hasAvailableFormats())
+<picture>
 
-    <picture>
+    {{-- AVIF --}}
 
-        {{-- AVIF --}}
+    <source
+        type="image/avif"
+        srcset="{{ $avifSrcset }}"
+        sizes="{{ $sizes }}"
+    >
 
-        <source
-            type="image/avif"
-            srcset="
-                {{ $image->url('160', 'avif') }} 160w,
-                {{ $image->url('320', 'avif') }} 320w,
-                {{ $image->url('480', 'avif') }} 480w,
-                {{ $image->url('640', 'avif') }} 640w,
-                {{ $image->url('800', 'avif') }} 800w,
-                {{ $image->url('1200', 'avif') }} 1200w,
-            "
-            sizes="{{ $sizes }}"
-        >
+    {{-- WebP fallback --}}
 
-        {{-- WebP --}}
-
-        <source
-            type="image/webp"
-            srcset="
-                {{ $image->url('160', 'webp') }} 160w,
-                {{ $image->url('320', 'webp') }} 320w,
-                {{ $image->url('480', 'webp') }} 480w,
-                {{ $image->url('640', 'webp') }} 640w,
-                {{ $image->url('800', 'webp') }} 800w,
-                {{ $image->url('1200', 'webp') }} 1200w,
-            "
-            sizes="{{ $sizes }}"
-        >
-
-        {{-- JPG fallback --}}
-
-        <img
-            src="{{ $image->url('800', 'jpg') }}"
-            srcset="
-                {{ $image->url('160', 'jpg') }} 160w,
-                {{ $image->url('320', 'jpg') }} 320w,
-                {{ $image->url('480', 'jpg') }} 480w,
-                {{ $image->url('640', 'jpg') }} 640w,
-                {{ $image->url('800', 'jpg') }} 800w,
-                {{ $image->url('1200', 'jpg') }} 1200w,
-            "
-            sizes="{{ $sizes }}"
-            alt="{{ $alt ?? $image->alt_text }}"
-            loading="{{ $loading }}"
-            fetchpriority="{{ $fetchpriority }}"
-            decoding="{{ $decoding }}"
-            {{ $attributes->class([
-                'rounded-xs object-cover',
-            ]) }}
-        >
-
-    </picture>
-
-@else
+    <source
+        type="image/webp"
+        srcset="{{ $webpSrcset }}"
+        sizes="{{ $sizes }}"
+    >
 
     <img
-        src="{{ $image->image_url }}"
+        src="{{ $image->url(max($responsiveSizes), 'webp') }}"
+        srcset="{{ $webpSrcset }}"
+        sizes="{{ $sizes }}"
         alt="{{ $alt ?? $image->alt_text }}"
         loading="{{ $loading }}"
         fetchpriority="{{ $fetchpriority }}"
@@ -81,5 +56,4 @@
         ]) }}
     >
 
-@endif
-
+</picture>

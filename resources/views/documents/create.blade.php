@@ -7,9 +7,13 @@
         <x-ui.header-actions
             title="Create a new document"
             subtitle="Enter the details for the new document."
-            :href="route('admin.documents.create')"
-            label="All documents"
-            buttonVariant="ghost"
+            :actions="[
+                'back' => [
+                    'label' => 'Back to Documents',
+                    'href' => route('admin.documents.index'),
+                    'variant' => 'ghost',
+                ],
+            ]"
         />
 
 
@@ -29,6 +33,7 @@
                 <x-ui.select
                     name="criminal_case_id"
                     label="Criminal case"
+                    size="sm"
                     :options="$criminalCases"
                     value="{{old('criminal_case_id')}}"
                     placeholder="Select a criminal case"

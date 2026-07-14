@@ -19,7 +19,7 @@
         default => 'px-4 py-2.5 text-base',
     };
 
-    $base = "w-full rounded-sm border shadow-sm text-gray-900 focus:outline-none focus:ring-1 focus:ring-sky-300 transition";
+    $base = "w-full rounded-sm border shadow-sm text-sm text-gray-900 focus:outline-none focus:ring-1 focus:ring-sky-300 transition";
 
     $stateDefault = "bg-white border-zinc-300 focus:ring-sky-300";
 

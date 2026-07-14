@@ -8,6 +8,7 @@ use App\Models\Image;
 use App\Services\ImageOptimizer;
 use App\Services\RandomStringGenerator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -67,7 +68,7 @@ class CriminalCaseController extends Controller
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
-        $validated['user_id'] = auth()->id();
+        $validated['user_id'] = Auth::id();
         $validated['hex'] = $generator->uniqueHexId();
 
         // Ensure the generated slug is unique
@@ -267,7 +268,7 @@ class CriminalCaseController extends Controller
         ]);
 
         try {
-            $optimizer->optimizeImage($image);
+            $optimizer->optimizeModel($image);
         } catch (\Throwable $e) {
             report($e);
         }

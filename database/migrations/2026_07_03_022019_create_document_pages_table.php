@@ -33,6 +33,8 @@ return new class extends Migration
             $table->unsignedInteger('width')->nullable();
             $table->unsignedInteger('height')->nullable();
 
+            $table->boolean('has_multiformat')->default(false);
+
             // Stats
             $table->unsignedInteger('views')->default(0);
 

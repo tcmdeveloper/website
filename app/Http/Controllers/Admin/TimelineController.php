@@ -10,7 +10,7 @@ use App\Models\TimelineEvent;
 use App\Services\RandomStringGenerator;
 use App\Support\DateTimeCombiner;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
@@ -81,15 +81,17 @@ class TimelineController extends Controller
 
 
         $validated['hex'] = $generator->uniqueHexId();
-        $validated['user_id'] = auth()->id();
+        $validated['user_id'] = Auth::id();
         $validated['published_at'] = $request->boolean('is_published') ? now() : null;
 
 
-        Timeline::create($validated);
+        $timeline = Timeline::create($validated);
 
 
-        return redirect( route('admin.timelines.events.index') )->with('status', [
-            'type' => 'status',
+        return redirect()
+            ->route('admin.timelines.events.index', $timeline)
+            ->with('status', [
+            'type' => 'success',
             'message' => 'New timeline added.'
         ]);
 
@@ -155,6 +157,25 @@ class TimelineController extends Controller
     }
 
 
+    // DESTROY
+
+    public function destroy(Timeline $timeline)
+    {
+        $timeline->events()->delete();
+
+        $timeline->delete();
+
+        return redirect()
+            ->route('timelines.index')
+            ->with('status', [
+                'type' => 'success',
+                'message' => 'Timeline deleted.'
+            ])
+        ;
+        
+    }
+
+
 
 
 
@@ -213,7 +234,7 @@ class TimelineController extends Controller
         ]);
 
         $validated['hex'] = $generator->uniqueHexId();
-        $validated['user_id'] = auth()->id();
+        $validated['user_id'] = Auth::id();
         $validated['occurred_at'] = $dateTime->combine(
             $validated['occurred_at_date'],
             $validated['occurred_at_time']

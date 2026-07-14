@@ -66,14 +66,11 @@
 
                                 {{-- Thumbnail --}}
                                 @if($document->coverPage)
-                                    <div class="shrink-0">
-                                        <img
-                                            src="{{ Storage::url($document->coverPage->image_path) }}"
-                                            alt="{{ $document->name }}"
-                                            class="w-24 rounded border border-gray-300 shadow-sm"
-                                            loading="lazy"
-                                        >
-                                    </div>
+                                    <x-ui.image
+                                        :image="$document->coverPage"
+                                        class="w-full sm:w-[80px] object-cover rounded-xs shadow-sm rounded-bl-none rounded-br-none border border-zinc-200"
+                                        sizes="(min-width: 640px) 80px, 100vw"
+                                    />
                                 @endif
 
                                 {{-- Text --}}
