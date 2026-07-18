@@ -1,10 +1,10 @@
 {{-- resources/views/components/articles/grid.blade.php --}}
 
-
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
 
     @forelse($articles as $article)
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        
             <x-cards.article
                 :title="$article->title"
                 :excerpt="$article->excerpt"
@@ -18,7 +18,7 @@
 
     @empty
 
-        <div class="py-20 text-center">
+        <div class="py-20 text-center col-span-1 sm:col-span-2">
 
             <h2 class="text-xl font-medium">
                 No articles yet
