@@ -41,11 +41,6 @@ return new class extends Migration
                 ->constrained()
                 ->nullOnDelete();
 
-            $table->foreignId('judge_id')
-                ->nullable()
-                ->constrained()
-                ->nullOnDelete();
-
             // Publishing
             $table->timestamp('published_at')->nullable();
             $table->boolean('is_published')->default(false);

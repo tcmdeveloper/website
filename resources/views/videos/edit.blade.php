@@ -47,15 +47,22 @@
     <x-ui.card class="max-w-5xl">
 
         <x-ui.header-actions
-            title="Manage video resources"
+            title="Manage Video Resources"
             subtitle="Generate transcription or create clips."
-            :href="route('admin.videos.index')"
-            label="All videos"
+            :actions="[
+                'back' => [
+                    'label' => 'Back to Videos',
+                    'href' => route('admin.videos.index'),
+                    'variant' => 'ghost',
+                ]
+            ]"
         />
 
-
-        {{-- Alert --}}
         <x-ui.alert />
+
+        @if($video->status == 'transcribing')
+            <x-ui.alert type="success" message="Video transcription is still running." />
+        @endif
 
 
         <div class="space-y-6">
@@ -123,11 +130,11 @@
                         name="search"
                         value="{{ $search }}"
                         placeholder="Search transcript..."
-                        class="w-full rounded border px-3 py-2">
+                        class="w-full rounded border border-zinc-300 px-3 py-2 text-sm">
                 </form>
 
 
-                <div class="border rounded-lg overflow-y-auto max-h-[700px] divide-y">
+                <div class="border border-zinc-300 rounded-sm text-sm overflow-y-auto max-h-[700px] divide-y">
 
                     @forelse($segments as $segment)
 
@@ -139,7 +146,7 @@
                             <div class="flex gap-3">
 
                                 <span class="text-xs font-mono text-blue-600 shrink-0">
-                                    {{ gmdate('i:s', $segment->start) }} - {{ gmdate('i:s', $segment->end) }}
+                                    {{ gmdate('H:i:s', $segment->start) }} - {{ gmdate('H:i:s', $segment->end) }}
                                 </span>
 
                                 <span class="text-sm">
@@ -159,7 +166,7 @@
 
                     @empty
 
-                        <div class="p-4 text-gray-500">
+                        <div class="px-3 py-2 text-gray-500">
                             No matching transcript found.
                         </div>
 

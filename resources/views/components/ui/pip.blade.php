@@ -33,6 +33,11 @@
                 text-green-800
             ',
 
+            'info' => '
+                bg-sky-100
+                text-sky-800
+            ',
+
             'warning' => '
                 bg-yellow-100
                 text-yellow-800

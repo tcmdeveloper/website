@@ -14,30 +14,15 @@
 
         {{-- Table --}}
 
-        <table class="w-full border">
+        <table class="w-full border text-xs">
 
             <thead>
-                <tr class="border-b border-zinc-200 bg-zinc-50 text-left text-sm text-zinc-600">
-
-                    <th class="px-6 py-4 font-medium">
-                        Name
-                        
-                    </th>
-
-                    <th class="px-6 py-4 font-medium">
-                        Slug
-                    </th>
-
-                    <th class="px-6 py-4 font-medium">
-                        Articles
-                    </th>
-
-                    <th class="px-6 py-4 font-medium">
-                        Created
-                    </th>
-
+                <tr class="bg-zinc-50 border-b border-zinc-200 text-left text-zinc-600 font-medium">
+                    <th class="px-6 py-4">Name</th>
+                    <th class="px-6 py-4">Slug</th>
+                    <th class="px-6 py-4">Articles</th>
+                    <th class="px-6 py-4">Created</th>
                     <th class="px-6 py-4 w-32"></th>
-
                 </tr>
             </thead>
 

@@ -110,11 +110,13 @@ class VideoController extends Controller
     public function transcribe(Video $video)
     {
         if (!$video['youtube_url']) {
-            return back()->withErrors([
-                'source' => 'Please provide either a YouTube URL or a file.'
-            ]);
+            return back()
+                ->with('status', [
+                    'type' => 'danger',
+                    'message' => 'There is a problem with this video file.',
+                ])
+            ;
         }
-
 
         TranscribeVideoJob::dispatch($video);
 
@@ -122,8 +124,9 @@ class VideoController extends Controller
             ->route('admin.videos.edit', $video)
             ->with('status', [
                 'type' => 'success',
-                'message' => 'Your transcription has started.'    
-            ]);
+                'message' => 'Video transcription has started. Check back in a few minutes.'
+            ])
+        ;
     
     }
 

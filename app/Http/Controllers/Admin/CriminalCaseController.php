@@ -40,7 +40,7 @@ class CriminalCaseController extends Controller
         // Put filters here if required.
         //
 
-        $criminalCases = $criminalCases->latest()->withCount('articles')->paginate();
+        $criminalCases = $criminalCases->latest()->withCount('articles')->withCount('documents')->paginate();
         
         return view('criminal-cases.admin-index', [
             'criminalCases' => $criminalCases
@@ -75,6 +75,11 @@ class CriminalCaseController extends Controller
         $validated['slug'] = Str::slug($validated['name']);
         $validated['user_id'] = Auth::id();
         $validated['hex'] = $generator->uniqueHexId();
+        
+
+        if ($validated['is_published']) {
+            $validated['published_at'] = now();
+        }
 
         // Ensure the generated slug is unique
         validator($validated, [
@@ -190,7 +195,7 @@ class CriminalCaseController extends Controller
 
     public function docketEntriesIndex(CriminalCase $criminalCase)
     {
-        $docketEntries = DocketEntry::where('has_document', true)->latest()->get();
+        $docketEntries = DocketEntry::latest()->get();
 
         return view('criminal-cases.docket-entries-index', [
             'criminalCase' => $criminalCase,

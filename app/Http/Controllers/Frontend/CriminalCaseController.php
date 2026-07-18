@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\CriminalCase;
+use App\Models\Document;
 use App\Models\Timeline;
 use Illuminate\Http\Request;
 
@@ -41,10 +42,16 @@ class CriminalCaseController extends Controller
     {   
         $criminalCase->load('documents.coverPage');
         $criminalCase->increment('views');
-        
 
+        $documents = Document::where('criminal_case_id', $criminalCase->id)
+            ->latest()
+            ->take(4)
+            ->get()
+        ;
+        
         return view('criminal-cases.show', [
             'criminalCase' => $criminalCase,
+            'documents' => $documents,
         ]);
     }
 

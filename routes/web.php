@@ -4,22 +4,23 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CriminalCaseController as AdminCriminalCaseController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\CharacterController as AdminCharacterController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Admin\TimelineController as AdminTimelineController;
-use App\Http\Controllers\Admin\JudgeController as AdminJudgeController;
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
-use App\Http\Controllers\Admin\TranscriptionController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\VideoPresenterController as AdminVideoPresenterController;
+use App\Http\Controllers\Admin\PlaylistController as AdminPlaylistController;
 
 use App\Http\Controllers\Frontend\CriminalCaseController as FrontendCriminalCaseController;
 use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
+use App\Http\Controllers\Frontend\CharacterController as FrontendCharacterController;
 use App\Http\Controllers\Frontend\ArticleController as FrontendArticleController;
 use App\Http\Controllers\Frontend\DocumentController as FrontendDocumentController;
 use App\Http\Controllers\Frontend\TimelineController as FrontendTimelineController;
-use App\Http\Controllers\Frontend\JudgeController as FrontendJudgeController;
 use App\Http\Controllers\Frontend\VideoPresenterController as FrontendVideoPresenterController;
+use App\Http\Controllers\Frontend\PlaylistController as FrontendPlaylistController;
 
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\SearchController as FrontendSearchController;
@@ -162,7 +163,7 @@ Route::controller(AdminCriminalCaseController::class)
         Route::get('/{criminalCase:hex}/docket', 'docketEntriesIndex')->name('docket-entries.index');
 
         Route::get('/{criminalCase:hex}/import-docket', 'importDocket')->name('import-docket');
-;
+
 
         Route::get('/{criminalCase:hex}', 'show')->name('show');
     })
@@ -203,6 +204,51 @@ Route::controller(AdminCategoryController::class)
         Route::post('/upload-image', 'uploadImage');
 
         Route::get('/{category}', 'show')->name('show');
+    })
+;
+
+
+// -----------------------------------------------------
+// CHARACTER CONTROLLER (FRONT-END)
+// -----------------------------------------------------
+
+Route::controller(FrontendCharacterController::class)
+    ->prefix('characters')
+    ->name('characters.')
+    ->group(function(){
+        Route::get('/', 'index')->name('index');
+        Route::get('/{character:slug}', 'show')->name('show');
+    })
+;
+
+
+// -----------------------------------------------------
+// CHARACTER CONTROLLER (ADMIN)
+// -----------------------------------------------------
+
+Route::controller(AdminCharacterController::class)
+    ->prefix('admin/characters')
+    ->name('admin.characters.')
+    ->middleware(['auth', 'verified'])
+    ->group(function () {
+
+        Route::get('/', 'index')->name('index');
+
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{character:hex}/edit', 'edit')->name('edit');
+        Route::patch('/{character:hex}', 'update')->name('update');
+        Route::delete('/{character:hex}', 'destroy')->name('destroy');
+
+        Route::post('/{character:hex}/images/{image:hex}/optimize', 'optimizeImage')->name('images.optimize');
+        Route::patch('/{character:hex}/images/{image:hex}/update', 'updateImage')->name('images.update');
+        Route::delete('/{character:hex}/images/{image:hex}', 'destroyImage')->name('images.destroy');
+        Route::get('/{character:hex}/images/{image:hex}/edit', 'editImage')->name('images.edit');
+        Route::post('/{character:hex}/images/store', 'storeImage')->name('images.store');
+        Route::get('/{character:hex}/images/upload', 'createImage')->name('images.create');
+        Route::get('/{character:hex}/images', 'imagesIndex')->name('images.index');
+        
+        Route::get('/{character:hex}', 'show')->name('show');
     })
 ;
 
@@ -339,51 +385,6 @@ Route::controller(AdminTimelineController::class)
 
 
 // -----------------------------------------------------
-// ARTICLE CONTROLLER (FRONT-END)
-// -----------------------------------------------------
-
-Route::controller(FrontendJudgeController::class)
-    ->prefix('judges')
-    ->name('judges.')
-    ->group(function(){
-        Route::get('/', 'index')->name('index');
-        Route::get('/{judge:slug}', 'show')->name('show');
-    })
-;
-
-
-// -----------------------------------------------------
-// ARTICLE CONTROLLER (ADMIN)
-// -----------------------------------------------------
-
-Route::controller(AdminJudgeController::class)
-    ->prefix('admin/judges')
-    ->name('admin.judges.')
-    ->middleware(['auth', 'verified'])
-    ->group(function () {
-
-        Route::get('/', 'index')->name('index');
-
-        Route::get('/create', 'create')->name('create');
-        Route::post('/store', 'store')->name('store');
-        Route::get('/{judge:id}/edit', 'edit')->name('edit');
-        Route::patch('/{judge:id}', 'update')->name('update');
-        Route::delete('/{judge:id}', 'destroy')->name('destroy');
-
-        Route::post('/{judge:id}/images/{image:hex}/optimize', 'optimizeImage')->name('images.optimize');
-        Route::patch('/{judge:id}/images/{image:hex}/update', 'updateImage')->name('images.update');
-        Route::delete('/{judge:id}/images/{image:hex}', 'destroyImage')->name('images.destroy');
-        Route::get('/{judge:id}/images/{image:hex}/edit', 'editImage')->name('images.edit');
-        Route::post('/{judge:id}/images/store', 'storeImage')->name('images.store');
-        Route::get('/{judge:id}/images/upload', 'createImage')->name('images.create');
-        Route::get('/{judge:id}/images', 'imagesIndex')->name('images.index');
-        
-        Route::get('/{judge:id}', 'show')->name('show');
-    })
-;
-
-
-// -----------------------------------------------------
 // SEARCH CONTROLLER (FRONT-END)
 // -----------------------------------------------------
 
@@ -431,6 +432,57 @@ Route::controller(TranscriptionController::class)
         Route::post('/transcribe', 'transcribeVideo')->name('transcribe-youtube');
         Route::post('/transcribe-uploaded-video', 'transcribeVideo')->name('transcribe-upload');
         Route::get('/translate', 'translateSubtitles')->name('translate-subs');
+    })
+;
+
+
+// -----------------------------------------------------
+// PLAYLIST CONTROLLER (FRONT-END)
+// -----------------------------------------------------
+
+Route::controller(FrontendPlaylistController::class)
+    ->prefix('playlists')
+    ->name('playlists.')
+    ->group(function(){
+        Route::get('/', 'index')->name('index');
+        Route::get('/{playlist:slug}', 'show')->name('show');
+    })
+;
+
+
+// -----------------------------------------------------
+// PLAYLIST CONTROLLER (ADMIN)
+// -----------------------------------------------------
+
+Route::controller(AdminPlaylistController::class)
+    ->prefix('admin/playlists')
+    ->name('admin.playlists.')
+    ->middleware(['auth', 'verified'])
+    ->group(function () {
+
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{playlist:hex}/edit', 'edit')->name('edit');
+        Route::patch('/{playlist:hex}', 'update')->name('update');
+        Route::delete('/{playlist:hex}', 'destroy')->name('destroy');
+
+        // Images
+        Route::post('/{playlist:hex}/images/{image:hex}/optimize', 'optimizeImage')->name('images.optimize');
+        Route::patch('/{playlist:hex}/images/{image:hex}/update', 'updateImage')->name('images.update');
+        Route::delete('/{playlist:hex}/images/{image:hex}', 'destroyImage')->name('images.destroy');
+        Route::get('/{playlist:hex}/images/{image:hex}/edit', 'editImage')->name('images.edit');
+        Route::post('/{playlist:hex}/images/store', 'storeImage')->name('images.store');
+        Route::get('/{playlist:hex}/images/upload', 'createImage')->name('images.create');
+        Route::get('/{playlist:hex}/images', 'imagesIndex')->name('images.index');
+
+        // Playlist videos
+        Route::delete('/{playlist:hex}/videos/{video:hex}', 'destroyVideo')->name('videos.destroy');
+        Route::patch('/{playlist:hex}/videos', 'updateVideos')->name('videos.update');
+        Route::get('/{playlist:hex}/videos/edit', 'editVideos')->name('videos.edit');
+        Route::get('/{playlist:hex}/videos', 'videosIndex')->name('videos.index');
+        
+        Route::get('/{playlist:hex}', 'show')->name('show');
     })
 ;
 

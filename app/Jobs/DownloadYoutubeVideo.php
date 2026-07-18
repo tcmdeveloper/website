@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Jobs\OptimizeImage;
 use App\Models\Video;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -20,7 +21,7 @@ class DownloadYoutubeVideo implements ShouldQueue
     public function handle(): void
     {
         $this->video->update([
-            'status' => 'downloading',
+            'status' => 'Downloading',
         ]);
 
         $videoDir = storage_path('app/public/videos');
@@ -143,19 +144,23 @@ class DownloadYoutubeVideo implements ShouldQueue
                 'duration' => $metadata['duration'] ?? null,
                 'filename' => 'videos/' . $filename,
                 'thumbnail' => 'thumbnails/' . $thumbnailFilename,
-                'status' => 'completed',
+                'status' => 'Video Downloaded',
                 'error_message' => null,
                 'uploader' => $metadata['uploader'] ?? null,
                 'uploader_id' => $metadata['uploader_id'] ?? null,
                 'channel_url' => $metadata['channel_url'] ?? null,
-
             ]);
+
+
+            OptimizeImage::dispatch($this->video);
+
+            
         } catch (\Throwable $e) {
 
             Log::error($e);
 
             $this->video->update([
-                'status' => 'failed',
+                'status' => 'Failed',
                 'error_message' => $e->getMessage(),
             ]);
 

@@ -4,8 +4,9 @@ namespace App\Providers;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Character;
 use App\Models\CriminalCase;
-use App\Models\Judge;
+use App\Models\Playlist;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
@@ -35,7 +36,8 @@ class AppServiceProvider extends ServiceProvider
             'criminal_case' => CriminalCase::class,
             'category' => Category::class,
             'article' => Article::class,
-            'judge' => Judge::class,
+            'character' => Character::class,
+            'playlist' => Playlist::class,
         ]);
     }
 }

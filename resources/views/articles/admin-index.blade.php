@@ -35,7 +35,7 @@
 
         <x-ui.alert />
         
-        <table class="w-full border text-sm">
+        <table class="w-full border text-xs">
 
             <thead>
                 <tr class="bg-zinc-50 border-b border-zinc-200 text-left text-zinc-600 font-medium">

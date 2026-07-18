@@ -73,6 +73,18 @@
                         </a>
 
                         <a
+                            href="{{ route('admin.characters.index') }}"
+                            @class([
+                                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
+                                'bg-stone-900 text-white' => request()->routeIs('admin.characters.*'),
+                                'text-stone-700 hover:bg-stone-100' => !request()->routeIs('admin.characters.*'),
+                            ])
+                        >
+                            <x-heroicon-o-users class="w-5 h-5" />
+                            Characters
+                        </a>
+
+                        <a
                             href="{{ route('admin.articles.index') }}"
                             @class([
                                 'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
@@ -109,18 +121,6 @@
                         </a>
 
                         <a
-                            href="{{ route('admin.judges.index') }}"
-                            @class([
-                                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
-                                'bg-stone-900 text-white' => request()->routeIs('admin.judges.*'),
-                                'text-stone-700 hover:bg-stone-100' => !request()->routeIs('admin.judges.*'),
-                            ])
-                        >
-                            <x-heroicon-o-scale class="w-5 h-5" />
-                            Judges
-                        </a>
-
-                        <a
                             href="{{ route('admin.videos.index') }}"
                             @class([
                                 'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
@@ -130,6 +130,18 @@
                         >
                             <x-heroicon-o-play class="w-5 h-5" />
                             Videos
+                        </a>
+
+                        <a
+                            href="{{ route('admin.playlists.index') }}"
+                            @class([
+                                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
+                                'bg-stone-900 text-white' => request()->routeIs('admin.playlists.*'),
+                                'text-stone-700 hover:bg-stone-100' => !request()->routeIs('admin.playlists.*'),
+                            ])
+                        >
+                            <x-heroicon-o-queue-list class="w-5 h-5" />
+                            Playlists
                         </a>
 
                     </div>

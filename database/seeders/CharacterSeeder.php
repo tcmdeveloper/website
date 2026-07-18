@@ -2,37 +2,45 @@
 
 namespace Database\Seeders;
 
-use App\Models\CriminalCase;
+use App\Models\Character;
 use Illuminate\Database\Seeder;
 
-class CriminalCaseSeeder extends Seeder
+class CharacterSeeder extends Seeder
 {
     public function run(): void
     {
         // SEED FROM IMPORT DATABASE
 
-        $model = new CriminalCase();
-        
-        $items = $model::on('mysql_import')->get();
+        $items = Character::on('mysql_import')->get();
 
-        foreach($items as $item){
+        foreach ($items as $item) {
 
-            $model::create([
+            Character::create([
                 'id' => $item->id,
-                'hex' => $item->hex,
-                'name' => $item->name,
                 'slug' => $item->slug,
+                'hex' => $item->hex,
+
+                'name' => $item->name,
+                'type' => $item->type,
+
+                'date_of_birth' => $item->date_of_birth,
+                'date_of_death' => $item->date_of_death,
+
+                'gender' => $item->gender,
+                'nationality' => $item->nationality,
+
                 'description' => $item->description,
+                
                 'meta_title' => $item->meta_title,
                 'meta_description' => $item->meta_description,
-                'criminal_case_number' => $item->criminal_case_number,
-                'arrest_date' => $item->arrest_date,
-                'clerk_qs' => $item->clerk_qs,
-                'last_docket_sync_at' => $item->last_docket_sync_at,
+
+                'image_path' => $item->image_path,
+
                 'views' => $item->views,
-                'user_id' => $item->user_id,
-                'published_at' => $item->published_at,
+
                 'is_published' => $item->is_published,
+                'published_at' => $item->published_at,
+
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at,
             ]);

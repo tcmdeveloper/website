@@ -15,6 +15,9 @@
     ]" --}}
 >
 
+
+
+
     <x-ui.container class="max-w-5xl">
 
         {{--
@@ -31,6 +34,88 @@
             </div> 
         --}}
 
+
+        {{-- DOCKET ENTRIES --}}
+
+        <div class="grid grid-cols-12 gap-4">
+            
+            <div class="col-span-8 rounded-md border border-gray-200 bg-white">
+
+                <h2 class="text-2xl font-bold px-3 py-5 bg-green-900 text-white">
+                    Court Docket Filings: {{ $criminalCase->name }}
+                </h2>
+
+                <div class="h-[600px] overflow-y-auto">
+
+                    <table class="w-full text-xs">
+
+                        <thead class="sticky top-0 bg-zinc-50 z-10">
+                            <tr class="border-b border-zinc-200 text-left text-zinc-600 font-medium">
+                                <th class="px-6 py-4">Seq.</th>
+                                <th class="px-6 py-4">Name</th>
+                                <th class="px-6 py-4 text-center">Attachment</th>
+                                <th class="px-6 py-4">Date Filed</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach($criminalCase->docketEntries->sortByDesc('filed_at') as $docketEntry)
+                                <tr class="border-b border-zinc-100">
+                                    <td class="px-6 py-4">{{ $docketEntry->sequence_number }}</td>
+                                    <td class="px-6 py-4">{{ $docketEntry->title }}</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex justify-center">
+                                            @if($docketEntry->document)
+                                                <a href="{{ route('documents.show', [$criminalCase, $docketEntry->document]) }}">
+                                                    <x-heroicon-s-document class="w-4" />
+                                                </a>
+                                            @else
+                                                —
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        {{ $docketEntry->filed_at->format('M d Y') }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+
+
+            
+        {{-- <aside class="mt-10 lg:mt-0 col-span-4">
+
+            
+
+        </aside> --}}
+
+            <div class="col-span-4">
+
+                <h2 class="text-2xl font-bold px-3 py-5 bg-blue-900 text-white">
+                    Case Articles
+                </h2>
+
+                <x-articles.grid    
+                    :articles="$criminalCase->articles" 
+                    :sideList="true"
+                 />
+            </div>
+
+        </div>
+
+
+
+
+
+
         {{-- CASE DOCUMENTS --}}
 
         <section aria-labelledby="case-documents-heading" class="mb-20">
@@ -43,8 +128,7 @@
 
 
             {{-- Document list --}}
-
-            @if($criminalCase->documents->isEmpty())
+            @if($documents->isEmpty())
 
                 <div class="mt-6 rounded-lg border border-gray-200 bg-white p-8 text-center">
                     <p class="text-gray-600">
@@ -56,7 +140,7 @@
 
                 <div class="mt-6 divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white">
 
-                    @foreach($criminalCase->documents as $document)
+                    @foreach($documents as $document)
 
                         <a
                             href="{{ route('documents.show', [$document->criminalCase, $document]) }}"
@@ -121,24 +205,7 @@
 
 
 
-
-        {{-- ARTICLES --}}
-
-        <section aria-labelledby="case-articles-heading">
-
-            <div 
-                class="my-10 px-3 relative text-center max-w-5xl mx-auto"
-            >
-                <h2 id="case-articles-heading" class="text-xl sm:text-3xl font-bold tracking-tight text-zinc-700">
-                    True crime articles about the {{ $criminalCase->name }} case
-                </h2>
-            </div>
-
-            <x-articles.grid :articles="$criminalCase->articles" />
-
-        </section>
         
     </x-ui.container>
     
-
 </x-layouts.app>

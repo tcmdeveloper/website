@@ -6,14 +6,18 @@
     'views' => 0,
     'publishedAt' => null,
     'url' => '#',
+    'sideList' => false,
 ])
 
 
-
-<article class="border border-gray-200 rounded-sm overflow-hidden bg-white hover:shadow-md transition-shadow duration-200">
+@if($sideList)
+    <article class="border-b border-gray-200 overflow-hidden bg-white hover:shadow-md transition-shadow duration-200 m-2">
+@else
+    <article class="border border-gray-200 rounded-sm overflow-hidden bg-white hover:shadow-md transition-shadow duration-200">
+@endif
         
     {{-- Featured image --}}
-    <a href="{{ $url }}" class="block">
+    <a href="{{ $url }}" class="block p-2 pb-0">
         <x-ui.image
             :image="$featuredImage"
             class="w-full sm:w-[480px] h-48 object-cover rounded-tl-sm rounded-tr-sm rounded-bl-none rounded-br-none"

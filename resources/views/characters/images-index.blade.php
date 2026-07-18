@@ -1,21 +1,21 @@
-{{-- resources/views/criminal-cases/images-index.blade.php --}}
+{{-- resources/views/characters/images-index.blade.php --}}
 
 <x-layouts.dashboard>
 
     <x-ui.card>
 
         <x-ui.header-actions
-            title="Manage Judge Images"
-            subtitle="Upload, organize, and manage the images used in this judge."
+            title="Manage Character Images"
+            subtitle="Upload, organize, and manage the images used in this character."
             :actions="[
                 'back' => [
-                    'label' => 'Back to Judge',
-                    'href' => route('admin.judges.index'),
+                    'label' => 'Back to Characters',
+                    'href' => route('admin.characters.index'),
                     'variant' => 'ghost',
                 ],
                 'uploadImage' => [
                     'label' => 'Upload New Image',
-                    'href' => route('admin.judges.images.create', $judge),
+                    'href' => route('admin.characters.images.create', $character),
                 ]
             ]"
         />
@@ -29,7 +29,7 @@
                     <th class="px-6 py-4">Image</th>
                     <th class="px-6 py-4">Caption</th>
                     <th class="px-6 py-4">Alt text</th>
-                    <th class="px-6 py-4">Featured</th>
+                    <th class="px-6 py-4 text-center">Featured</th>
                     <th class="px-6 py-4">Created at</th>
                     <th class="px-6 py-4"></th>
                 </tr>
@@ -46,6 +46,7 @@
                             <x-ui.image
                                 :image="$image"
                                 class="w-20"
+                                sizes="(min-width: 640px) 80px, 100vw"
                             />
                         </td>
 
@@ -53,8 +54,20 @@
 
                         <td class="px-6 py-4">{{ Str::limit($image->alt_text, 50) }}</td>
 
-                        <td class="px-6 py-4">{{ $image->is_featured ? 'Featured' : '-' }}</td>
-                        
+                        <td class="px-6 py-4 text-center">
+                            @if($image->is_featured)
+                                <x-ui.pip 
+                                    label="Main image"
+                                    variant="success"
+                                />
+                            @else
+                                <x-ui.pip 
+                                    label="Gallary"
+                                    variant="secondary"
+                                />
+                            @endif
+                        </td>
+
                         <td class="px-6 py-4">{{ $image->created_at->format('d M Y') }}</td>
 
                         <td class="px-6 py-4">
@@ -63,14 +76,14 @@
                                 <x-ui.button
                                     size="xs"
                                     variant="ghost"
-                                    href="{{ route('admin.judges.images.edit', [$judge, $image]) }}"    
+                                    href="{{ route('admin.characters.images.edit', [$character, $image]) }}"    
                                 >
                                     Edit
                                 </x-ui.button>
 
                                 <form
                                     method="POST"
-                                    action="{{ route('admin.judges.images.destroy', [$judge, $image]) }}"
+                                    action="{{ route('admin.characters.images.destroy', [$character, $image]) }}"
                                     onsubmit="return confirm('Are you sure you want to delete this image? This cannot be undone.')"
                                 >
                                     @csrf
@@ -97,7 +110,7 @@
                             colspan="6"
                             class="px-6 py-12 text-center text-zinc-500"
                         >
-                            No images for this judge.
+                            No images for this character.
                         </td>
 
                     </tr>

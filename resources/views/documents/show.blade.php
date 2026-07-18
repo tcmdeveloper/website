@@ -1,7 +1,8 @@
 {{-- resources/views/documents/show.blade.php --}}
 
 <x-layouts.app
-    :title="$document->criminalCase->name . ': Documents'"
+    title="Court Docket: {{ $document->criminalCase->name }}"
+    :subtitle="$document->name"
     :meta="[
         'title' => $document->name,
         'description' => 'Read the court filing from the ' . $document->criminalCase->name . ' case. Published on ' . $document->docketEntry?->filed_at->format('M d Y'),
@@ -81,98 +82,22 @@
         @keydown.right.window="if (open) next()"
         @keydown.left.window="if (open) prev()"
 
-        class="mx-auto max-w-7xl px-4 py-8 lg:grid lg:grid-cols-12 lg:gap-10"
+        class="mx-auto max-w-4xl px-4 flex justify-center"
     >
 
         
 
-        {{-- Sidebar --}}
-        <aside class="mt-10 lg:mt-0 col-span-4">
-
-            <div class="lg:sticky lg:top-24">
-
-                <x-ui.card>
-
-                    <h2 class="mb-4 text-sm font-semibold uppercase tracking-wide">
-                        Document details
-                    </h2>
-
-                    <dl class="space-y-3 text-sm">
-
-                        <div class="flex justify-between gap-4">
-
-                            <dt>Pages</dt>
-
-                            <dd>
-                                {{ $document->pages }}
-                            </dd>
-
-                        </div>
-
-                        <div class="flex justify-between gap-4">
-
-                            <dt>Uploaded by</dt>
-
-                            <dd>
-                                {{ $document->author->display_name }}
-                            </dd>
-
-                        </div>
-
-                        @if ($document->docketEntry?->filed_at)
-
-                            <div class="flex justify-between gap-4">
-
-                                <dt>Published</dt>
-
-                                <dd>
-                                    {{ $document->docketEntry?->filed_at->format('M d Y') }}
-                                </dd>
-
-                            </div>
-
-                        @endif
-
-                        @if ($document->views)
-
-                            <div class="flex justify-between gap-4">
-
-                                <dt>Views</dt>
-
-                                <dd>
-                                    {{ number_format($document->views) }}
-                                </dd>
-
-                            </div>
-
-                        @endif
-
-                    </dl>
-
-
-                </x-ui.card>
-
-            </div>
-
-        </aside>
+        
 
         {{-- MAIN COLUMN --}}
-        <main class="min-w-0 col-span-8">
+        <main class="min-w-0">
 
-            {{-- Header --}}
-            <header class="mb-10 prose-content">
 
-                <h1 class="mt-0">
-                    {{ $document->name }}
-                </h1>
 
-                @if(! empty($document->description))
-                    <p>
-                        {{ $document->description }}
-                    </p>
-                @endif
 
-                <div class="mb-4 flex flex-wrap gap-2">
+
+
+                <div class="mb-4 flex justify-center gap-2 mb-10">
 
                     @if ($document->criminalCase)
 
@@ -200,16 +125,15 @@
 
                
 
-            </header>
+         
 
-            {{-- Pages --}}
-            <section class="space-y-8">
+
 
                 @foreach ($document->documentPages as $index => $page)
                 {{-- @dd($page->url) --}}
                     <button
                         type="button"
-                        class="block w-full text-left"
+                        class="block w-full text-left mb-10"
                         @click="show({{ $index }})"
                     >
 
@@ -224,7 +148,7 @@
 
                 @endforeach
 
-            </section>
+
 
         </main>
 

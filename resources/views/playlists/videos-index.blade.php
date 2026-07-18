@@ -1,30 +1,33 @@
-{{-- resources/views/videos/admin-index.blade.php --}}
+{{-- resources/views/playlists/images-index.blade.php --}}
 
 <x-layouts.dashboard>
 
     <x-ui.card>
 
         <x-ui.header-actions
-            title="Video Manager"
-            subtitle="Manage videos you have downloaded from YouTube."
+            title="Manage Playlist Videos"
+            subtitle="Upload, organize, and manage the videos in this playlist."
             :actions="[
-                'create' => [
-                    'label' => 'Download YouTube Video',
-                    'href' => route('admin.videos.create'),
-                    'variant' => 'primary',
-                    'icon' => 'heroicon-o-play'
+                'back' => [
+                    'label' => 'Back to Playlists',
+                    'href' => route('admin.playlists.index'),
+                    'variant' => 'ghost',
+                ],
+                'editPlaylistVideos' => [
+                    'label' => 'Edit Playlist Videos',
+                    'href' => route('admin.playlists.videos.edit', $playlist),
                 ]
             ]"
         />
-       
+
         <x-ui.alert />
-        
+
         <table class="w-full border text-xs">
 
             <thead>
                 <tr class="bg-zinc-50 border-b border-zinc-200 text-left text-zinc-600 font-medium">
                     <th class="px-6 py-4">Title</th>
-                    <th class="px-6 py-4">Duration</th>
+                    <th class="px-6 py-4 text-center">Duration</th>
                     <th class="px-6 py-4 text-center">Status</th>
                     <th class="px-6 py-4"></th>
                 </tr>
@@ -33,8 +36,8 @@
 
             <tbody>
 
-                @forelse($videos as $video)
-
+                @forelse ($playlistVideos as $video)
+                    
                     <tr class="border-b border-zinc-100 text-zinc-500">
                         
                         <td class="px-6 py-4 flex gap-4 items-center">
@@ -51,7 +54,7 @@
 
                         </td>
 
-                        <td class="px-6 py-4 text-zinc-500">
+                        <td class="px-6 py-4 text-center">
                             {{ $video->duration_formatted }}
                         </td>
 
@@ -63,6 +66,8 @@
                                 <x-ui.pip label="Transcribing..." variant="warning" />
                             @elseif ($video->isDownloaded())
                                 <x-ui.pip label="Downloaded" variant="info" />
+                            @elseif ($video->isDownloading())
+                                <x-ui.pip label="Downloading" variant="secondary" />
                             @elseif ($video->transcriptionFailed())
                                 <x-ui.pip label="Failed" variant="danger" />
                             @endif
@@ -121,18 +126,21 @@
 
                 @endforelse
 
+
+
             </tbody>
 
         </table>
 
 
-
         {{-- Pagination --}}
 
-        <div class="mt-6 flex justify-end">
-            {{ $videos->links() }}
-        </div>
+        {{-- <div class="mt-6 flex justify-end">
+            {{ $playlistVideos->links() }}
+        </div> --}}
+
 
     </x-ui.card>
+
 
 </x-layouts.dashboard>

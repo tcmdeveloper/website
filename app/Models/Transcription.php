@@ -40,4 +40,13 @@ class Transcription extends Model
     {
         return $this->status === 'failed';
     }
+
+
+
+
+
+    public function video()
+    {
+        return $this->belongsTo(Video::class);
+    }
 }

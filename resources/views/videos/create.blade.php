@@ -8,8 +8,13 @@
         <x-ui.header-actions
             title="Download a YouTube video"
             subtitle="Enter the YouTube URL to download the video."
-            :href="route('admin.videos.index')"
-            label="All videos"
+            :actions="[
+                'back' => [
+                    'label' => 'Back to Videos',
+                    'href' => route('admin.videos.index'),
+                    'variant' => 'ghost',
+                ]
+            ]"
         />
 
 

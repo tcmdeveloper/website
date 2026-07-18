@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Video;
 use App\Models\DocumentPage;
 use App\Models\Image;
 use Illuminate\Database\Eloquent\Model;
@@ -36,6 +37,14 @@ protected function getSizesForModel(Model $model): array
             640,
             800,
             1200,
+        ];
+    }
+
+    if ($model instanceof Video) {
+        return [
+            160,
+            320,
+            640
         ];
     }
 

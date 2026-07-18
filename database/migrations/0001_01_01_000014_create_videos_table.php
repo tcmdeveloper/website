@@ -28,7 +28,16 @@ return new class extends Migration
             $table->string('filename')->nullable();
             $table->string('thumbnail')->nullable();
 
-            $table->string('status')->default('pending');
+            $table->enum('status', [
+                'Pending',
+                'Downloading',
+                'Video Downloaded',
+                'Transcribing',
+                'Completed',
+                'Failed',
+            ])->default('pending');
+
+            $table->timestamp('transcribed_at')->nullable();
             $table->text('error_message')->nullable();
 
             $table->string('uploader')->nullable();
@@ -49,6 +58,11 @@ return new class extends Migration
                 ->nullOnDelete();
 
             $table->foreignId('criminal_case_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
+
+            $table->foreignId('playlist_id')
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();

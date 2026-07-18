@@ -41,14 +41,14 @@
 
         {{-- Table --}}
 
-        <table class="w-full border text-sm">
+        <table class="w-full border text-xs">
 
             <thead>
                 <tr class="bg-zinc-50 border-b border-zinc-200 text-left text-zinc-600 font-medium">
                     <th class="px-6 py-4">Name</th>
                     <th class="px-6 py-4">Slug</th>
                     <th class="px-6 py-4">Pages</th>
-                    <th class="px-6 py-4">Created</th>
+                    <th class="px-6 py-4">Date Filed</th>
                     <th class="px-6 py-4"></th>
                 </tr>
             </thead>

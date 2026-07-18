@@ -26,7 +26,7 @@ class DocumentPageSeeder extends Seeder
                 'image_path' => $item->image_path,
                 'width' => $item->width,
                 'height' => $item->height,
-                'is_optimized' => $item->has_multiformat,
+                'is_optimized' => $item->is_optimized,
                 'views' => $item->views,
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at

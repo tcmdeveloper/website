@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             ArticleSeeder::class,
             ImageSeeder::class,
-            TranscriptionSeeder::class,
             EmailChangeRequestSeeder::class,
             FailedJobSeeder::class,
             JobBatchSeeder::class,
@@ -26,12 +25,16 @@ class DatabaseSeeder extends Seeder
             TermsVersionSeeder::class,
             JailCallLogSeeder::class,
             VideoSeeder::class,
+            PlaylistSeeder::class,
+            PlaylistVideoSeeder::class,
             TranscriptSegmentSeeder::class,
             DocketEntrySeeder::class,
             DocumentSeeder::class,
             DocumentPageSeeder::class,
             TimelineSeeder::class,
             TimelineEventSeeder::class,
+            CharacterSeeder::class,
+            CharacterCriminalCaseSeeder::class,
         ]);
     }
 }

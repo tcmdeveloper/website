@@ -65,8 +65,76 @@ class Video extends Model
     // RELATIONSHIPS
 
     // Transcript segments
+
     public function transcriptSegments()
     {
         return $this->hasMany(TranscriptSegment::class);
     }
+
+
+    // Playlists
+
+    public function playlists()
+    {
+        return $this->belongsToMany(Playlist::class)
+            ->withPivot('position')
+            ->withTimestamps();
+    }
+
+
+
+
+    // HELPERS
+
+    // Has transcript
+
+    public function hasTranscript(): bool
+    {
+        return $this->status === 'Completed';
+    }
+
+
+    // Is transcribing
+
+    public function isTranscribing(): bool
+    {
+        return $this->status === 'Transcribing';
+    }
+
+    // Is downloaded
+
+    public function isDownloaded(): bool
+    {
+        return $this->status === 'Video Downloaded';
+    }
+
+
+    // Is downloading
+
+    public function isDownloading(): bool
+    {
+        return $this->status === 'Downloading';
+    }
+
+
+    // Transcription failed
+
+    public function transcriptionFailed(): bool
+    {
+        return $this->status === 'Failed';
+    }
+
+
+
+
+    // ACCESSORS
+
+    // Image path
+
+    public function getImagePathAttribute(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+
 }

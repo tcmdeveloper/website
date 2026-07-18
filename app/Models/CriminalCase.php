@@ -107,7 +107,7 @@ class CriminalCase extends Model
     }
 
 
-    // IMAGE
+    // IMAGES
     
     public function images()
     {
@@ -147,13 +147,6 @@ class CriminalCase extends Model
     }
 
 
-    // JUDGE
-
-    public function judge()
-    {
-        return $this->belongsTo(Judge::class);
-    }
-
 
     // DOCKET ENTRIES
 
@@ -162,6 +155,15 @@ class CriminalCase extends Model
         return $this->hasMany(DocketEntry::class, 'criminal_case_id');
     }
 
+
+    // CHARACTERS
+
+    public function characters()
+    {
+        return $this->belongsToMany(Character::class)
+            ->withPivot('role')
+            ->withTimestamps();
+    }
 
     
 

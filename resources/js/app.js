@@ -1,5 +1,6 @@
 import Alpine from 'alpinejs';
 import imageUploader from './image-uploader';
+import './playlist-manager';
 
 
 window.Alpine = Alpine;

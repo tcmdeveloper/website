@@ -1,6 +1,21 @@
 {{-- resources/views/components/articles/grid.blade.php --}}
 
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+@props([
+    'articles' => [],
+    'sideList' => false,
+])
+
+
+@if($sideList)
+    <div {{ $attributes->class([
+        'grid grid-cols-1 gap-8'
+    ]) }}>
+@else
+    <div {{ $attributes->class([
+        'grid grid-cols-1 sm:grid-cols-2 gap-8'
+    ]) }}>
+@endif
+
 
     @forelse($articles as $article)
 
@@ -13,6 +28,7 @@
                 :views="$article->views"
                 :publishedAt="$article->published_at"
                 url="/articles/{{$article->slug}}"
+                
             />
    
 
