@@ -22,7 +22,7 @@
                     
                     <div class="grid grid-cols-12 gap-6">
                         
-                        <div class="col-span-3">
+                        <div class="col-span-12 sm:col-span-5 md:col-span-3">
 
                             <x-ui.image
                                 :image="$case->display_image"
@@ -31,7 +31,7 @@
                             />
                         </div>
                         
-                        <div class="col-span-9">
+                        <div class="col-span-12 sm:col-span-7 md:col-span-9">
 
                             {{-- Case name --}}
                             <h2 class="text-lg font-semibold group-hover:text-red-metrix transition">

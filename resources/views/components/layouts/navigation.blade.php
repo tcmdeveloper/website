@@ -139,7 +139,7 @@
                 Articles
             </a>
 
-            <a href="{{ route('articles.index') }}" class="whitespace-nowrap text-zinc-100 hover:text-yellow-300">
+            <a href="{{ route('timelines.index') }}" class="whitespace-nowrap text-zinc-100 hover:text-yellow-300">
                 Timelines
             </a>
 
