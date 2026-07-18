@@ -14,7 +14,7 @@
                 :publishedAt="$article->published_at"
                 url="/articles/{{$article->slug}}"
             />
-        </div>
+   
 
     @empty
 
