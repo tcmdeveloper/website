@@ -109,6 +109,18 @@
                         </a>
 
                         <a
+                            href="{{ route('admin.judges.index') }}"
+                            @class([
+                                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
+                                'bg-stone-900 text-white' => request()->routeIs('admin.judges.*'),
+                                'text-stone-700 hover:bg-stone-100' => !request()->routeIs('admin.judges.*'),
+                            ])
+                        >
+                            <x-heroicon-o-scale class="w-5 h-5" />
+                            Judges
+                        </a>
+
+                        <a
                             href="{{ route('admin.videos.index') }}"
                             @class([
                                 'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',

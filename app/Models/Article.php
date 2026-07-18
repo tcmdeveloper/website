@@ -102,6 +102,19 @@ class Article extends Model
         return $this->morphMany(Image::class, 'imageable')
             ->orderBy('sort_order');
     }
+
+
+    protected function displayImage(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->featuredImage
+                ?? $this->images()->first()
+                ?? new Image([
+                    'image_path' => 'images/default-article',
+                    'alt_text' => 'Default case image',
+                ]),
+        );
+    }
     /*
     |--------------------------------------------------------------------------
     | Accessors
@@ -129,10 +142,11 @@ class Article extends Model
     }
 
 
-    public function getUrlAttribute(): string
+    public function getImageUrlAttribute(): string
     {
         return $this->url();
     }
+
 
     public function url(
         ?int $width = 640,
@@ -147,6 +161,7 @@ class Article extends Model
         return Storage::url(
             "{$path}.{$extension}"
         );
+        
     }
 
     

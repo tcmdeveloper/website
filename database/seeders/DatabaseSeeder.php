@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             JailCallLogSeeder::class,
             VideoSeeder::class,
             TranscriptSegmentSeeder::class,
+            DocketEntrySeeder::class,
             DocumentSeeder::class,
             DocumentPageSeeder::class,
             TimelineSeeder::class,

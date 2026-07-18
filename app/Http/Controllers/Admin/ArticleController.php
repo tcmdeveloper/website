@@ -452,7 +452,7 @@ class ArticleController extends Controller
             ->route('admin.articles.images', $article)
             ->with('status', [
                 'type' => 'success',
-                'message' => 'Image updated successfully!',
+                'message' => 'Image updated successfully.',
             ]);
     }
 

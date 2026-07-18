@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('documents', function (Blueprint $table) {
-            
+        Schema::create('criminal_cases', function (Blueprint $table) {
+
             // Identifiers
             $table->id();
             $table->string('hex', 11)->unique();
@@ -21,14 +21,16 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->string('pdf_path');
-            $table->unsignedInteger('pages')->default(0);
-            $table->unsignedBigInteger('filesize')->nullable();
 
-            // Meta
+            // SEO
             $table->string('meta_title')->nullable();
-            $table->text('meta_description')->nullable();
-            $table->string('og_image')->nullable();
+            $table->string('meta_description')->nullable();
+
+            // Case data
+            $table->string('criminal_case_number')->nullable()->unique();
+            $table->date('arrest_date')->nullable();          
+            $table->string('clerk_qs')->nullable();
+            $table->timestamp('last_docket_sync_at')->nullable();
 
             // Stats
             $table->unsignedInteger('views')->default(0);
@@ -39,23 +41,16 @@ return new class extends Migration
                 ->constrained()
                 ->nullOnDelete();
 
-            $table->foreignId('category_id')
-                ->nullable()
-                ->constrained()
-                ->nullOnDelete();
-
-            $table->foreignId('criminal_case_id')
+            $table->foreignId('judge_id')
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();
 
             // Publishing
-            $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();
+            $table->boolean('is_published')->default(false);
 
             $table->timestamps();
-
-            $table->index(['is_published', 'published_at']);
         });
     }
 
@@ -64,6 +59,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('documents');
+        Schema::dropIfExists('criminal_cases');
     }
 };

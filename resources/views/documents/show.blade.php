@@ -2,6 +2,10 @@
 
 <x-layouts.app
     :title="$document->criminalCase->name . ': Documents'"
+    :meta="[
+        'title' => $document->name,
+        'description' => 'Read the court filing from the ' . $document->criminalCase->name . ' case. Published on ' . $document->docketEntry?->filed_at->format('M d Y'),
+    ]"
     
 >
 
@@ -115,14 +119,28 @@
 
                         </div>
 
-                        @if ($document->published_at)
+                        @if ($document->docketEntry?->filed_at)
 
                             <div class="flex justify-between gap-4">
 
                                 <dt>Published</dt>
 
                                 <dd>
-                                    {{ $document->published_at->format('j M Y') }}
+                                    {{ $document->docketEntry?->filed_at->format('M d Y') }}
+                                </dd>
+
+                            </div>
+
+                        @endif
+
+                        @if ($document->views)
+
+                            <div class="flex justify-between gap-4">
+
+                                <dt>Views</dt>
+
+                                <dd>
+                                    {{ number_format($document->views) }}
                                 </dd>
 
                             </div>
@@ -161,19 +179,19 @@
                         <x-ui.category-pip
                             href="{{ route('cases.show', $document->criminalCase->slug) }}"
                         >
-                            {{ $document->criminalCase->name }} case
+                            {{ $document->criminalCase->name }} Case
                         </x-ui.category-pip>
 
                     @endif
 
-                    <span class="rounded-full bg-zinc-100 px-3 py-1 text-xs">
+                    <span class="rounded-full bg-lime-100 px-3 py-1 text-xs">
                         {{ $document->pages }} pages
                     </span>
 
-                    @if ($document->published_at)
+                    @if ($document->docketEntry?->filed_at)
 
-                        <span class="rounded-full bg-zinc-100 px-3 py-1 text-xs">
-                            {{ $document->published_at->format('j M Y') }}
+                        <span class="rounded-full bg-yellow-100 px-3 py-1 text-xs">
+                            {{ $document->docketEntry?->filed_at->format('M d Y') }}
                         </span>
 
                     @endif

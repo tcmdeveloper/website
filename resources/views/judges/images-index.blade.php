@@ -5,17 +5,17 @@
     <x-ui.card>
 
         <x-ui.header-actions
-            title="Manage Article Images"
-            subtitle="Upload, organize, and manage the images used in this article."
+            title="Manage Judge Images"
+            subtitle="Upload, organize, and manage the images used in this judge."
             :actions="[
                 'back' => [
-                    'label' => 'Back to Articles',
-                    'href' => route('admin.articles.index'),
+                    'label' => 'Back to Judge',
+                    'href' => route('admin.judges.index'),
                     'variant' => 'ghost',
                 ],
                 'uploadImage' => [
                     'label' => 'Upload New Image',
-                    'href' => route('admin.articles.images.create', $article),
+                    'href' => route('admin.judges.images.create', $judge),
                 ]
             ]"
         />
@@ -63,14 +63,14 @@
                                 <x-ui.button
                                     size="xs"
                                     variant="ghost"
-                                    href="{{ route('admin.articles.images.edit', [$article, $image]) }}"    
+                                    href="{{ route('admin.judges.images.edit', [$judge, $image]) }}"    
                                 >
                                     Edit
                                 </x-ui.button>
 
                                 <form
                                     method="POST"
-                                    action="{{ route('admin.articles.images.destroy', [$article, $image]) }}"
+                                    action="{{ route('admin.judges.images.destroy', [$judge, $image]) }}"
                                     onsubmit="return confirm('Are you sure you want to delete this image? This cannot be undone.')"
                                 >
                                     @csrf
@@ -97,7 +97,7 @@
                             colspan="6"
                             class="px-6 py-12 text-center text-zinc-500"
                         >
-                            No articles images.
+                            No images for this judge.
                         </td>
 
                     </tr>

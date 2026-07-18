@@ -4,7 +4,7 @@
     'value' => null,
     'label' => null,
     'hideLabel' => false,
-    'size' => 'md',
+    'size' => 'sm',
     'disabled' => false,
     'readonly' => false,
 ])

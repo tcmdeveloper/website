@@ -12,7 +12,7 @@ class DocumentPage extends Model
 {
     use HasFactory;
 
-    public const SIZES = [80, 320, 640];
+    public const SIZES = [80, 480, 800];
 
 
     protected $fillable = [
@@ -23,6 +23,7 @@ class DocumentPage extends Model
         'image_path',
         'width',
         'height',
+        'is_optimized',
         'views',
         'created_at',
         'updated_at',

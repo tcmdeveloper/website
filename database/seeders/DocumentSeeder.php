@@ -33,6 +33,7 @@ class DocumentSeeder extends Seeder
                 'user_id' => $item->user_id,
                 'category_id' => $item->category_id,
                 'criminal_case_id' => $item->criminal_case_id,
+                'docket_entry_id' => $item->docket_entry_id,
                 'published_at' => $item->published_at,
                 'is_published' => $item->is_published,
                 'created_at' => $item->created_at,

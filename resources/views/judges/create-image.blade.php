@@ -5,12 +5,12 @@
     <x-ui.card class="max-w-4xl">
 
         <x-ui.header-actions
-            title="Upload Image"
-            subtitle="Select the image you want to add to this criminal case."
+            title="Upload a new image"
+            subtitle="Select the image you want to add to this judge."
             :actions="[
                 'back' => [
                     'label' => 'Back to Images',
-                    'href' => route('admin.criminal-cases.images.index', $criminalCase),
+                    'href' => route('admin.judges.images.index', [$judge]),
                     'variant' => 'ghost',
                 ],
             ]"
@@ -21,11 +21,8 @@
         <form
             id="imageForm"
             method="POST"
-            action="{{ route('admin.criminal-cases.images.store', $criminalCase) }}"
-            x-data="imageUploader(
-                '',
-                false
-            )"
+            action="{{ route('admin.judges.images.store', $judge) }}"
+            x-data="imageUploader()"
             @submit.prevent="submit"
             class="space-y-6"
         >
@@ -34,7 +31,7 @@
             <input
                 x-ref="file"
                 type="file"
-                accept=".jpg,.jpeg,.png,.webp,image/webp"
+                accept="image/*"
                 class="hidden"
                 @change="selectImage"
             >
@@ -49,6 +46,18 @@
                 class="relative flex h-96 items-center justify-center overflow-hidden rounded border border-zinc-300 bg-zinc-50"
             >
 
+                <template x-if="!preview">
+                    <x-ui.button
+                        type="button"
+                        @click="$refs.file.click()"
+                        class="rounded bg-stone-900 px-4 py-2 text-white"
+                        size="sm"
+                        variant="secondary"
+                    >
+                        Choose image
+                    </x-ui.button>
+                </template>
+
                 <img
                     x-show="preview"
                     :src="preview"
@@ -56,21 +65,6 @@
                     class="max-h-full max-w-full object-contain"
                 >
 
-                <template x-if="!preview">
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <x-ui.button
-                            type="button"
-                            @click="$refs.file.click()"
-                            size="sm"
-                            variant="primary"
-                        >
-                            <x-heroicon-o-photo class="w-4 h-4" />
-                            Choose Image
-                        </x-ui.button>
-                    </div>
-                </template>
-
-                
                 <div
                     x-show="preview"
                     class="absolute bottom-3 right-3 flex items-center gap-2"
@@ -118,24 +112,17 @@
 
                 </div>
 
-
             </div>
-
-
-
-
-
 
 
             {{-- Caption --}}
 
             <div>
-                <x-ui.textarea
+                <x-ui.input
                     name="caption"
                     type="text"
-                    label="Image caption"
+                    label="Caption"
                     :value="old('caption')"
-                    placeholder="Describe the image"
                 />
             </div>
 
@@ -148,13 +135,12 @@
                     type="text"
                     label="Alt text"
                     :value="old('alt_text')"
-                    placeholder="Description for SEO"
                 />
             </div>
 
 
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-
+            
                 {{-- Credit name --}}
 
                 <div>
@@ -163,7 +149,6 @@
                         type="text"
                         label="Credit source"
                         :value="old('credit_name')"
-                        placeholder="Name of source"
                     />
                 </div>
 
@@ -176,22 +161,22 @@
                         type="text"
                         label="Credit URL"
                         :value="old('credit_url')"
-                        placeholder="URL of source"
                     />
                 </div>
-
+            
             </div>
 
 
-            <div>
+            <div class="flex gap-2">
 
                 <x-ui.button 
                     type="submit"
                     size="sm"
                 >
-                    <x-heroicon-o-check-circle class="w-4 h-4" />
-                    Save Image
+                    Upload image
                 </x-ui.button>
+
+               
 
             </div>
 

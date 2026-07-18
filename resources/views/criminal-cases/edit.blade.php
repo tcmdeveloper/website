@@ -34,9 +34,34 @@
                 <x-ui.input
                     name="name"
                     type="text"
-                    label="Case name"
-                    placeholder="Case name"
+                    label="Defendant name"
+                    placeholder="Defendant name"
                     :value="old('name', $criminalCase->name)"
+                />
+            </div>
+
+
+            {{-- Criminal case number --}}
+
+            <div>
+                <x-ui.input
+                    name="criminal_case_number"
+                    type="text"
+                    label="Case number"
+                    placeholder="Case number"
+                    :value="old('criminal_case_number', $criminalCase->criminal_case_number)"
+                />
+            </div>
+
+
+            {{-- Arrest date --}}
+
+            <div>
+                <x-ui.input
+                    type="date"
+                    name="arrest_date"
+                    label="Date of Arrest"
+                    :value="old('arrest_date', $criminalCase->arrest_date)"
                 />
             </div>
 
@@ -77,7 +102,7 @@
                     type="submit"
                     size="sm"
                 >
-                    Create case
+                    Save changes
                 </x-ui.button>
 
                 <x-ui.button

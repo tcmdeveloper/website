@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\DocumentPage;
 use App\Models\Image;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\Encoders\AvifEncoder;
@@ -22,8 +23,8 @@ protected function getSizesForModel(Model $model): array
     if ($model instanceof DocumentPage) {
         return [
             80,
-            320,
-            640,
+            480,
+            800,
         ];
     }
 
@@ -185,5 +186,16 @@ protected function getSizesForModel(Model $model): array
             $this->getSizesForModel($model)
         );
         
+        if (
+            Schema::hasColumn(
+                $model->getTable(),
+                'is_optimized'
+            )
+        ) {
+            $model->update([
+                'is_optimized' => true,
+            ]);
+        }
+
     }
 }

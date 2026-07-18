@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 class CriminalCase extends Model
 {
     use HasFactory;
+    
 
     protected $fillable = [
         'hex',
@@ -19,12 +20,21 @@ class CriminalCase extends Model
         'description',
         'meta_title',
         'meta_description',
+        'criminal_case_number',
+        'arrest_date',
+        'clerk_qs',
+        'last_docket_sync_at',
+        'judge_id',
         'views',
         'user_id',
         'published_at',
         'is_published',
     ];
 
+
+    protected $casts = [
+        'arrest_date' => 'date',
+    ];
 
 
 
@@ -81,29 +91,55 @@ class CriminalCase extends Model
     |--------------------------------------------------------------------------
     */
 
-    // Author of the criminal case
+    // AUTHOR
+
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Criminal Case
+    
+    // FEATURED IMAGE
+
+    public function featuredImage()
+    {
+        return $this->morphOne(Image::class, 'imageable')->where('is_featured', true);
+    }
+
+
+    // IMAGE
+    
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable')->orderBy('sort_order');
+    }
+
+
+    // CRIMINAL CASE
+
     public function articles()
     {
         return $this->hasMany(Article::class);
     }
 
-    // Documents
+
+    // DOCUMENTS
+
     public function documents()
     {
         return $this->hasMany(Document::class);
     }
 
-    // Published articles
+
+    // PUBLISHED DOCUMENTS
+
     public function publishedDocuments()
     {
         return $this->hasMany(Document::class)->published();
     }
+
+
+    // TIMELINES
 
     public function timelines()
     {
@@ -111,16 +147,52 @@ class CriminalCase extends Model
     }
 
 
+    // JUDGE
+
+    public function judge()
+    {
+        return $this->belongsTo(Judge::class);
+    }
 
 
+    // DOCKET ENTRIES
+
+    public function docketEntries()
+    {
+        return $this->hasMany(DocketEntry::class, 'criminal_case_id');
+    }
 
 
-
-    //
-    // ATTRIBUTE ACCESSORS
-    //
     
-    // Formatted views (25419 -> 25,419)
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ATTRIBUTE ACCESSORS
+    |--------------------------------------------------------------------------
+    */
+
+    // DISPLAY IMAGE
+
+    protected function displayImage(): Attribute
+    {
+        return Attribute::make(get: fn () => $this->featuredImage
+                ?? $this->images()->first()
+                ?? new Image([
+                    'image_path' => 'images/default-article',
+                    'alt_text' => 'Default case image',
+                    'is_optimized' => false,
+                ]),
+        );
+    }
+    
+    
+    // FORMATED VIEWS
+
     protected function formattedViews(): Attribute
     {
         return Attribute::make(
@@ -128,28 +200,15 @@ class CriminalCase extends Model
         );
     }
 
-    // Published check
+    
+    // IS PUBLISHED
+
     public function isPublished(): bool
     {
         return $this->is_published && $this->published_at !== null;
     }
 
-
-
-
-    // Images
-    public function featuredImage()
-    {
-        return $this->morphOne(Image::class, 'imageable')
-            ->where('is_featured', true);
-    }
-
-    public function images()
-    {
-        return $this->morphMany(Image::class, 'imageable')
-            ->orderBy('sort_order');
-    }
-
+    
 
 
 
@@ -166,58 +225,41 @@ class CriminalCase extends Model
     
 
 
-    protected function displayImage(): Attribute
-{
-    return Attribute::make(
-        get: function () {
-
-            $image = $this->featuredImage;
-
-            if ($image && $image->exists()) {
-                return $image;
-            }
-
-            $image = $this->images()
-                ->orderBy('sort_order')
-                ->first();
-
-            if ($image && $image->exists()) {
-                return $image;
-            }
-
-            return new Image([
-                'image_path' => 'images/default-article',
-                'alt_text' => 'Default article image',
-            ]);
-        },
-    );
-}
-
-
-
-
-        public function getImageUrlAttribute(): string
-{
-    if ($this->has_multiformat) {
-        return $this->url(1200, 'avif');
+    public function responsiveSizes(): array
+    {
+        return [
+            160,
+            320,
+            480,
+            640,
+            800,
+            1200,
+        ];
     }
 
-    return Storage::url("{$this->image_path}.jpg");
-}
-
-
-    public function url(?int $width = null, string $extension = 'jpg'): string
-{
-    $path = $this->image_path;
-
-    if ($width !== null) {
-        $path .= "-{$width}";
+    public function getImageUrlAttribute(): string
+    {
+        return $this->url();
     }
 
-    return Storage::url(
-        "{$path}.{$extension}"
-    );
-}
+
+    public function url(
+        ?int $width = 640,
+        string $extension = 'avif'
+    ): string {
+        $path = $this->image_path;
+
+        if ($width !== null) {
+            $path .= "-{$width}";
+        }
+
+        return Storage::url(
+            "{$path}.{$extension}"
+        );
+        
+    }
+
+
 
 
 }

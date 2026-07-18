@@ -1,18 +1,20 @@
 {{-- resources/views/components/articles/grid.blade.php --}}
 
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+
 
     @forelse($articles as $article)
 
-        <x-cards.article
-            :title="$article->title"
-            :excerpt="$article->excerpt"
-            :featuredImage="$article->featuredImage"
-            :authorName="$article->author->display_name"
-            :views="$article->views"
-            :publishedAt="$article->published_at"
-            url="/articles/{{$article->slug}}"
-        />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <x-cards.article
+                :title="$article->title"
+                :excerpt="$article->excerpt"
+                :featuredImage="$article->displayImage"
+                :authorName="$article->author->display_name"
+                :views="$article->views"
+                :publishedAt="$article->published_at"
+                url="/articles/{{$article->slug}}"
+            />
+        </div>
 
     @empty
 

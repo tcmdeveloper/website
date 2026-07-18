@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SyncDocketEntries;
 use App\Models\CriminalCase;
+use App\Models\DocketEntry;
 use App\Models\Image;
 use App\Services\ImageOptimizer;
 use App\Services\RandomStringGenerator;
@@ -64,7 +66,10 @@ class CriminalCaseController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100', 'unique:criminal_cases,name'],
+            'criminal_case_number' => ['nullable', 'string', 'max:100', Rule::unique('criminal_cases', 'criminal_case_number')],
+            'arrest_date' => ['nullable', 'date_format:Y-m-d'],
             'description' => ['required', 'string', 'max:500'],
+            'is_published' => ['required', 'boolean']
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -107,6 +112,8 @@ class CriminalCaseController extends Controller
         
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100', Rule::unique('criminal_cases', 'name')->ignore($criminalCase->id)],
+            'criminal_case_number' => ['nullable', 'string', 'max:100', Rule::unique('criminal_cases', 'criminal_case_number')->ignore($criminalCase->id)],
+            'arrest_date' => ['nullable', 'date_format:Y-m-d'],
             'description' => ['required', 'string', 'max:500'],
             'is_published' => ['required', 'boolean']
         ]);
@@ -138,6 +145,11 @@ class CriminalCaseController extends Controller
 
 
     
+    public function importDocket(CriminalCase $criminalCase)
+    {
+        SyncDocketEntries::dispatchSync($criminalCase, Auth::id());
+        
+    }
 
 
 
@@ -147,8 +159,7 @@ class CriminalCaseController extends Controller
 
 
 
-
-     // -----------------------------------------------------
+    // -----------------------------------------------------
     // DESTROY
     // -----------------------------------------------------
 
@@ -170,6 +181,22 @@ class CriminalCaseController extends Controller
                 'type' => 'success',
                 'message' => 'Criminal Case deleted.',
             ]);
+    }
+
+
+    // -----------------------------------------------------
+    // DOCKET ENTRIES INDEX
+    // -----------------------------------------------------
+
+    public function docketEntriesIndex(CriminalCase $criminalCase)
+    {
+        $docketEntries = DocketEntry::where('has_document', true)->latest()->get();
+
+        return view('criminal-cases.docket-entries-index', [
+            'criminalCase' => $criminalCase,
+            'docketEntries' => $docketEntries,
+            'count' => DocketEntry::where('has_document', true)->count()
+        ]);
     }
 
 

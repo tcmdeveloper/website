@@ -1,26 +1,30 @@
 <?php
 
 // PAGE
-use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
-use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
-use App\Http\Controllers\Admin\CriminalCaseController as AdminCriminalCaseController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\CriminalCaseController as AdminCriminalCaseController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
-use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\Admin\TranscriptionController;
+use App\Http\Controllers\Admin\TimelineController as AdminTimelineController;
+use App\Http\Controllers\Admin\JudgeController as AdminJudgeController;
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
-use App\Http\Controllers\Frontend\ArticleController as FrontendArticleController;
-use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
-use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Admin\TranscriptionController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\VideoPresenterController as AdminVideoPresenterController;
+
 use App\Http\Controllers\Frontend\CriminalCaseController as FrontendCriminalCaseController;
+use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
+use App\Http\Controllers\Frontend\ArticleController as FrontendArticleController;
 use App\Http\Controllers\Frontend\DocumentController as FrontendDocumentController;
 use App\Http\Controllers\Frontend\TimelineController as FrontendTimelineController;
-use App\Http\Controllers\Admin\TimelineController as AdminTimelineController;
+use App\Http\Controllers\Frontend\JudgeController as FrontendJudgeController;
+use App\Http\Controllers\Frontend\VideoPresenterController as FrontendVideoPresenterController;
 
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\SearchController as FrontendSearchController;
-use App\Http\Controllers\Frontend\VideoController as FrontendVideoController;
-use App\Http\Controllers\JailCallLogController;
+use App\Http\Controllers\Frontend\ContactController;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -132,7 +136,7 @@ Route::controller(FrontendCriminalCaseController::class)
 
 
 // -----------------------------------------------------
-// CRIMINAL CASE CONTROLLER (ADMIN)
+// CRIMINAL CASE CONTROLLER (ADMIN) 
 // -----------------------------------------------------
 
 Route::controller(AdminCriminalCaseController::class)
@@ -154,6 +158,11 @@ Route::controller(AdminCriminalCaseController::class)
         Route::post('/{criminalCase:hex}/images/store', 'storeImage')->name('images.store');
         Route::get('/{criminalCase:hex}/images/upload', 'createImage')->name('images.create');
         Route::get('/{criminalCase:hex}/images', 'imagesIndex')->name('images.index');
+
+        Route::get('/{criminalCase:hex}/docket', 'docketEntriesIndex')->name('docket-entries.index');
+
+        Route::get('/{criminalCase:hex}/import-docket', 'importDocket')->name('import-docket');
+;
 
         Route::get('/{criminalCase:hex}', 'show')->name('show');
     })
@@ -330,6 +339,51 @@ Route::controller(AdminTimelineController::class)
 
 
 // -----------------------------------------------------
+// ARTICLE CONTROLLER (FRONT-END)
+// -----------------------------------------------------
+
+Route::controller(FrontendJudgeController::class)
+    ->prefix('judges')
+    ->name('judges.')
+    ->group(function(){
+        Route::get('/', 'index')->name('index');
+        Route::get('/{judge:slug}', 'show')->name('show');
+    })
+;
+
+
+// -----------------------------------------------------
+// ARTICLE CONTROLLER (ADMIN)
+// -----------------------------------------------------
+
+Route::controller(AdminJudgeController::class)
+    ->prefix('admin/judges')
+    ->name('admin.judges.')
+    ->middleware(['auth', 'verified'])
+    ->group(function () {
+
+        Route::get('/', 'index')->name('index');
+
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{judge:id}/edit', 'edit')->name('edit');
+        Route::patch('/{judge:id}', 'update')->name('update');
+        Route::delete('/{judge:id}', 'destroy')->name('destroy');
+
+        Route::post('/{judge:id}/images/{image:hex}/optimize', 'optimizeImage')->name('images.optimize');
+        Route::patch('/{judge:id}/images/{image:hex}/update', 'updateImage')->name('images.update');
+        Route::delete('/{judge:id}/images/{image:hex}', 'destroyImage')->name('images.destroy');
+        Route::get('/{judge:id}/images/{image:hex}/edit', 'editImage')->name('images.edit');
+        Route::post('/{judge:id}/images/store', 'storeImage')->name('images.store');
+        Route::get('/{judge:id}/images/upload', 'createImage')->name('images.create');
+        Route::get('/{judge:id}/images', 'imagesIndex')->name('images.index');
+        
+        Route::get('/{judge:id}', 'show')->name('show');
+    })
+;
+
+
+// -----------------------------------------------------
 // SEARCH CONTROLLER (FRONT-END)
 // -----------------------------------------------------
 
@@ -361,6 +415,7 @@ Route::controller(AdminVideoController::class)
     })
 ;
 
+
 // -----------------------------------------------------
 // TRANSCRIPTION CONTROLLER
 // -----------------------------------------------------
@@ -376,7 +431,42 @@ Route::controller(TranscriptionController::class)
         Route::post('/transcribe', 'transcribeVideo')->name('transcribe-youtube');
         Route::post('/transcribe-uploaded-video', 'transcribeVideo')->name('transcribe-upload');
         Route::get('/translate', 'translateSubtitles')->name('translate-subs');
-});
+    })
+;
+
+
+// -----------------------------------------------------
+// VIDEO PRESENTER CONTROLLER (FRONTEND)
+// -----------------------------------------------------
+
+Route::controller(FrontendVideoPresenterController::class)
+    ->prefix('video-presenter')
+    ->name('video-presenter.')
+    ->group(function(){
+        Route::get('/', 'index')->name('index');
+        Route::get('/{videoPresentation:slug}', 'show')->name('show');
+    })
+;
+
+
+
+// -----------------------------------------------------
+// VIDEO PRESENTER CONTROLLER (ADMIN)
+// -----------------------------------------------------
+
+Route::controller(AdminVideoPresenterController::class)
+    ->prefix('admin/video-presenter')
+    ->name('admin.video-presenter.')
+    ->middleware(['auth', 'verified'])
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{videoPresentation:hex}/edit', 'edit')->name('edit');
+        Route::get('/{videoPresentation:hex}/transcribe', 'transcribe')->name('transcribe');
+        Route::delete('/{videoPresentation:hex}', 'destroy')->name('destroy');
+    })
+;
 
 
 require __DIR__.'/auth.php';

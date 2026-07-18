@@ -29,6 +29,7 @@ class Image extends Model
         'is_featured',
         'sort_order',
         'user_id',
+        'is_optimized',
     ];
 
 

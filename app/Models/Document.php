@@ -28,6 +28,7 @@ class Document extends Model
         'user_id',
         'category_id',
         'criminal_case_id',
+        'docket_entry_id',
         'published_at',
         'is_published',
     ];
@@ -43,6 +44,14 @@ class Document extends Model
         'is_published' => 'boolean',
     ];
 
+
+
+    // -----------------------------------------------------
+    // MODEL EVENTS
+    // Automatically generate a slug from the document name
+    // when a new record is created and no slug is provided.
+    // -----------------------------------------------------
+
     protected static function booted()
     {
         static::creating(function ($document) {
@@ -54,11 +63,11 @@ class Document extends Model
 
 
     /*
-    |--------------------------------------------------------------------------
-    | Route Binding (IMPORTANT)
+    |-------------------------------------------------------
     | This makes URLs use /documents/{slug}
-    |--------------------------------------------------------------------------
+    |-------------------------------------------------------
     */
+
     public function getRouteKeyName(): string
     {
         return 'slug';
@@ -78,39 +87,58 @@ class Document extends Model
             ->where('published_at', '<=', now());
     }
 
-    
-    
 
 
     // -----------------------------------------------------
     // RELATIONSHIPS
     // -----------------------------------------------------
 
-    // Criminal Case
+    // CRIMINAL CASE
+
     public function criminalCase()
     {
         return $this->belongsTo(CriminalCase::class);
     }
 
-    // Document Pages
+
+    // DOCKET ENTRY
+
+    public function docketEntry()
+    {
+        return $this->belongsTo(DocketEntry::class);
+    }
+
+    
+    // DOCUMENT PAGES
+
     public function documentPages()
     {
         return $this->hasMany(DocumentPage::class);
     }
 
-    // Cover page
+    
+    // COVER PAGE
+
     public function coverPage()
     {
         return $this->hasOne(DocumentPage::class)->oldestOfMany('page_number');
     }
 
-    // Author
+
+    // AUTHOR
+
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Formatted views (25419 -> 25,419)
+
+    // -----------------------------------------------------
+    // RELATIONSHIPS
+    // -----------------------------------------------------
+
+    // FORMATTED
+
     protected function formattedViews(): Attribute
     {
         return Attribute::make(
@@ -119,13 +147,6 @@ class Document extends Model
     }
 
 
-
-
-    
-
-
-    
-    
 }
 
 
