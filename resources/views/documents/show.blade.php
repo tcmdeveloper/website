@@ -141,7 +141,7 @@
                             :image="$page"
                             alt="Page {{ $page->page_number }}"
                             class="w-full rounded border border-zinc-200 bg-white shadow"
-                            sizes="(min-width: 640px) 640px, 100vw"
+                            sizes="(min-width: 800px) 800px, 100vw"
                         />
 
                     </button>

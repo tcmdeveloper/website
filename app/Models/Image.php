@@ -100,16 +100,38 @@ class Image extends Model
     
 
     public function responsiveSizes(): array
-{
-    return [
-        160,
-        320,
-        480,
-        640,
-        800,
-        1200,
-    ];
-}
+    {
+        return match (class_basename($this)) {
+            
+            'Image' => [
+                160,
+                320,
+                480,
+                640,
+                800,
+                1200,
+            ],
 
+            // 'DocumentPage' => [
+            //     320,
+            //     640,
+            //     1024,
+            //     1600,
+            // ],
+
+            // 'CriminalCase' => [
+            //     160,
+            //     320,
+            //     480,
+            //     640,
+            // ],
+
+            default => [
+                320,
+                640,
+                800,
+            ],
+        };
+    }
     
 }

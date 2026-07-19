@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\SyncDocketEntries;
 use App\Models\CriminalCase;
 use App\Models\DocketEntry;
 use App\Models\Image;
@@ -15,10 +14,10 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\Encoders\AvifEncoder;
 use Intervention\Image\Encoders\JpegEncoder;
-use Intervention\Image\Encoders\WebpEncoder;
+use App\Services\Courts\CourtProviderFactory;
 use Intervention\Image\ImageManager;
+use App\Jobs\SyncCourtDockets;
 
 
 // -----------------------------------------------------
@@ -75,6 +74,12 @@ class CriminalCaseController extends Controller
         $validated['slug'] = Str::slug($validated['name']);
         $validated['user_id'] = Auth::id();
         $validated['hex'] = $generator->uniqueHexId();
+
+
+        if (!empty($validated['criminal_case_number'])) {
+            $validated['criminal_case_number_display'] = $validated['criminal_case_number'];
+            $validated['criminal_case_number'] = CriminalCase::normalizeCriminalCaseNumber($validated['criminal_case_number']);
+        }
         
 
         if ($validated['is_published']) {
@@ -125,6 +130,12 @@ class CriminalCaseController extends Controller
 
         $validated['slug'] = Str::slug($validated['name']);
 
+        if (!empty($validated['criminal_case_number'])) {
+            $validated['criminal_case_number_display'] = $validated['criminal_case_number'];
+            $validated['criminal_case_number'] = $criminalCase->normalizeCriminalCaseNumber($validated['criminal_case_number']);
+        }
+
+
         // Ensure the generated slug is unique
         validator($validated, [
             'slug' => ['required', 'string', 'max:100', Rule::unique('criminal_cases', 'slug')->ignore($criminalCase->id)],
@@ -150,11 +161,29 @@ class CriminalCaseController extends Controller
 
 
     
+    
     public function importDocket(CriminalCase $criminalCase)
     {
-        SyncDocketEntries::dispatchSync($criminalCase, Auth::id());
-        
+        SyncCourtDockets::dispatch(
+            $criminalCase->id,
+            Auth::id()
+        );
     }
+
+
+    // public function syncDockets(CriminalCase $criminalCase, CourtProviderFactory $factory)
+    // {
+    //     $provider = $factory->make(
+    //         $criminalCase
+    //     );
+
+    //     $dockets = $provider->getDockets(
+    //         $criminalCase
+    //     );
+
+    //     return $dockets;
+    // }
+    
 
 
 

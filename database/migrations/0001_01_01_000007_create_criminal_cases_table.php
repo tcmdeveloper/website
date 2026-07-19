@@ -21,6 +21,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
+            $table->date('arrest_date')->nullable(); 
+            $table->char('country_code', 2)->nullable();
+            $table->char('state_code', 2)->nullable();
 
             // SEO
             $table->string('meta_title')->nullable();
@@ -28,8 +31,8 @@ return new class extends Migration
 
             // Case data
             $table->string('criminal_case_number')->nullable()->unique();
-            $table->date('arrest_date')->nullable();          
-            $table->string('clerk_qs')->nullable();
+            $table->string('criminal_case_number_display')->nullable()->unique();
+            $table->string('court_provider')->nullable();
             $table->timestamp('last_docket_sync_at')->nullable();
 
             // Stats
@@ -42,10 +45,12 @@ return new class extends Migration
                 ->nullOnDelete();
 
             // Publishing
-            $table->timestamp('published_at')->nullable();
             $table->boolean('is_published')->default(false);
+            $table->timestamp('published_at')->nullable();
+            
 
             $table->timestamps();
+            
         });
     }
 

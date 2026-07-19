@@ -109,7 +109,7 @@
 
             @else
 
-                <div class="grid grid-cols-12 gap-6">
+                <div class="grid grid-cols-12 gap-6 mt-6">
 
                     <div class="col-span-12 md:col-span-8 mt-6 divide-y divide-gray-200 rounded-sm border border-gray-200 bg-white">
 

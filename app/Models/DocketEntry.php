@@ -17,16 +17,21 @@ class DocketEntry extends Model
         'has_document',
         'input_document_id',
         'document_title',
+        'viewer_qs',
+        'viewer_parameters',
+        'mobile_viewer_parameters',
+        'encoded_document_path',
         'page_count',
         'raw_data',
         'pdf_path',
-        'encoded_document_path',
+        
     ];
 
 
     protected $casts = [
         'raw_data' => 'array',
         'filed_at' => 'date',
+        'has_document' => 'boolean'
     ];
 
 

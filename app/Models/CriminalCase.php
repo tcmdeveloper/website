@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -18,22 +19,28 @@ class CriminalCase extends Model
         'name',
         'slug',
         'description',
+        'arrest_date',
+        'country_code',
+        'state_code',
         'meta_title',
         'meta_description',
         'criminal_case_number',
-        'arrest_date',
-        'clerk_qs',
+        'criminal_case_number_display',
+        'court_provider',
         'last_docket_sync_at',
-        'judge_id',
         'views',
         'user_id',
-        'published_at',
         'is_published',
+        'published_at',
+        
     ];
 
 
     protected $casts = [
         'arrest_date' => 'date',
+        'last_docket_sync_at' => 'date',
+        'published_at' => 'date',
+
     ];
 
 
@@ -165,6 +172,24 @@ class CriminalCase extends Model
             ->withTimestamps();
     }
 
+
+    // COURT PROVIDER
+
+    public function courtProvider(): string
+    {
+        return $this->court_provider;
+    }
+
+
+    // COURT IDENTIFIERS
+
+    public function courtIdentifiers(): HasMany
+    {
+        return $this->hasMany(
+            CriminalCaseCourtIdentifier::class
+        );
+    }
+
     
 
 
@@ -208,6 +233,29 @@ class CriminalCase extends Model
     public function isPublished(): bool
     {
         return $this->is_published && $this->published_at !== null;
+    }
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HELPERS
+    |--------------------------------------------------------------------------
+    */
+
+    // NORMALIZE CRIMINAL CASE NUMBER
+
+    public static function normalizeCriminalCaseNumber(
+        string $criminalCaseNumber
+    ): string {
+        return strtoupper(
+            preg_replace(
+                '/[^A-Za-z0-9]/',
+                '',
+                $criminalCaseNumber
+            )
+        );
     }
 
     

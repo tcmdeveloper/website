@@ -23,11 +23,14 @@ class CriminalCaseSeeder extends Seeder
                 'name' => $item->name,
                 'slug' => $item->slug,
                 'description' => $item->description,
+                'arrest_date' => $item->arrest_date,
+                'country_code' => $item->country_code,
+                'state_code' => $item->state_code,
                 'meta_title' => $item->meta_title,
                 'meta_description' => $item->meta_description,
                 'criminal_case_number' => $item->criminal_case_number,
-                'arrest_date' => $item->arrest_date,
-                'clerk_qs' => $item->clerk_qs,
+                'criminal_case_number_display' => $item->criminal_case_number_display,
+                'court_provider' => $item->court_provider,
                 'last_docket_sync_at' => $item->last_docket_sync_at,
                 'views' => $item->views,
                 'user_id' => $item->user_id,
@@ -35,6 +38,7 @@ class CriminalCaseSeeder extends Seeder
                 'is_published' => $item->is_published,
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at,
+
             ]);
         }
     }

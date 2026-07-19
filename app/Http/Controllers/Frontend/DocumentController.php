@@ -5,12 +5,32 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\CriminalCase;
 use App\Models\Document;
-use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
 
+    // -----------------------------------------------------
+    // INDEX
+    // -----------------------------------------------------
+
+    public function index(CriminalCase $criminalCase)
+    {   
+        $documents = Document::where('criminal_case_id', $criminalCase->id)
+            ->latest()
+            // ->take(4)
+            ->get()
+        ;
+
+        return view('documents.index', [
+            'criminalCase' => $criminalCase,
+            'documents' => $documents
+        ]);
+    }
+
+
+    // -----------------------------------------------------
     // SHOW
+    // -----------------------------------------------------
 
     public function show(CriminalCase $criminalCase, Document $document)
     {

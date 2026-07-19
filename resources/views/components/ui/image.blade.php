@@ -7,7 +7,7 @@
     'sizes' => '100vw',
 ])
 
-
+{{-- @dd( $image->responsiveSizes()) --}}
 <picture>
 
     @if($image->is_optimized)
@@ -52,7 +52,7 @@
 
     <img
     src="{{ $image->is_optimized
-        ? $image->url(max($responsiveSizes), 'webp')
+        ? $image->url($responsiveSizes[array_key_first($responsiveSizes)], 'webp')
         : Storage::url($image->image_path . '.jpg') }}"
     alt="{{ $alt ?? $image->alt_text }}"
     loading="{{ $loading }}"

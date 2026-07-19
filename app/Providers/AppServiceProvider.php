@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Character;
 use App\Models\CriminalCase;
 use App\Models\Playlist;
+use App\Services\Courts\CourtProviderFactory;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
@@ -18,7 +19,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(
+            CourtProviderFactory::class,
+            function () {
+                return new CourtProviderFactory();
+            }
+        );
     }
 
     /**

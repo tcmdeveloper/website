@@ -28,7 +28,8 @@
             @csrf
             @method('PATCH')
 
-            {{-- Criminal case name --}}
+            
+            {{-- Defendant name --}}
 
             <div>
                 <x-ui.input
@@ -49,7 +50,7 @@
                     type="text"
                     label="Case number"
                     placeholder="Case number"
-                    :value="old('criminal_case_number', $criminalCase->criminal_case_number)"
+                    :value="old('criminal_case_number', $criminalCase->criminal_case_number_display)"
                 />
             </div>
 
@@ -61,7 +62,7 @@
                     type="date"
                     name="arrest_date"
                     label="Date of Arrest"
-                    :value="old('arrest_date', $criminalCase->arrest_date)"
+                    :value="old('arrest_date', $criminalCase->arrest_date?->format('Y-m-d'))"
                 />
             </div>
 

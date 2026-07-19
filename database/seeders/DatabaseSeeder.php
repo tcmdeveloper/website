@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             TimelineEventSeeder::class,
             CharacterSeeder::class,
             CharacterCriminalCaseSeeder::class,
+            CriminalCaseCourtIdentifierSeeder::class,
         ]);
     }
 }

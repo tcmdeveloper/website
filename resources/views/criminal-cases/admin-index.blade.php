@@ -26,9 +26,9 @@
                     <th class="px-6 py-4">Visibility</th>
                     <th class="px-6 py-4">Case number</th>
                     <th class="px-6 py-4">Arrest Date</th>
-                    <th class="px-6 py-4">Articles</th>
-                    <th class="px-6 py-4">Documents</th>
-                    <th class="px-6 py-4">Views</th>
+                    <th class="px-6 py-4 text-center">Articles</th>
+                    <th class="px-6 py-4 text-center">Documents</th>
+                    <th class="px-6 py-4 text-center">Views</th>
                     <th class="px-6 py-4"></th>
                 </tr>
             </thead>
@@ -69,22 +69,22 @@
                         </td>
 
                         <td class="px-6 py-4">
-                            {{ $criminalCase->criminal_case_number }}
+                            {{ $criminalCase->criminal_case_number_display }}
                         </td>
 
                         <td class="px-6 py-4">
                             {{ $criminalCase->arrest_date?->format('M j, Y') }}
                         </td>
 
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 text-center">
                             {{ number_format($criminalCase->articles_count) }}
                         </td>
 
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 text-center">
                             {{ number_format($criminalCase->documents_count) }}
                         </td>
 
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 text-center">
                            {{ number_format($criminalCase->formatted_views) }}
                         </td>
 

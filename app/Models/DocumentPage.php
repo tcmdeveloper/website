@@ -89,8 +89,8 @@ public function responsiveSizes(): array
 {
     return [
         80,
-        320,
-        640,
+        480,
+        800,
     ];
 }
 

@@ -418,25 +418,6 @@ Route::controller(AdminVideoController::class)
 
 
 // -----------------------------------------------------
-// TRANSCRIPTION CONTROLLER
-// -----------------------------------------------------
-
-Route::controller(TranscriptionController::class)
-    ->prefix('transcriptions')
-    ->name('transcriptions.')
-    ->middleware(['auth', 'verified'])
-    ->group(function(){
-        Route::post('/store', 'store')->name('store');
-        Route::get('/create', 'create')->name('create');
-        Route::get('/transcriptions', 'index')->name('index');
-        Route::post('/transcribe', 'transcribeVideo')->name('transcribe-youtube');
-        Route::post('/transcribe-uploaded-video', 'transcribeVideo')->name('transcribe-upload');
-        Route::get('/translate', 'translateSubtitles')->name('translate-subs');
-    })
-;
-
-
-// -----------------------------------------------------
 // PLAYLIST CONTROLLER (FRONT-END)
 // -----------------------------------------------------
 
