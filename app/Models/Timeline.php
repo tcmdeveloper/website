@@ -28,8 +28,9 @@ class Timeline extends Model
 
     protected $casts = [
         'is_default' => 'boolean',
-        'is_public' => 'boolean',
+        'is_published' => 'boolean',
         'type' => TimelineType::class,
+        'published_at' => 'datetime',
     ];
 
 
@@ -37,9 +38,9 @@ class Timeline extends Model
     
     protected static function booted()
     {
-        static::creating(function ($criminalCase) {
-            if (empty($criminalCase->slug)) {
-                $criminalCase->slug = Str::slug($criminalCase->name);
+        static::creating(function ($timeline) {
+            if (empty($timeline->slug)) {
+                $timeline->slug = Str::slug($timeline->name);
             }
         });
     }

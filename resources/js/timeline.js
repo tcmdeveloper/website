@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chart = new ApexCharts(chartEl, {
         chart: {
             type: 'heatmap',
-            height: 130,
+            height: 260,
             toolbar: {
                 show: false
             }

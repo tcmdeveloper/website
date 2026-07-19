@@ -17,8 +17,9 @@ class TimelineController extends Controller
         $timelines = Timeline::query()
             ->published()
             ->latestFirst()
-            ->withCount('events')
+            // ->withCount('events')
             ->paginate(12);
+
         
         return view('timelines.index', [
             'timelines' => $timelines
