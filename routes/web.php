@@ -128,7 +128,8 @@ Route::controller(FrontendCriminalCaseController::class)
     ->group(function(){
         Route::get('/', 'index')->name('index');
 
-        Route::get('/{criminalCase:slug}/timelines/{timeline:slug}', 'timelinesIndex')->name('timelines');
+        Route::get('/{criminalCase:slug}/timelines/{timeline:slug}', 'timelineEventsIndex')->name('timeline.events.index');
+        Route::get('/{criminalCase:slug}/timelines/{timeline:slug}/events', 'timelineEvents')->name('timeline.events');
 
         Route::get('/{criminalCase}', 'show')->name('show');
         
@@ -349,7 +350,6 @@ Route::controller(FrontendTimelineController::class)
     ->name('timelines.')
     ->group(function(){
         Route::get('/', 'index')->name('index');
-        Route::get('/{timeline:slug}', 'show')->name('show');
     })
 ;
 
@@ -498,6 +498,8 @@ Route::controller(AdminVideoPresenterController::class)
         Route::get('/{videoPresentation:hex}/edit', 'edit')->name('edit');
         Route::get('/{videoPresentation:hex}/transcribe', 'transcribe')->name('transcribe');
         Route::delete('/{videoPresentation:hex}', 'destroy')->name('destroy');
+
+        Route::get('/present', 'present')->name('present');
     })
 ;
 

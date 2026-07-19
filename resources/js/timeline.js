@@ -8,11 +8,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const chart = new ApexCharts(chartEl, {
+
         chart: {
+            
             type: 'heatmap',
             height: 260,
+
             toolbar: {
                 show: false
+            },
+
+            events: {
+                async dataPointSelection(event, chartContext, config) {
+
+                    const point =
+                        config.w.config.series[
+                            config.seriesIndex
+                        ].data[
+                            config.dataPointIndex
+                        ];
+
+                    if (!point.url) {
+                        return;
+                    }
+
+                    try {
+
+                        const response = await fetch(point.url, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                            }
+                        });
+
+                        const data = await response.json();
+
+                        document.querySelector('#timeline-events').innerHTML =
+                            data.html;
+
+                    } catch (error) {
+
+                        console.error(
+                            'Failed to load timeline events:',
+                            error
+                        );
+
+                    }
+                }
             }
         },
 

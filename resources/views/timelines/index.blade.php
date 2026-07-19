@@ -14,7 +14,7 @@
             @forelse($timelines as $timeline)
 
                 <a
-                    href="{{ route('cases.timelines', [$timeline->criminalCase->slug, $timeline->slug]) }}"
+                    href="{{ route('cases.timeline.events.index', [$timeline->criminalCase->slug, $timeline->slug]) }}"
                     class="group block rounded-sm border border-zinc-200 p-6 hover:shadow-md hover:border-red-metrix transition bg-white"
                 >   
 

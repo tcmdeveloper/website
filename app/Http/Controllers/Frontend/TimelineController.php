@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Timeline;
-use Illuminate\Http\Request;
 
 class TimelineController extends Controller
 {
@@ -25,9 +24,5 @@ class TimelineController extends Controller
             'timelines' => $timelines
         ]);
     }
-
-
-    //
-
     
 }

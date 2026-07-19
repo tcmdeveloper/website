@@ -3,9 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class VideoPresenterController extends Controller
 {
-    //
+    // -----------------------------------------------------
+    // PRESENT
+    // -----------------------------------------------------
+
+    function present()
+    {
+        return view('video-presenter.present');
+    }
+    
+
 }

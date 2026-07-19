@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             DocumentPageSeeder::class,
             TimelineSeeder::class,
             TimelineEventSeeder::class,
+            TimelineEventCustomSeeder::class,
             CharacterSeeder::class,
             CharacterCriminalCaseSeeder::class,
             CriminalCaseCourtIdentifierSeeder::class,

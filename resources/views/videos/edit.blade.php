@@ -1,4 +1,4 @@
-{{-- resources/views/videos/create.blade.php --}}
+{{-- resources/views/videos/edit.blade.php --}}
 
 @push('scripts')
 

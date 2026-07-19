@@ -4,7 +4,8 @@
     'title' => null,
     'subtitle' => null,
     'meta' => [],
-    'breadcrumbs' => [],  
+    'breadcrumbs' => [],
+    'pageWithoutBranding' => false
 ])
 
 @php
@@ -109,27 +110,37 @@
 <body 
     x-data="{ menuOpen: false }"
     :class="{ 'overflow-hidden': menuOpen }"
-    class="pt-[61px] flex flex-col min-h-screen bg-gray-50 text-gray-800 font-body"
+    class="{{ $pageWithoutBranding ? 'pt-0' : 'pt-[61px]' }} flex flex-col min-h-screen bg-gray-50 text-gray-800 font-body"
 >
 
-    <x-layouts.navigation />
+    @if($pageWithoutBranding)
 
-    <x-ui.content-navigation/>
+        <main class="flex-1">
+            {{ $slot }}
+        </main>
 
-    @if(! empty($breadcrumbs))
-        <x-ui.breadcrumbs :breadcrumbs="$breadcrumbs" />
+    @else
+        
+        <x-layouts.navigation />
+
+        <x-ui.content-navigation/>
+
+        @if(! empty($breadcrumbs))
+            <x-ui.breadcrumbs :breadcrumbs="$breadcrumbs" />
+        @endif
+
+        <x-ui.page-headings
+            :title="$title ?? null"
+            :subtitle="$subtitle ?? null"
+        />
+
+        <main class="flex-1">
+            {{ $slot }}
+        </main>
+
+        <x-layouts.footer />
+    
     @endif
-
-    <x-ui.page-headings
-        :title="$title ?? null"
-        :subtitle="$subtitle ?? null"
-    />
-
-    <main class="flex-1">
-        {{ $slot }}
-    </main>
-
-    <x-layouts.footer />
 
     @stack('scripts')
 

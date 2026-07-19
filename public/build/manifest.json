@@ -352,7 +352,7 @@
     "src": "node_modules/@fontsource/roboto-slab/files/roboto-slab-vietnamese-700-normal.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-BB7EFkUE.css",
+    "file": "assets/app-Btgy1vTO.css",
     "name": "app",
     "names": [
       "app.css"
@@ -466,7 +466,7 @@
     "isEntry": true
   },
   "resources/js/timeline.js": {
-    "file": "assets/timeline-DNkbr3Rr.js",
+    "file": "assets/timeline-BurKID9-.js",
     "name": "timeline",
     "src": "resources/js/timeline.js",
     "isEntry": true

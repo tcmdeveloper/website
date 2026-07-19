@@ -30,12 +30,25 @@ return new class extends Migration
             $table->string('title', 150);
             $table->text('description')->nullable();
 
+            // Importance
+            $table->boolean('is_key_event')->default(false);
+            $table->unsignedTinyInteger('importance')
+                ->default(3);
+
             // Date
             $table->dateTime('occurred_at')->nullable();
+
+            $table->enum('accuracy', [
+                'exact',
+                'approximate',
+                'disputed',
+            ])->default('exact');
 
             // For approximate dates/times
             $table->string('date_label')->nullable();
             $table->string('time_label')->nullable();
+
+            
 
             // Ordering
             $table->unsignedInteger('sort_order')->default(0);

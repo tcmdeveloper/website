@@ -1,7 +1,7 @@
 {{-- resources/views/documents/show.blade.php --}}
 
 <x-layouts.app
-    title="Court Docket: {{ $document->criminalCase->name }}"
+    title="Court Docket / {{ $document->criminalCase->name }}"
     :subtitle="$document->name"
     :meta="[
         'title' => $document->name,

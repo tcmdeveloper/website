@@ -7,6 +7,7 @@ use App\Models\CriminalCase;
 use App\Models\Document;
 use App\Models\Timeline;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 
 // -----------------------------------------------------
@@ -57,12 +58,12 @@ class CriminalCaseController extends Controller
 
 
     // -----------------------------------------------------
-    // SHOW
+    // TIMELINE EVENTS INDEX
     // -----------------------------------------------------
 
-    public function timelinesIndex(CriminalCase $criminalCase, Timeline $timeline)
+    public function timelineEventsIndex(CriminalCase $criminalCase, Timeline $timeline)
     {
-        $criminalCase->increment('views');
+        $timeline->increment('views');
         $start = $timeline->events->min('occurred_at');
         $end = $timeline->events->max('occurred_at');
 
@@ -95,6 +96,8 @@ class CriminalCaseController extends Controller
             })
             ->values();
 
+
+
         $yearGroups = $dailyEvents
             ->groupBy(fn ($item) => substr($item['date'], 0, 4))
             ->map(fn ($items, $year) => [
@@ -105,59 +108,51 @@ class CriminalCaseController extends Controller
 
 
 
-        $heatmapData = $events
-    ->groupBy(fn ($event) => $event->occurred_at->format('Y-m'))
-    ->map(fn ($events, $month) => [
-        'date' => \Carbon\Carbon::createFromFormat('Y-m', $month)
-            ->format('M Y'),
-        'count' => $events->count(),
-    ])
-    ->values();
-
-
-
-
-
-
-
-
-    $months = [
-        'Jan', 'Feb', 'Mar', 'Apr',
-        'May', 'Jun', 'Jul', 'Aug',
-        'Sep', 'Oct', 'Nov', 'Dec',
-    ];
-
-$monthlyCounts = $events
-    ->groupBy(fn ($event) => $event->occurred_at->format('Y'))
-    ->sortKeysDesc(SORT_NUMERIC)
-    ->map(function ($yearEvents, $year) use ($months) {
-
-        $counts = $yearEvents
-            ->groupBy(fn ($event) => $event->occurred_at->format('M'))
-            ->map->count();
-
-        return [
-            'name' => (string) $year,
-            'data' => collect($months)
-                ->map(fn ($month) => [
-                    'x' => $month,
-                    'y' => $counts[$month] ?? 0,
-                ])
-                ->values(),
+        $months = [
+            'Jan', 'Feb', 'Mar', 'Apr',
+            'May', 'Jun', 'Jul', 'Aug',
+            'Sep', 'Oct', 'Nov', 'Dec',
         ];
-    })
-    ->values();
-
-    // dd($monthl   yCounts);
-
-$heatmapData = $monthlyCounts;
 
 
 
 
+        $monthlyCounts = $events
+            ->groupBy(fn ($event) => $event->occurred_at->format('Y'))
+            ->sortKeysDesc(SORT_NUMERIC)
+            ->map(function ($yearEvents, $year) use (
+                $months,
+                $criminalCase,
+                $timeline            
+            ) {
+
+                $counts = $yearEvents
+                    ->groupBy(fn ($event) => $event->occurred_at->format('M'))
+                    ->map->count();
+
+                return [
+                    'name' => (string) $year,
+                    'data' => collect($months)
+                        ->map(fn ($month) => [
+                            'x' => $month,
+                            'y' => $counts[$month] ?? 0,
+
+                            'url' => route('cases.timeline.events', [
+                                'criminalCase' => $criminalCase,
+                                'timeline' => $timeline,
+                                'year' => $year,
+                                'month' => $month,
+                            ]),
+                        ])
+                    ->values(),
+                ];
+
+            })
+
+        ->values();
 
 
-
+        $heatmapData = $monthlyCounts;
 
 
         return view('timeline-events.index', compact(
@@ -169,6 +164,38 @@ $heatmapData = $monthlyCounts;
             'heatmapData'
         ));
 
+
+    }
+
+
+    // -----------------------------------------------------
+    // TIMELINE EVENTS
+    // -----------------------------------------------------
+
+
+    public function timelineEvents(
+        CriminalCase $criminalCase,
+        Timeline $timeline,
+        Request $request
+    ) {
+        $month = Carbon::createFromFormat(
+            'M',
+            $request->month
+        )->month;
+
+        $events = $timeline->events()
+            ->whereNull('parent_event_id')
+            ->whereYear('occurred_at', $request->year)
+            ->whereMonth('occurred_at', $month)
+            ->orderBy('occurred_at')
+            ->get();
+
+        return response()->json([
+            'html' => view(
+                'timeline-events.partials.events',
+                compact('events')
+            )->render(),
+        ]);
     }
     
 
